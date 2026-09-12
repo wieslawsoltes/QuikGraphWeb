@@ -28,12 +28,14 @@ test('Viewer renders copied equatable endpoints and retains canonical vertex pos
 test('Viewer resizing preserves relative camera framing', () => {
   const viewer = new QuikGraphViewer();
   Object.defineProperties(viewer, {clientWidth:{value:800,configurable:true},clientHeight:{value:480,configurable:true}});
+  viewer.Positions.set('left',{x:-300,y:-100});viewer.Positions.set('right',{x:300,y:100});
   viewer._viewport={width:800,height:480}; viewer._scale=1.5; viewer._pan={x:100,y:-50};
   Object.defineProperty(viewer,'clientWidth',{value:400,configurable:true});
   viewer._resizeViewport();
-  assert.equal(viewer._scale,.75); assert.deepEqual(viewer._pan,{x:50,y:-25});
+  const factor=(300/600)/(700/600);
+  assert.equal(viewer._scale,1.5*factor); assert.deepEqual(viewer._pan,{x:100*factor,y:-50*factor});
   viewer._resizeViewport();
-  assert.equal(viewer._scale,.75); assert.deepEqual(viewer._pan,{x:50,y:-25});
+  assert.equal(viewer._scale,1.5*factor); assert.deepEqual(viewer._pan,{x:100*factor,y:-50*factor});
 });
 
 test('Viewer supports multiple tag names and preserves an existing registration', () => {

@@ -41,7 +41,19 @@ export class QuikGraphViewer extends HTMLElementBase {
     this._scale=Math.min(2,(width-100)/Math.max(100,maxX-minX),(height-100)/Math.max(100,maxY-minY));this._scale=Math.max(.03,this._scale);
     this._pan={x:-(minX+maxX)/2*this._scale,y:-(minY+maxY)/2*this._scale};this.Refresh();
   }
-  _resizeViewport() {const width=this.clientWidth||800,height=this.clientHeight||480,previous=this._viewport;this._viewport={width,height};if(previous&&previous.width>0&&previous.height>0){const factor=Math.min(width/previous.width,height/previous.height);this._scale=Math.max(.03,Math.min(8,this._scale*factor));this._pan={x:this._pan.x*factor,y:this._pan.y*factor};}this.Refresh();}
+  _resizeViewport() {
+    const width=this.clientWidth||800,height=this.clientHeight||480,previous=this._viewport;
+    this._viewport={width,height};
+    if(previous&&previous.width>0&&previous.height>0&&this.Positions.size){
+      let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+      for(const p of this.Positions.values()){minX=Math.min(minX,p.x);minY=Math.min(minY,p.y);maxX=Math.max(maxX,p.x);maxY=Math.max(maxY,p.y);}
+      const fit=(w,h)=>Math.max(.03,Math.min(2,(w-100)/Math.max(100,maxX-minX),(h-100)/Math.max(100,maxY-minY)));
+      const factor=fit(width,height)/fit(previous.width,previous.height);
+      this._scale=Math.max(.03,Math.min(8,this._scale*factor));
+      this._pan={x:this._pan.x*factor,y:this._pan.y*factor};
+    }
+    this.Refresh();
+  }
   Zoom(factor,x=(this.clientWidth||800)/2,y=(this.clientHeight||480)/2) {if (!Number.isFinite(factor) || factor <= 0 || !Number.isFinite(x) || !Number.isFinite(y)) throw new RangeError('Zoom factor and coordinates must be finite; factor must be positive.');const before=this._world({x,y}),next=Math.max(.03,Math.min(8,this._scale*factor));this._scale=next;this._pan={x:x-(this.clientWidth||800)/2-before.x*next,y:y-(this.clientHeight||480)/2-before.y*next};this.Refresh();}
   Refresh(){if(this._frame||!this.isConnected)return;this._frame=requestAnimationFrame(()=>{this._frame=0;this._draw();});}
   _point(event){const rect=this._canvas.getBoundingClientRect();return{x:event.clientX-rect.left,y:event.clientY-rect.top};}

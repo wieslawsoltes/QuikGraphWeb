@@ -27946,10 +27946,10 @@
       },
       {
         "file": "test/viewer.test.js",
-        "sha256": "4b0bdbaf8534ca3b804e153bfdfb6b8a8d48d434fff588069b8a5e63cc505883"
+        "sha256": "07f795d89d21dc288d3c6963397c5dc23f43bdec951bb096d669231f17338708"
       }
     ],
-    "eventStreamSha256": "d9031f98cc8023df8120731cf61d69611229f34725fb7239f6780fbb945a4bd0"
+    "eventStreamSha256": "25d2a4322a9da700661b20d96a616d9afeafb25c916ea89777095a8c86c0c81a"
   },
   "tests": [
     {
