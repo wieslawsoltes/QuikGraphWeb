@@ -1,0 +1,13 @@
+QuikGraphWeb is a JavaScript adaptation of QuikGraph.
+Upstream: https://github.com/KeRNeLith/QuikGraph
+Source commit: 9cd6b49292e09041258708a37bed99c56177b0ef
+
+QuikGraph originated as QuickGraph by Jonathan "Peli" de Halleux (2003),
+continued as YC.QuickGraph, and is maintained as QuikGraph by KeRNeLith
+and the upstream contributors. The original source, tests, and this
+adaptation are distributed under the Microsoft Public License (MS-PL).
+See LICENSE for the full terms. Original attribution and license notices
+are retained in the reference test archive.
+
+This is an independent web port. JavaScript runtime adaptations and
+verified behavior differences are documented in docs/compatibility.md.

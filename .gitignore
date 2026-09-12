@@ -1,0 +1,10 @@
+node_modules/
+dist/
+site/
+test-results/
+.release/
+*.tgz
+quikgraphweb-*.tar.gz
+benchmark.json
+SHA256SUMS.txt
+.DS_Store

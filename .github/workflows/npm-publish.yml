@@ -1,0 +1,113 @@
+name: Publish npm registry
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: Existing release tag to publish
+        required: true
+        type: string
+      expected_sha:
+        description: Commit that the release tag must resolve to
+        required: false
+        default: ''
+        type: string
+      dist_tag:
+        description: npm distribution tag
+        required: false
+        default: latest
+        type: string
+    secrets:
+      NPM_TOKEN:
+        description: npm publication token; optional when trusted publishing is configured
+        required: false
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to publish (for example v0.1.1)
+        required: true
+        type: string
+      expected_sha:
+        description: Optional full commit SHA to verify against the release tag
+        required: false
+        default: ''
+        type: string
+      dist_tag:
+        description: npm distribution tag
+        required: true
+        default: latest
+        type: choice
+        options: [latest, next]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: npm-publish-${{ inputs.tag }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      RELEASE_TAG: ${{ inputs.tag }}
+      EXPECTED_SHA: ${{ inputs.expected_sha }}
+      NPM_DIST_TAG: ${{ inputs.dist_tag }}
+    steps:
+      - name: Validate release inputs
+        shell: bash
+        run: |
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?$ ]]
+          [[ -z "$EXPECTED_SHA" || "$EXPECTED_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$NPM_DIST_TAG" == latest || "$NPM_DIST_TAG" == next ]]
+      - uses: actions/checkout@v7
+        with:
+          ref: refs/tags/${{ inputs.tag }}
+          persist-credentials: false
+      - name: Verify release version and commit
+        shell: bash
+        run: |
+          node --input-type=module -e 'import fs from "node:fs"; const p = JSON.parse(fs.readFileSync("package.json", "utf8")); if (`v${p.version}` !== process.env.RELEASE_TAG) throw Error("Tag/version mismatch");'
+          if [[ -n "$EXPECTED_SHA" && "$(git rev-parse HEAD)" != "$EXPECTED_SHA" ]]; then
+            echo 'Release tag does not identify the verified CI commit.' >&2
+            exit 1
+          fi
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - run: npm install --global npm@11
+      - run: npm ci
+      - name: Download existing release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          [[ "$(gh release view "$RELEASE_TAG" --json isDraft --jq .isDraft)" == false ]]
+          gh release download "$RELEASE_TAG" --pattern '*.tgz' --pattern SHA256SUMS.txt --dir .release/npm
+      - name: Verify release asset checksum
+        id: asset
+        run: node scripts/npm-registry.mjs prepare .release/npm
+      - name: Verify the exact release tarball in installed consumers
+        env:
+          RELEASE_TARBALL: ${{ steps.asset.outputs.tarball }}
+        run: node scripts/package-test.mjs --tarball "$RELEASE_TARBALL"
+      - name: Check immutable npm version
+        id: registry
+        env:
+          RELEASE_TARBALL: ${{ steps.asset.outputs.tarball }}
+        run: node scripts/npm-registry.mjs check "$RELEASE_TARBALL"
+      - name: Publish release tarball with provenance
+        if: steps.registry.outputs.exists != 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          RELEASE_TARBALL: ${{ steps.asset.outputs.tarball }}
+        run: npm publish "$RELEASE_TARBALL" --registry=https://registry.npmjs.org --access public --provenance --ignore-scripts --tag "$NPM_DIST_TAG"
+      - name: Download and verify the public npm artifact and consumers
+        env:
+          RELEASE_TARBALL: ${{ steps.asset.outputs.tarball }}
+        run: node scripts/npm-registry.mjs verify "$RELEASE_TARBALL" "$NPM_DIST_TAG"

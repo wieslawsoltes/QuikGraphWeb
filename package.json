@@ -1,0 +1,39 @@
+{
+  "name": "@wieslawsoltes/quikgraphweb",
+  "version": "0.1.0",
+  "description": "Reusable graph structures and algorithms for JavaScript and the web, with QuikGraph-style APIs",
+  "type": "module",
+  "license": "MS-PL",
+  "author": "QuikGraphWeb contributors",
+  "repository": { "type": "git", "url": "git+https://github.com/wieslawsoltes/QuikGraphWeb.git" },
+  "homepage": "https://wieslawsoltes.github.io/QuikGraphWeb/",
+  "bugs": "https://github.com/wieslawsoltes/QuikGraphWeb/issues",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "unpkg": "./dist/quikgraphweb.min.js",
+  "jsdelivr": "./dist/quikgraphweb.min.js",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "require": "./dist/cjs/index.js" },
+    "./browser": "./dist/quikgraphweb.browser.js",
+    "./package.json": "./package.json"
+  },
+  "files": ["dist", "src", "docs", "examples", "LICENSE", "NOTICE", "README.md", "CHANGELOG.md"],
+  "sideEffects": ["./src/web-component.js", "./dist/web-component.js", "./dist/cjs/web-component.js", "./dist/quikgraphweb.browser.js", "./dist/quikgraphweb.min.js"],
+  "engines": { "node": ">=22" },
+  "keywords": ["quikgraph", "graph", "graph-algorithms", "shortest-path", "graphviz", "petri-net", "web-components", "dotnet"],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node scripts/test.mjs",
+    "test:package": "node scripts/package-test.mjs",
+    "test:browser": "node scripts/browser-test.mjs",
+    "benchmark": "node scripts/benchmark.mjs",
+    "audit": "node scripts/audit.mjs",
+    "build:demo": "node scripts/build-demo.mjs",
+    "dev": "node scripts/serve.mjs",
+    "check": "npm run build && npm test && npm run audit && npm run test:package && npm run build:demo",
+    "prepack": "npm run build"
+  },
+  "devDependencies": { "esbuild": "0.28.2", "playwright": "1.63.0", "typescript": "7.0.2" },
+  "publishConfig": { "access": "public", "provenance": true }
+}

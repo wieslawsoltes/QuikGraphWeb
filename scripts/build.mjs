@@ -1,0 +1,21 @@
+import { build } from 'esbuild';
+import { cp, mkdir, readdir, rm, writeFile } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
+import { resolve } from 'node:path';
+
+await rm('dist', { recursive: true, force: true });
+await mkdir('dist', { recursive: true });
+const entries = (await readdir('src', { recursive: true })).filter(file => file.endsWith('.js')).map(file => 'src/' + file);
+await build({ entryPoints: entries, outdir: 'dist', outbase: 'src', bundle: false, platform: 'neutral', format: 'esm', target: 'es2022', sourcemap: true });
+await build({ entryPoints: entries, outdir: 'dist/cjs', outbase: 'src', bundle: false, platform: 'node', format: 'cjs', target: 'es2022', sourcemap: true });
+await writeFile('dist/cjs/package.json', JSON.stringify({ type: 'commonjs' }) + '\n');
+const declarations = spawnSync(process.execPath, [resolve('node_modules/typescript/bin/tsc'), '-p', 'tsconfig.json'], { stdio: 'inherit' });
+if (declarations.status !== 0) process.exit(declarations.status ?? 1);
+await import('./build-types.mjs');
+await import('./build-contracts.mjs');
+const typecheck = spawnSync(process.execPath, [resolve('node_modules/typescript/bin/tsc'), '--ignoreConfig', '--noEmit', '--strict', '--target', 'ES2022', '--module', 'NodeNext', '--moduleResolution', 'NodeNext', '--lib', 'ES2022,DOM', 'dist/index.d.ts'], { stdio: 'inherit' });
+if (typecheck.status !== 0) process.exit(typecheck.status ?? 1);
+await build({ entryPoints: ['src/index.js'], outfile: 'dist/quikgraphweb.browser.js', bundle: true, platform: 'browser', format: 'esm', target: 'es2022', sourcemap: true, minify: true });
+await build({ entryPoints: ['src/index.js'], outfile: 'dist/quikgraphweb.min.js', bundle: true, platform: 'browser', format: 'iife', globalName: 'QuikGraphWeb', target: 'es2022', sourcemap: true, minify: true });
+for (const name of ['LICENSE', 'NOTICE']) await cp(name, 'dist/' + name);
+console.log('Built ESM, CommonJS, TypeScript declarations, standalone browser ESM and QuikGraphWeb IIFE.');
