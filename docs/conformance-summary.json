@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "upstreamCommit": "9cd6b49292e09041258708a37bed99c56177b0ef",
+  "report": "conformance-audit.json",
+  "reportSha256": "82b4ac3928cc02cae0b0439db2f737aa640bf3b019d9c208a67df9706517be8b",
+  "explanation": "Export presence establishes name coverage only. Mappings come from explicit source comments or exact existing Fixture.Method identities in passing Node test names, with source-file hashes checked against the recorded run. They do not prove all upstream assertions, parameters, fixture inheritance or exception semantics have been ported. No method is counted as fully ported without a behavioral review. The requires-host-runtime disposition comes from the explicitly reviewed CLR backend method list; it is not a passing test or a browser serialization equivalence claim. Member presence uses runtime static/prototype reflection and lexical constructor-field/event initialization; it does not validate overloads, parameter rules, instance defaults or algorithm results.",
+  "counts": {
+    "runtimeExports": 391,
+    "publicTypeDeclarations": 373,
+    "api": {
+      "runtime-export-present-unverified": 272,
+      "typescript-contract-present-unverified": 97,
+      "dotnet-framework-polyfill": 4
+    },
+    "publicMemberSignatures": 2293,
+    "members": {
+      "runtime-member-name-present-unverified": 1810,
+      "constructor-export-present-overloads-unverified": 279,
+      "interface-contract-unverified": 169,
+      "javascript-iteration-adaptation": 7,
+      "dotnet-framework-polyfill": 26,
+      "language-adaptation-unverified": 2
+    },
+    "upstreamTestMethods": 1939,
+    "javascriptTestFiles": 18,
+    "testMappings": {
+      "mapped-js-test-unverified": 1917,
+      "requires-host-runtime": 22
+    },
+    "platformSpecificSourceMethods": 22,
+    "fileLevelReferences": 0,
+    "verifiedFullTestPorts": 0
+  }
+}

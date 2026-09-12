@@ -314,3 +314,338 @@ test('DOT numeric properties retain invariant decimal separators',()=>{const ver
 test('BasicStructuresExtensions font roundtrip with host construction adapter',()=>{assert.equal(G.BasicStructuresExtensions.ToFont(null),null);assert.equal(G.BasicStructuresExtensions.ToGraphvizFont(null),null);for(const[name,size]of[['Arial',12],['Tahoma',8.25]]){const portable=new G.GraphvizFont(name,size),native=G.BasicStructuresExtensions.ToFont(portable,(Name,SizeInPoints)=>({Name,SizeInPoints}));const copy=G.BasicStructuresExtensions.ToGraphvizFont(native);assert.equal(copy.Name,name);assert.equal(copy.SizeInPoints,size);}});
 // upstream: tests/QuikGraph.Graphviz.Tests/FileFotEngineTests.cs::Run_Throws
 test('FileDotEngineTests.Run_Throws',()=>{const engine=new G.FileDotEngine(()=>{});for(const dot of[null,''])for(const path of[null,'','file'])assert.throws(()=>engine.Run('png',dot,path));for(const path of[null,''])assert.throws(()=>engine.Run('png','graph {}',path));});
+
+import * as C from '../src/core.js';
+import {CondensedEdge,MergedEdge}from'../src/structural.js';
+
+// upstream: tests/QuikGraph.Graphviz.Tests/GraphvizAlgorithmTests.cs::Generate
+{
+let graph = new C.AdjacencyGraph();
+{ const fixtureGraph=graph, expected="digraph G {" + "\n" + "}"; test("GraphvizAlgorithmTests.Generate source fixture 1",()=>{const renderer=new G.GraphvizAlgorithm(fixtureGraph);assert.equal(renderer.Generate(),expected);assert.equal(renderer.Generate({Run:(type,dot,path)=>{assert.equal(dot,expected);assert.equal(path,"graph.dot");return dot;}},"graph.dot"),expected);}); }
+let undirectedGraph = new C.UndirectedGraph();
+{ const fixtureGraph=undirectedGraph, expected="graph G {" + "\n" + "}"; test("GraphvizAlgorithmTests.Generate source fixture 2",()=>{const renderer=new G.GraphvizAlgorithm(fixtureGraph);assert.equal(renderer.Generate(),expected);assert.equal(renderer.Generate({Run:(type,dot,path)=>{assert.equal(dot,expected);assert.equal(path,"graph.dot");return dot;}},"graph.dot"),expected);}); }
+graph = new C.AdjacencyGraph();
+graph.AddVertexRange([1,2,3]);
+{ const fixtureGraph=graph, expected="digraph G {" + "\n" + "0;" + "\n" + "1;" + "\n" + "2;" + "\n" + "}"; test("GraphvizAlgorithmTests.Generate source fixture 3",()=>{const renderer=new G.GraphvizAlgorithm(fixtureGraph);assert.equal(renderer.Generate(),expected);assert.equal(renderer.Generate({Run:(type,dot,path)=>{assert.equal(dot,expected);assert.equal(path,"graph.dot");return dot;}},"graph.dot"),expected);}); }
+undirectedGraph = new C.UndirectedGraph();
+undirectedGraph.AddVertexRange([1,2,3]);
+{ const fixtureGraph=undirectedGraph, expected="graph G {" + "\n" + "0;" + "\n" + "1;" + "\n" + "2;" + "\n" + "}"; test("GraphvizAlgorithmTests.Generate source fixture 4",()=>{const renderer=new G.GraphvizAlgorithm(fixtureGraph);assert.equal(renderer.Generate(),expected);assert.equal(renderer.Generate({Run:(type,dot,path)=>{assert.equal(dot,expected);assert.equal(path,"graph.dot");return dot;}},"graph.dot"),expected);}); }
+graph = new C.AdjacencyGraph();
+graph.AddVerticesAndEdgeRange([new C.Edge(1,2),new C.Edge(2,3),new C.Edge(3,1)]);
+{ const fixtureGraph=graph, expected="digraph G {" + "\n" + "0;" + "\n" + "1;" + "\n" + "2;" + "\n" + "0 -> 1;" + "\n" + "1 -> 2;" + "\n" + "2 -> 0;" + "\n" + "}"; test("GraphvizAlgorithmTests.Generate source fixture 5",()=>{const renderer=new G.GraphvizAlgorithm(fixtureGraph);assert.equal(renderer.Generate(),expected);assert.equal(renderer.Generate({Run:(type,dot,path)=>{assert.equal(dot,expected);assert.equal(path,"graph.dot");return dot;}},"graph.dot"),expected);}); }
+undirectedGraph = new C.UndirectedGraph();
+undirectedGraph.AddVerticesAndEdgeRange([new C.Edge(1,2),new C.Edge(2,3),new C.Edge(3,1)]);
+{ const fixtureGraph=undirectedGraph, expected="graph G {" + "\n" + "0;" + "\n" + "1;" + "\n" + "2;" + "\n" + "0 -- 1;" + "\n" + "1 -- 2;" + "\n" + "2 -- 0;" + "\n" + "}"; test("GraphvizAlgorithmTests.Generate source fixture 6",()=>{const renderer=new G.GraphvizAlgorithm(fixtureGraph);assert.equal(renderer.Generate(),expected);assert.equal(renderer.Generate({Run:(type,dot,path)=>{assert.equal(dot,expected);assert.equal(path,"graph.dot");return dot;}},"graph.dot"),expected);}); }
+let wrappedGraph = new C.AdjacencyGraph();
+wrappedGraph.AddVertexRange([1,2]);
+let clusteredGraph = new C.ClusteredAdjacencyGraph(wrappedGraph);
+{ const fixtureGraph=clusteredGraph, expected="digraph G {" + "\n" + "0;" + "\n" + "1;" + "\n" + "}"; test("GraphvizAlgorithmTests.Generate source fixture 7",()=>{const renderer=new G.GraphvizAlgorithm(fixtureGraph);assert.equal(renderer.Generate(),expected);assert.equal(renderer.Generate({Run:(type,dot,path)=>{assert.equal(dot,expected);assert.equal(path,"graph.dot");return dot;}},"graph.dot"),expected);}); }
+wrappedGraph = new C.AdjacencyGraph();
+wrappedGraph.AddVertexRange([1,2]);
+clusteredGraph = new C.ClusteredAdjacencyGraph(wrappedGraph);
+let subGraph1 = clusteredGraph.AddCluster();
+subGraph1.AddVerticesAndEdgeRange([new C.Edge(3,4),new C.Edge(4,1)]);
+let subGraph2 = clusteredGraph.AddCluster();
+subGraph2.AddVerticesAndEdge(new C.Edge(1,5));
+{ const fixtureGraph=clusteredGraph, expected="digraph G {" + "\n" + "subgraph cluster1 {" + "\n" + "2;" + "\n" + "3;" + "\n" + "0;" + "\n" + "2 -> 3;" + "\n" + "3 -> 0;" + "\n" + "}" + "\n" + "subgraph cluster2 {" + "\n" + "4;" + "\n" + "0 -> 4;" + "\n" + "}" + "\n" + "1;" + "\n" + "}"; test("GraphvizAlgorithmTests.Generate source fixture 8",()=>{const renderer=new G.GraphvizAlgorithm(fixtureGraph);assert.equal(renderer.Generate(),expected);assert.equal(renderer.Generate({Run:(type,dot,path)=>{assert.equal(dot,expected);assert.equal(path,"graph.dot");return dot;}},"graph.dot"),expected);}); }
+wrappedGraph = new C.AdjacencyGraph();
+let rootClusteredGraph = new C.ClusteredAdjacencyGraph(wrappedGraph);
+let subClusteredGraph1 = rootClusteredGraph.AddCluster();
+let subClusteredGraph2 = rootClusteredGraph.AddCluster();
+let nestedSubClusteredGraph2_1 = subClusteredGraph2.AddCluster();
+let nestedSubClusteredGraph2_2 = subClusteredGraph2.AddCluster();
+let subClusteredGraph3 = rootClusteredGraph.AddCluster();
+let subClusteredGraph4 = rootClusteredGraph.AddCluster();
+let nestedSubClusteredGraph4_1 = subClusteredGraph4.AddCluster();
+let nestedSubClusteredGraph4_2 = subClusteredGraph4.AddCluster();
+wrappedGraph.AddVerticesAndEdgeRange([new C.Edge(1,2),new C.Edge(2,2)]);
+wrappedGraph.AddVertex(3);
+subClusteredGraph1.AddVerticesAndEdge(new C.Edge(4,5));
+subClusteredGraph1.AddVertex(6);
+subClusteredGraph2.AddVerticesAndEdge(new C.Edge(7,8));
+subClusteredGraph2.AddVertex(9);
+nestedSubClusteredGraph2_1.AddVerticesAndEdge(new C.Edge(10,11));
+nestedSubClusteredGraph2_1.AddVertex(12);
+nestedSubClusteredGraph2_2.AddVerticesAndEdge(new C.Edge(13,14));
+nestedSubClusteredGraph2_2.AddVertex(15);
+subClusteredGraph3.AddVerticesAndEdge(new C.Edge(16,17));
+subClusteredGraph3.AddVertex(18);
+subClusteredGraph4.AddVerticesAndEdge(new C.Edge(19,20));
+subClusteredGraph4.AddVertex(21);
+nestedSubClusteredGraph4_1.AddVerticesAndEdge(new C.Edge(22,23));
+nestedSubClusteredGraph4_1.AddVertex(24);
+nestedSubClusteredGraph4_2.AddVerticesAndEdge(new C.Edge(25,26));
+nestedSubClusteredGraph4_2.AddVertex(27);
+{ const fixtureGraph=rootClusteredGraph, expected="digraph G {" + "\n" + "subgraph cluster1 {" + "\n" + "3;" + "\n" + "4;" + "\n" + "5;" + "\n" + "3 -> 4;" + "\n" + "}" + "\n" + "subgraph cluster2 {" + "\n" + "subgraph cluster3 {" + "\n" + "9;" + "\n" + "10;" + "\n" + "11;" + "\n" + "9 -> 10;" + "\n" + "}" + "\n" + "subgraph cluster4 {" + "\n" + "12;" + "\n" + "13;" + "\n" + "14;" + "\n" + "12 -> 13;" + "\n" + "}" + "\n" + "6;" + "\n" + "7;" + "\n" + "8;" + "\n" + "6 -> 7;" + "\n" + "}" + "\n" + "subgraph cluster5 {" + "\n" + "15;" + "\n" + "16;" + "\n" + "17;" + "\n" + "15 -> 16;" + "\n" + "}" + "\n" + "subgraph cluster6 {" + "\n" + "subgraph cluster7 {" + "\n" + "21;" + "\n" + "22;" + "\n" + "23;" + "\n" + "21 -> 22;" + "\n" + "}" + "\n" + "subgraph cluster8 {" + "\n" + "24;" + "\n" + "25;" + "\n" + "26;" + "\n" + "24 -> 25;" + "\n" + "}" + "\n" + "18;" + "\n" + "19;" + "\n" + "20;" + "\n" + "18 -> 19;" + "\n" + "}" + "\n" + "0;" + "\n" + "1;" + "\n" + "2;" + "\n" + "0 -> 1;" + "\n" + "1 -> 1;" + "\n" + "}"; test("GraphvizAlgorithmTests.Generate source fixture 9",()=>{const renderer=new G.GraphvizAlgorithm(fixtureGraph);assert.equal(renderer.Generate(),expected);assert.equal(renderer.Generate({Run:(type,dot,path)=>{assert.equal(dot,expected);assert.equal(path,"graph.dot");return dot;}},"graph.dot"),expected);}); }
+wrappedGraph = new C.AdjacencyGraph();
+rootClusteredGraph = new C.ClusteredAdjacencyGraph(wrappedGraph);
+subClusteredGraph1 = rootClusteredGraph.AddCluster();
+subClusteredGraph2 = rootClusteredGraph.AddCluster();
+nestedSubClusteredGraph2_1 = subClusteredGraph2.AddCluster();
+nestedSubClusteredGraph2_2 = subClusteredGraph2.AddCluster();
+subClusteredGraph3 = rootClusteredGraph.AddCluster();
+subClusteredGraph4 = rootClusteredGraph.AddCluster();
+nestedSubClusteredGraph4_1 = subClusteredGraph4.AddCluster();
+nestedSubClusteredGraph4_2 = subClusteredGraph4.AddCluster();
+wrappedGraph.AddVerticesAndEdgeRange([new C.Edge(1,2),new C.Edge(2,2)]);
+wrappedGraph.AddVertex(3);
+subClusteredGraph1.AddVerticesAndEdge(new C.Edge(4,5));
+subClusteredGraph1.AddVertex(6);
+subClusteredGraph2.AddVerticesAndEdge(new C.Edge(7,8));
+subClusteredGraph2.AddVertex(9);
+nestedSubClusteredGraph2_1.AddVerticesAndEdge(new C.Edge(10,11));
+nestedSubClusteredGraph2_1.AddVertex(12);
+nestedSubClusteredGraph2_2.AddVerticesAndEdge(new C.Edge(13,14));
+nestedSubClusteredGraph2_2.AddVertex(15);
+subClusteredGraph3.AddVerticesAndEdge(new C.Edge(16,17));
+subClusteredGraph3.AddVertex(18);
+subClusteredGraph4.AddVerticesAndEdge(new C.Edge(19,20));
+subClusteredGraph4.AddVertex(21);
+nestedSubClusteredGraph4_1.AddVerticesAndEdge(new C.Edge(22,23));
+nestedSubClusteredGraph4_1.AddVertex(24);
+nestedSubClusteredGraph4_2.AddVerticesAndEdge(new C.Edge(25,26));
+nestedSubClusteredGraph4_2.AddVertex(27);
+subClusteredGraph3.Collapsed = true;
+subClusteredGraph4.Collapsed = true;
+{ const fixtureGraph=rootClusteredGraph, expected="digraph G {" + "\n" + "subgraph cluster1 {" + "\n" + "3;" + "\n" + "4;" + "\n" + "5;" + "\n" + "3 -> 4;" + "\n" + "}" + "\n" + "subgraph cluster2 {" + "\n" + "subgraph cluster3 {" + "\n" + "9;" + "\n" + "10;" + "\n" + "11;" + "\n" + "9 -> 10;" + "\n" + "}" + "\n" + "subgraph cluster4 {" + "\n" + "12;" + "\n" + "13;" + "\n" + "14;" + "\n" + "12 -> 13;" + "\n" + "}" + "\n" + "6;" + "\n" + "7;" + "\n" + "8;" + "\n" + "6 -> 7;" + "\n" + "}" + "\n" + "subgraph cluster5 {" + "\n" + "15;" + "\n" + "16;" + "\n" + "17;" + "\n" + "15 -> 16;" + "\n" + "}" + "\n" + "subgraph cluster6 {" + "\n" + "subgraph cluster7 {" + "\n" + "}" + "\n" + "subgraph cluster8 {" + "\n" + "}" + "\n" + "18;" + "\n" + "19;" + "\n" + "20;" + "\n" + "18 -> 19;" + "\n" + "}" + "\n" + "0;" + "\n" + "1;" + "\n" + "2;" + "\n" + "0 -> 1;" + "\n" + "1 -> 1;" + "\n" + "}"; test("GraphvizAlgorithmTests.Generate source fixture 10",()=>{const renderer=new G.GraphvizAlgorithm(fixtureGraph);assert.equal(renderer.Generate(),expected);assert.equal(renderer.Generate({Run:(type,dot,path)=>{assert.equal(dot,expected);assert.equal(path,"graph.dot");return dot;}},"graph.dot"),expected);}); }
+}
+
+// upstream: tests/QuikGraph.Graphviz.Tests/Renderers/CondensatedGraphRendererTests.cs::Generate
+{
+let graph = new C.AdjacencyGraph();
+{ const fixtureGraph=graph, expected="digraph G {" + "\n" + "node [fontname=\"Tahoma\", fontsize=8.25, shape=box, style=filled, fillcolor=\"#FFFFE0FF\"];" + "\n" + "edge [fontname=\"Tahoma\", fontsize=8.25];" + "\n" + "}"; test("CondensatedGraphRendererTests.Generate source fixture 1",()=>{const renderer=new G.CondensatedGraphRenderer(fixtureGraph);assert.equal(renderer.Generate(),expected);assert.equal(renderer.Generate({Run:(type,dot,path)=>{assert.equal(dot,expected);assert.equal(path,"graph.dot");return dot;}},"graph.dot"),expected);}); }
+let subGraph1 = new C.AdjacencyGraph();
+subGraph1.AddVerticesAndEdgeRange([new C.Edge(1,2),new C.Edge(2,3),new C.Edge(3,1)]);
+let subGraph2 = new C.AdjacencyGraph();
+subGraph2.AddVerticesAndEdgeRange([new C.Edge(1,1),new C.Edge(1,2),new C.Edge(2,3),new C.Edge(3,2)]);
+let subGraph3 = new C.AdjacencyGraph();
+subGraph3.AddVerticesAndEdgeRange([new C.Edge(1,4),new C.Edge(2,4)]);
+subGraph3.AddVertex(3);
+graph = new C.AdjacencyGraph();
+graph.AddVerticesAndEdgeRange([new CondensedEdge(subGraph1,subGraph2),new CondensedEdge(subGraph1,subGraph3)]);
+{ const fixtureGraph=graph, expected="digraph G {" + "\n" + "node [fontname=\"Tahoma\", fontsize=8.25, shape=box, style=filled, fillcolor=\"#FFFFE0FF\"];" + "\n" + "edge [fontname=\"Tahoma\", fontsize=8.25];" + "\n" + "0 [label=\"3-3\\n  1\\n  2\\n  3\\n  1 -> 2\\n  2 -> 3\\n  3 -> 1\\n\"];" + "\n" + "1 [label=\"3-4\\n  1\\n  2\\n  3\\n  1 -> 1\\n  1 -> 2\\n  2 -> 3\\n  3 -> 2\\n\"];" + "\n" + "2 [label=\"4-2\\n  1\\n  4\\n  2\\n  3\\n  1 -> 4\\n  2 -> 4\\n\"];" + "\n" + "0 -> 1 [label=\"0\\n\"];" + "\n" + "0 -> 2 [label=\"0\\n\"];" + "\n" + "}"; test("CondensatedGraphRendererTests.Generate source fixture 2",()=>{const renderer=new G.CondensatedGraphRenderer(fixtureGraph);assert.equal(renderer.Generate(),expected);assert.equal(renderer.Generate({Run:(type,dot,path)=>{assert.equal(dot,expected);assert.equal(path,"graph.dot");return dot;}},"graph.dot"),expected);}); }
+subGraph1 = new C.AdjacencyGraph();
+subGraph1.AddVerticesAndEdgeRange([new C.Edge(1,2),new C.Edge(2,3),new C.Edge(3,1)]);
+subGraph2 = new C.AdjacencyGraph();
+subGraph2.AddVerticesAndEdgeRange([new C.Edge(1,1),new C.Edge(1,2),new C.Edge(2,3),new C.Edge(3,2)]);
+subGraph3 = new C.AdjacencyGraph();
+subGraph3.AddVerticesAndEdgeRange([new C.Edge(1,4),new C.Edge(2,4)]);
+subGraph3.AddVertex(3);
+graph = new C.AdjacencyGraph();
+let condensedEdge1 = new CondensedEdge(subGraph1,subGraph2);
+condensedEdge1.Edges.push(new C.Edge(1,2));
+let condensedEdge2 = new CondensedEdge(subGraph1,subGraph3);
+condensedEdge2.Edges.push(new C.Edge(2,1));
+condensedEdge2.Edges.push(new C.Edge(3,4));
+let condensedEdge3 = new CondensedEdge(subGraph2,subGraph3);
+graph.AddVerticesAndEdgeRange([condensedEdge1,condensedEdge2,condensedEdge3]);
+{ const fixtureGraph=graph, expected="digraph G {" + "\n" + "node [fontname=\"Tahoma\", fontsize=8.25, shape=box, style=filled, fillcolor=\"#FFFFE0FF\"];" + "\n" + "edge [fontname=\"Tahoma\", fontsize=8.25];" + "\n" + "0 [label=\"3-3\\n  1\\n  2\\n  3\\n  1 -> 2\\n  2 -> 3\\n  3 -> 1\\n\"];" + "\n" + "1 [label=\"3-4\\n  1\\n  2\\n  3\\n  1 -> 1\\n  1 -> 2\\n  2 -> 3\\n  3 -> 2\\n\"];" + "\n" + "2 [label=\"4-2\\n  1\\n  4\\n  2\\n  3\\n  1 -> 4\\n  2 -> 4\\n\"];" + "\n" + "0 -> 1 [label=\"1\\n  1 -> 2\\n\"];" + "\n" + "0 -> 2 [label=\"2\\n  2 -> 1\\n  3 -> 4\\n\"];" + "\n" + "1 -> 2 [label=\"0\\n\"];" + "\n" + "}"; test("CondensatedGraphRendererTests.Generate source fixture 3",()=>{const renderer=new G.CondensatedGraphRenderer(fixtureGraph);assert.equal(renderer.Generate(),expected);assert.equal(renderer.Generate({Run:(type,dot,path)=>{assert.equal(dot,expected);assert.equal(path,"graph.dot");return dot;}},"graph.dot"),expected);}); }
+}
+
+// upstream: tests/QuikGraph.Graphviz.Tests/Renderers/CondensatedGraphRendererTests.cs::Generate_WithEscape
+test("CondensatedGraphRendererTests.Generate_WithEscape exact source Unicode/escape fixture",()=>{
+let vertex1 = "Vertex1&/<>@~|";
+let vertex2 = "Vertex2æéèêë£¤¶ÀÁÂÃÄÅ";
+let vertex3 = "\"Vertex3\"\nΣη← ♠\\[]()";
+let vertex4 = "Vertex4∴∞⇐ℜΩ÷嗷娪";
+let subGraph1 = new C.AdjacencyGraph();
+subGraph1.AddVerticesAndEdgeRange([new C.Edge(vertex1,vertex2),new C.Edge(vertex2,vertex2),new C.Edge(vertex3,vertex1)]);
+let subGraph2 = new C.AdjacencyGraph();
+subGraph2.AddVerticesAndEdgeRange([new C.Edge(vertex1,vertex1),new C.Edge(vertex1,vertex2),new C.Edge(vertex2,vertex3),new C.Edge(vertex2,vertex4),new C.Edge(vertex3,vertex4)]);
+let graph = new C.AdjacencyGraph();
+let condensedEdge = new CondensedEdge(subGraph1,subGraph2);
+condensedEdge.Edges.push(new C.Edge(vertex1,vertex2));
+condensedEdge.Edges.push(new C.Edge(vertex3,vertex1));
+graph.AddVerticesAndEdgeRange([condensedEdge]);
+let expectedVertex1 = "Vertex1&/<>@~|";
+let expectedVertex2 = "Vertex2æéèêë£¤¶ÀÁÂÃÄÅ";
+let expectedVertex3 = "\\\"Vertex3\\\"\\nΣη← ♠\\\\[]()";
+let expectedVertex4 = "Vertex4∴∞⇐ℜΩ÷嗷娪";
+let expectedDot = "digraph G {" + "\n" + "node [fontname=\"Tahoma\", fontsize=8.25, shape=box, style=filled, fillcolor=\"#FFFFE0FF\"];" + "\n" + "edge [fontname=\"Tahoma\", fontsize=8.25];" + "\n" + "0 [label=\"3-3\\n  " + expectedVertex1 + "\\n  " + expectedVertex2 + "\\n  " + expectedVertex3 + "\\n  " + expectedVertex1 + " -> " + expectedVertex2 + "\\n  " + expectedVertex2 + " -> " + expectedVertex2 + "\\n  " + expectedVertex3 + " -> " + expectedVertex1 + "\\n\"];" + "\n" + "1 [label=\"4-5\\n  " + expectedVertex1 + "\\n  " + expectedVertex2 + "\\n  " + expectedVertex3 + "\\n  " + expectedVertex4 + "\\n  " + expectedVertex1 + " -> " + expectedVertex1 + "\\n  " + expectedVertex1 + " -> " + expectedVertex2 + "\\n  " + expectedVertex2 + " -> " + expectedVertex3 + "\\n  " + expectedVertex2 + " -> " + expectedVertex4 + "\\n  " + expectedVertex3 + " -> " + expectedVertex4 + "\\n\"];" + "\n" + "0 -> 1 [label=\"2\\n  " + expectedVertex1 + " -> " + expectedVertex2 + "\\n  " + expectedVertex3 + " -> " + expectedVertex1 + "\\n\"];" + "\n" + "}";
+assert.equal(new G.CondensatedGraphRenderer(graph).Generate(),expectedDot);
+});
+
+// upstream: tests/QuikGraph.Graphviz.Tests/Renderers/EdgeMergeCondensatedGraphRendererTests.cs::Generate
+{
+let graph = new C.AdjacencyGraph();
+{ const fixtureGraph=graph, expected="digraph G {" + "\n" + "node [fontname=\"Tahoma\", fontsize=8.25, shape=box, style=filled, fillcolor=\"#FFFFE0FF\"];" + "\n" + "edge [fontname=\"Tahoma\", fontsize=8.25];" + "\n" + "}"; test("EdgeMergeCondensatedGraphRendererTests.Generate source fixture 1",()=>{const renderer=new G.EdgeMergeCondensatedGraphRenderer(fixtureGraph);assert.equal(renderer.Generate(),expected);assert.equal(renderer.Generate({Run:(type,dot,path)=>{assert.equal(dot,expected);assert.equal(path,"graph.dot");return dot;}},"graph.dot"),expected);}); }
+graph = new C.AdjacencyGraph();
+graph.AddVertexRange([4,8]);
+let edge12 = new C.Edge(1,2);
+let edge13 = new C.Edge(1,3);
+let edge23 = new C.Edge(2,3);
+let edge38 = new C.Edge(3,8);
+let edge42 = new C.Edge(4,2);
+let edge43 = new C.Edge(4,3);
+let edge44 = new C.Edge(4,4);
+let edge45 = new C.Edge(4,5);
+let edge57 = new C.Edge(5,7);
+let edge71 = new C.Edge(7,1);
+let edge82 = new C.Edge(8,2);
+let mergeEdge1 = new MergedEdge(8,8);
+mergeEdge1.Edges.push(edge82);
+mergeEdge1.Edges.push(edge23);
+mergeEdge1.Edges.push(edge38);
+let mergeEdge2 = new MergedEdge(4,4);
+mergeEdge2.Edges.push(edge44);
+let mergeEdge3 = new MergedEdge(4,8);
+mergeEdge3.Edges.push(edge43);
+mergeEdge3.Edges.push(edge38);
+let mergeEdge4 = new MergedEdge(4,8);
+mergeEdge4.Edges.push(edge42);
+mergeEdge4.Edges.push(edge23);
+mergeEdge4.Edges.push(edge38);
+let mergeEdge5 = new MergedEdge(4,8);
+mergeEdge5.Edges.push(edge45);
+mergeEdge5.Edges.push(edge57);
+mergeEdge5.Edges.push(edge71);
+mergeEdge5.Edges.push(edge13);
+mergeEdge5.Edges.push(edge38);
+let mergeEdge6 = new MergedEdge(4,8);
+mergeEdge6.Edges.push(edge45);
+mergeEdge6.Edges.push(edge57);
+mergeEdge6.Edges.push(edge71);
+mergeEdge6.Edges.push(edge12);
+mergeEdge6.Edges.push(edge23);
+mergeEdge6.Edges.push(edge38);
+graph.AddEdgeRange([mergeEdge1,mergeEdge2,mergeEdge3,mergeEdge4,mergeEdge5,mergeEdge6]);
+{ const fixtureGraph=graph, expected="digraph G {" + "\n" + "node [fontname=\"Tahoma\", fontsize=8.25, shape=box, style=filled, fillcolor=\"#FFFFE0FF\"];" + "\n" + "edge [fontname=\"Tahoma\", fontsize=8.25];" + "\n" + "0 [label=\"4\"];" + "\n" + "1 [label=\"8\"];" + "\n" + "0 -> 0 [label=\"1\\n  4 -> 4\\n\"];" + "\n" + "0 -> 1 [label=\"2\\n  4 -> 3\\n  3 -> 8\\n\"];" + "\n" + "0 -> 1 [label=\"3\\n  4 -> 2\\n  2 -> 3\\n  3 -> 8\\n\"];" + "\n" + "0 -> 1 [label=\"5\\n  4 -> 5\\n  5 -> 7\\n  7 -> 1\\n  1 -> 3\\n  3 -> 8\\n\"];" + "\n" + "0 -> 1 [label=\"6\\n  4 -> 5\\n  5 -> 7\\n  7 -> 1\\n  1 -> 2\\n  2 -> 3\\n  3 -> 8\\n\"];" + "\n" + "1 -> 1 [label=\"3\\n  8 -> 2\\n  2 -> 3\\n  3 -> 8\\n\"];" + "\n" + "}"; test("EdgeMergeCondensatedGraphRendererTests.Generate source fixture 2",()=>{const renderer=new G.EdgeMergeCondensatedGraphRenderer(fixtureGraph);assert.equal(renderer.Generate(),expected);assert.equal(renderer.Generate({Run:(type,dot,path)=>{assert.equal(dot,expected);assert.equal(path,"graph.dot");return dot;}},"graph.dot"),expected);}); }
+}
+
+// upstream: tests/QuikGraph.Graphviz.Tests/Renderers/EdgeMergeCondensatedGraphRendererTests.cs::Generate_WithEscape
+test("EdgeMergeCondensatedGraphRendererTests.Generate_WithEscape exact source Unicode/escape fixture",()=>{
+let vertex1 = "Vertex1&/<>@~|";
+let vertex2 = "Vertex2æéèêë£¤¶ÀÁÂÃÄÅ";
+let vertex3 = "\"Vertex3\"\nΣη← ♠\\[]()";
+let vertex4 = "Vertex4∴∞⇐ℜΩ÷嗷娪";
+let graph = new C.AdjacencyGraph();
+graph.AddVertexRange([vertex3,vertex4]);
+let edge12 = new C.Edge(vertex1,vertex2);
+let edge24 = new C.Edge(vertex2,vertex4);
+let edge31 = new C.Edge(vertex3,vertex1);
+let edge32 = new C.Edge(vertex3,vertex2);
+let edge33 = new C.Edge(vertex3,vertex3);
+let edge41 = new C.Edge(vertex4,vertex1);
+let mergeEdge1 = new MergedEdge(vertex4,vertex4);
+mergeEdge1.Edges.push(edge41);
+mergeEdge1.Edges.push(edge12);
+mergeEdge1.Edges.push(edge24);
+let mergeEdge2 = new MergedEdge(vertex3,vertex3);
+mergeEdge2.Edges.push(edge33);
+let mergeEdge3 = new MergedEdge(vertex3,vertex4);
+mergeEdge3.Edges.push(edge32);
+mergeEdge3.Edges.push(edge24);
+let mergeEdge4 = new MergedEdge(vertex3,vertex4);
+mergeEdge4.Edges.push(edge31);
+mergeEdge4.Edges.push(edge12);
+mergeEdge4.Edges.push(edge24);
+graph.AddEdgeRange([mergeEdge1,mergeEdge2,mergeEdge3,mergeEdge4]);
+let expectedVertex1 = "Vertex1&/<>@~|";
+let expectedVertex2 = "Vertex2æéèêë£¤¶ÀÁÂÃÄÅ";
+let expectedVertex3 = "\\\"Vertex3\\\"\\nΣη← ♠\\\\[]()";
+let expectedVertex4 = "Vertex4∴∞⇐ℜΩ÷嗷娪";
+let expectedDot = "digraph G {" + "\n" + "node [fontname=\"Tahoma\", fontsize=8.25, shape=box, style=filled, fillcolor=\"#FFFFE0FF\"];" + "\n" + "edge [fontname=\"Tahoma\", fontsize=8.25];" + "\n" + "0 [label=\"" + expectedVertex3 + "\"];" + "\n" + "1 [label=\"" + expectedVertex4 + "\"];" + "\n" + "0 -> 0 [label=\"1\\n  " + expectedVertex3 + " -> " + expectedVertex3 + "\\n\"];" + "\n" + "0 -> 1 [label=\"2\\n  " + expectedVertex3 + " -> " + expectedVertex2 + "\\n  " + expectedVertex2 + " -> " + expectedVertex4 + "\\n\"];" + "\n" + "0 -> 1 [label=\"3\\n  " + expectedVertex3 + " -> " + expectedVertex1 + "\\n  " + expectedVertex1 + " -> " + expectedVertex2 + "\\n  " + expectedVertex2 + " -> " + expectedVertex4 + "\\n\"];" + "\n" + "1 -> 1 [label=\"3\\n  " + expectedVertex4 + " -> " + expectedVertex1 + "\\n  " + expectedVertex1 + " -> " + expectedVertex2 + "\\n  " + expectedVertex2 + " -> " + expectedVertex4 + "\\n\"];" + "\n" + "}";
+assert.equal(new G.EdgeMergeCondensatedGraphRenderer(graph).Generate(),expectedDot);
+});
+
+// upstream: tests/QuikGraph.Graphviz.Tests/Extensions/GraphvizExtensionsTests.cs::ToGraphviz
+test("GraphvizExtensionsTests.ToGraphviz exact source fixture",()=>{
+let graph = new C.AdjacencyGraph();
+graph.AddVerticesAndEdgeRange([new C.Edge(1,2),new C.Edge(2,3),new C.Edge(3,1)]);
+graph.AddVertexRange([4,5]);
+assert.equal(G.ToGraphviz(graph),"digraph G {" + "\n" + "0;" + "\n" + "1;" + "\n" + "2;" + "\n" + "3;" + "\n" + "4;" + "\n" + "0 -> 1;" + "\n" + "1 -> 2;" + "\n" + "2 -> 0;" + "\n" + "}");
+});
+
+// upstream: tests/QuikGraph.Graphviz.Tests/Extensions/GraphvizExtensionsTests.cs::ToGraphvizWithEmptyInit
+test("GraphvizExtensionsTests.ToGraphvizWithEmptyInit exact source fixture",()=>{
+let graph = new C.AdjacencyGraph();
+graph.AddVerticesAndEdgeRange([new C.Edge(1,2),new C.Edge(2,3),new C.Edge(3,1)]);
+graph.AddVertexRange([4,5]);
+assert.equal(G.ToGraphviz(graph,a=>{a.FormatCluster.add(()=>{});a.FormatVertex.add(()=>{});a.FormatEdge.add(()=>{});}),"digraph G {" + "\n" + "0;" + "\n" + "1;" + "\n" + "2;" + "\n" + "3;" + "\n" + "4;" + "\n" + "0 -> 1;" + "\n" + "1 -> 2;" + "\n" + "2 -> 0;" + "\n" + "}");
+});
+
+// upstream: tests/QuikGraph.Graphviz.Tests/Extensions/GraphvizExtensionsTests.cs::ToGraphvizWithInit
+test("GraphvizExtensionsTests.ToGraphvizWithInit exact source fixture",()=>{
+let wrappedGraph = new C.AdjacencyGraph();
+wrappedGraph.AddVerticesAndEdgeRange([new C.Edge(1,2),new C.Edge(1,3),new C.Edge(2,4)]);
+wrappedGraph.AddVertex(5);
+let clusteredGraph = new C.ClusteredAdjacencyGraph(wrappedGraph);
+let subGraph1 = clusteredGraph.AddCluster();
+subGraph1.AddVerticesAndEdgeRange([new C.Edge(6,7),new C.Edge(7,8)]);
+let subGraph2 = clusteredGraph.AddCluster();
+subGraph2.AddVerticesAndEdge(new C.Edge(9,10));
+subGraph2.AddVertex(11);
+assert.equal(G.ToGraphviz(clusteredGraph,a=>{a.CommonVertexFormat.Shape=G.GraphvizVertexShape.Diamond;a.CommonEdgeFormat.ToolTip="Test Edge";a.FormatVertex.add((_,args)=>{args.VertexFormat.Label=`Test Vertex ${args.Vertex}`;});}),"digraph G {" + "\n" + "node [shape=diamond];" + "\n" + "edge [tooltip=\"Test Edge\"];" + "\n" + "subgraph cluster1 {" + "\n" + "5 [label=\"Test Vertex 6\"];" + "\n" + "6 [label=\"Test Vertex 7\"];" + "\n" + "7 [label=\"Test Vertex 8\"];" + "\n" + "5 -> 6;" + "\n" + "6 -> 7;" + "\n" + "}" + "\n" + "subgraph cluster2 {" + "\n" + "8 [label=\"Test Vertex 9\"];" + "\n" + "9 [label=\"Test Vertex 10\"];" + "\n" + "10 [label=\"Test Vertex 11\"];" + "\n" + "8 -> 9;" + "\n" + "}" + "\n" + "0 [label=\"Test Vertex 1\"];" + "\n" + "1 [label=\"Test Vertex 2\"];" + "\n" + "2 [label=\"Test Vertex 3\"];" + "\n" + "3 [label=\"Test Vertex 4\"];" + "\n" + "4 [label=\"Test Vertex 5\"];" + "\n" + "0 -> 1;" + "\n" + "0 -> 2;" + "\n" + "1 -> 3;" + "\n" + "}");
+});
+
+// upstream: tests/QuikGraph.Graphviz.Tests/Extensions/GraphvizExtensionsTests.cs::ToGraphvizWithInit2
+test("GraphvizExtensionsTests.ToGraphvizWithInit2 exact source fixture",()=>{
+let graph = new C.AdjacencyGraph();
+graph.AddVerticesAndEdgeRange([new C.Edge(1,2),new C.Edge(1,3),new C.Edge(2,4)]);
+graph.AddVertex(5);
+assert.equal(G.ToGraphviz(graph,a=>{a.CommonVertexFormat.Style=G.GraphvizVertexStyle.Bold;a.CommonEdgeFormat.StrokeColor=G.GraphvizColor.Azure;a.FormatVertex.add((_,args)=>{args.VertexFormat.ToolTip=`Tooltip for Test Vertex ${args.Vertex}`;});a.FormatEdge.add((_,args)=>{args.EdgeFormat.ToolTip=`Tooltip for Test Edge ${args.Edge.Source} -> ${args.Edge.Target}`;});}),"digraph G {" + "\n" + "node [style=bold];" + "\n" + "edge [color=\"#F0FFFFFF\"];" + "\n" + "0 [tooltip=\"Tooltip for Test Vertex 1\"];" + "\n" + "1 [tooltip=\"Tooltip for Test Vertex 2\"];" + "\n" + "2 [tooltip=\"Tooltip for Test Vertex 3\"];" + "\n" + "3 [tooltip=\"Tooltip for Test Vertex 4\"];" + "\n" + "4 [tooltip=\"Tooltip for Test Vertex 5\"];" + "\n" + "0 -> 1 [tooltip=\"Tooltip for Test Edge 1 -> 2\"];" + "\n" + "0 -> 2 [tooltip=\"Tooltip for Test Edge 1 -> 3\"];" + "\n" + "1 -> 3 [tooltip=\"Tooltip for Test Edge 2 -> 4\"];" + "\n" + "}");
+});
+
+// upstream: tests/QuikGraph.Graphviz.Tests/Extensions/GraphvizExtensionsTests.cs::ToGraphvizWithInit_Record
+test("GraphvizExtensionsTests.ToGraphvizWithInit_Record exact source fixture",()=>{
+let graph = new C.AdjacencyGraph();
+graph.AddVerticesAndEdgeRange([new C.Edge(1,2),new C.Edge(1,3),new C.Edge(2,4)]);
+graph.AddVertex(5);
+assert.equal(G.ToGraphviz(graph,a=>{a.CommonVertexFormat.ToolTip="Vertex";a.CommonEdgeFormat.ToolTip="Edge";a.FormatVertex.add((_,args)=>{args.VertexFormat.Shape=G.GraphvizVertexShape.Record;if(args.Vertex===2)args.VertexFormat.Label=String.raw`Vertex\ 2 | Custom\ Record | { Top | Bottom }`;else if(args.Vertex===3){args.VertexFormat.Shape=G.GraphvizVertexShape.Box;args.VertexFormat.Label='Vertex 3 label';}else{args.VertexFormat.Record=new G.GraphvizRecord();args.VertexFormat.Record.Cells=new G.GraphvizRecordCellCollection([new G.GraphvizRecordCell(`Vertex ${args.Vertex}`),new G.GraphvizRecordCell('Generated Record')]);}});}),"digraph G {" + "\n" + "node [tooltip=\"Vertex\"];" + "\n" + "edge [tooltip=\"Edge\"];" + "\n" + "0 [shape=record, label=\"Vertex\\ 1 | Generated\\ Record\"];" + "\n" + "1 [shape=record, label=\"Vertex\\ 2 | Custom\\ Record | { Top | Bottom }\"];" + "\n" + "2 [shape=box, label=\"Vertex 3 label\"];" + "\n" + "3 [shape=record, label=\"Vertex\\ 4 | Generated\\ Record\"];" + "\n" + "4 [shape=record, label=\"Vertex\\ 5 | Generated\\ Record\"];" + "\n" + "0 -> 1;" + "\n" + "0 -> 2;" + "\n" + "1 -> 3;" + "\n" + "}");
+});
+
+// upstream: tests/QuikGraph.Graphviz.Tests/Extensions/GraphvizExtensionsTests.cs::ToGraphvizWithInit_Record2
+test("GraphvizExtensionsTests.ToGraphvizWithInit_Record2 exact source fixture",()=>{
+let graph = new C.AdjacencyGraph();
+graph.AddVerticesAndEdgeRange([new C.Edge(1,2),new C.Edge(1,3),new C.Edge(2,4)]);
+graph.AddVertex(5);
+assert.equal(G.ToGraphviz(graph,a=>{a.CommonVertexFormat.Shape=G.GraphvizVertexShape.Record;a.CommonEdgeFormat.ToolTip="Edge";a.FormatVertex.add((_,args)=>{if(args.Vertex===2)args.VertexFormat.Label=String.raw`Vertex\ 2 | Custom\ Record | { Top | Bottom }`;else if(args.Vertex===3){args.VertexFormat.Shape=G.GraphvizVertexShape.Box;args.VertexFormat.Label='Vertex 3 label';}else{args.VertexFormat.Record=new G.GraphvizRecord();args.VertexFormat.Record.Cells=new G.GraphvizRecordCellCollection([new G.GraphvizRecordCell(`Vertex ${args.Vertex}`),new G.GraphvizRecordCell('Generated Record')]);}});}),"digraph G {" + "\n" + "node [shape=record];" + "\n" + "edge [tooltip=\"Edge\"];" + "\n" + "0 [label=\"Vertex\\ 1 | Generated\\ Record\"];" + "\n" + "1 [label=\"Vertex\\ 2 | Custom\\ Record | { Top | Bottom }\"];" + "\n" + "2 [shape=box, label=\"Vertex 3 label\"];" + "\n" + "3 [label=\"Vertex\\ 4 | Generated\\ Record\"];" + "\n" + "4 [label=\"Vertex\\ 5 | Generated\\ Record\"];" + "\n" + "0 -> 1;" + "\n" + "0 -> 2;" + "\n" + "1 -> 3;" + "\n" + "}");
+});
+
+// upstream: tests/QuikGraph.Graphviz.Tests/GraphvizAlgorithmTests.cs::GenerateWithFormats
+test("GraphvizAlgorithmTests.GenerateWithFormats exact source fixture",()=>{
+let graph = new C.AdjacencyGraph();
+graph.AddVerticesAndEdgeRange([new C.Edge(1,2),new C.Edge(1,3),new C.Edge(3,2),new C.Edge(3,4),new C.Edge(4,6),new C.Edge(5,2),new C.Edge(5,5)]);
+graph.AddVertex(7);
+let clusteredGraph = new C.ClusteredAdjacencyGraph(graph);
+let subGraph1 = clusteredGraph.AddCluster();
+subGraph1.AddVertexRange([8,9,10]);
+let subGraph2 = clusteredGraph.AddCluster();
+subGraph2.AddVerticesAndEdgeRange([new C.Edge(11,12),new C.Edge(11,13),new C.Edge(12,13)]);
+let algorithm = new G.GraphvizAlgorithm(clusteredGraph);
+algorithm.GraphFormat.Name = "MyGraph";
+algorithm.GraphFormat.NodeSeparation = 2;
+algorithm.GraphFormat.FontColor = G.GraphvizColor.Red;
+algorithm.CommonVertexFormat.Url = "https://myurl.com";
+algorithm.CommonVertexFormat.FillColor = G.GraphvizColor.LightYellow;
+algorithm.CommonVertexFormat.Style = G.GraphvizVertexStyle.Filled;
+algorithm.CommonEdgeFormat.Direction = G.GraphvizEdgeDirection.Back;
+algorithm.CommonEdgeFormat.ToolTip = "Edge";
+algorithm.FormatCluster.add((_,args)=>{args.GraphFormat.Label=args.Cluster===subGraph1?'Only Vertices cluster':'Triangle cluster';});algorithm.FormatVertex.add((_,args)=>{if(args.Vertex===2||args.Vertex===11)args.VertexFormat.Label='Special Node';});algorithm.FormatEdge.add((_,args)=>{if(args.Edge.Source===args.Edge.Target)args.EdgeFormat.StrokeColor=G.GraphvizColor.Gold;});
+assert.equal(algorithm.Generate(),"digraph MyGraph {" + "\n" + "fontcolor=\"#FF0000FF\"; nodesep=2;" + "\n" + "node [URL=\"https://myurl.com\", style=filled, fillcolor=\"#FFFFE0FF\"];" + "\n" + "edge [dir=back, tooltip=\"Edge\"];" + "\n" + "subgraph cluster1 {" + "\n" + "label=\"Only Vertices cluster\"" + "\n" + "7;" + "\n" + "8;" + "\n" + "9;" + "\n" + "}" + "\n" + "subgraph cluster2 {" + "\n" + "label=\"Triangle cluster\"" + "\n" + "10 [label=\"Special Node\"];" + "\n" + "11;" + "\n" + "12;" + "\n" + "10 -> 11;" + "\n" + "10 -> 12;" + "\n" + "11 -> 12;" + "\n" + "}" + "\n" + "0;" + "\n" + "1 [label=\"Special Node\"];" + "\n" + "2;" + "\n" + "3;" + "\n" + "4;" + "\n" + "5;" + "\n" + "6;" + "\n" + "0 -> 1;" + "\n" + "0 -> 2;" + "\n" + "2 -> 1;" + "\n" + "2 -> 3;" + "\n" + "3 -> 4;" + "\n" + "5 -> 1;" + "\n" + "5 -> 5 [color=\"#FFD700FF\"];" + "\n" + "}");
+});
+
+// upstream: tests/QuikGraph.Graphviz.Tests/Extensions/GraphvizExtensionsTests.cs::ToGraphviz_DelegateGraph
+// upstream: tests/QuikGraph.Graphviz.Tests/Extensions/GraphvizExtensionsTests.cs::ToGraphviz_EquatableEdgeDelegateGraph
+for(const EdgeType of[C.Edge,C.EquatableEdge])test(`Graphviz delegate graph source ${EdgeType.name}`,()=>{const graph=new C.DelegateVertexAndEdgeListGraph([1,2,3,4,5],v=>v===1?[new EdgeType(1,2),new EdgeType(1,3)]:v===2?[new EdgeType(2,4)]:[3,4,5].includes(v)?[]:undefined);assert.equal(G.ToGraphviz(graph),'digraph G {\n0;\n1;\n2;\n3;\n4;\n0 -> 1;\n0 -> 2;\n1 -> 3;\n}');});
+// upstream: tests/QuikGraph.Graphviz.Tests/GraphvizAlgorithmTests.cs::FormatHandlers
+// upstream: tests/QuikGraph.Graphviz.Tests/GraphvizAlgorithmTests.cs::GenerateSameDot
+test('Graphviz source format handlers exactly once and repeated engine generation',()=>{const g=new AdjacencyGraph();const check=graph=>{const a=new G.GraphvizAlgorithm(graph),vertices=new Set(graph.Vertices),edges=new Set(graph.Edges),clusters=new Set(graph.Clusters??[]);a.FormatVertex.add((sender,args)=>{assert.equal(sender,a);assert.ok(vertices.delete(args.Vertex));});a.FormatEdge.add((sender,args)=>{assert.equal(sender,a);assert.ok(edges.delete(args.Edge));});a.FormatCluster.add((sender,args)=>{assert.equal(sender,a);assert.ok(clusters.delete(args.Cluster));});const dot=a.Generate();assert.ok(dot);assert.equal(vertices.size,0);assert.equal(edges.size,0);assert.equal(clusters.size,0);a.FormatVertex.clear();a.FormatEdge.clear();a.FormatCluster.clear();a.Generate({Run:(_,actual,path)=>{assert.equal(actual,dot);assert.equal(path,'NotSaved.dot');return path;}},'NotSaved.dot');};check(g);g.AddVertexRange([1,2]);check(g);g.AddVerticesAndEdgeRange([new Edge(1,2),new Edge(2,3),new Edge(3,1)]);check(g);const c=new C.ClusteredAdjacencyGraph(g);check(c);c.AddCluster().AddVertexRange([4,5]);c.AddCluster().AddVerticesAndEdge(new Edge(1,6));check(c);});
+// upstream: tests/QuikGraph.Graphviz.Tests/GraphvizAlgorithmTests.cs::Generate_Throws
+// upstream: tests/QuikGraph.Graphviz.Tests/Extensions/GraphvizExtensionsTests.cs::ToGraphvizWithInit_Throws
+// upstream: tests/QuikGraph.Graphviz.Tests/Extensions/GraphvizExtensionsTests.cs::DotToSvg_Throws
+// upstream: tests/QuikGraph.Graphviz.Tests/Extensions/GraphvizExtensionsTests.cs::ToSvgWithInit_Throws
+test('Graphviz generation and extension null argument source combinations',()=>{const g=new AdjacencyGraph(),a=new G.GraphvizAlgorithm(g),engine={Run:()=>assert.fail('must not run')};for(const args of[[null,'NotSaved.dot'],[engine,null],[engine,''],[null,null],[null,'']])assert.throws(()=>a.Generate(...args));assert.throws(()=>G.ToGraphviz(g,null),TypeError);assert.throws(()=>G.ToSvg(null),TypeError);assert.throws(()=>G.ToSvg(g,null),TypeError);});
+// upstream: tests/QuikGraph.Graphviz.Tests/Extensions/GraphvizExtensionsTests.cs::ToSvg
+// upstream: tests/QuikGraph.Graphviz.Tests/Extensions/GraphvizExtensionsTests.cs::ToSvgWithInit
+test('Graphviz SVG source result and initialized DOT through explicit rendering adapter',async()=>{const g=new AdjacencyGraph();g.AddVerticesAndEdgeRange([new Edge(1,2),new Edge(1,3),new Edge(2,4)]);const expected='Mock SVG content';assert.equal(G.ToSvg(g,dot=>{assert.equal(dot,G.ToGraphviz(g));return expected;}),expected);assert.equal(await G.ToSvg(g,{renderString:async(dot,options)=>{assert.match(dot,/tooltip="Test vertex"/);assert.deepEqual(options,{format:'svg'});return expected;}},a=>{a.CommonVertexFormat.ToolTip='Test vertex';}),expected);});
+// upstream: tests/QuikGraph.Graphviz.Tests/Renderers/CondensatedGraphRendererTests.cs::Constructor
+// upstream: tests/QuikGraph.Graphviz.Tests/Renderers/CondensatedGraphRendererTests.cs::Constructor_Throws
+// upstream: tests/QuikGraph.Graphviz.Tests/Renderers/EdgeMergeCondensatedGraphRendererTests.cs::Constructor
+// upstream: tests/QuikGraph.Graphviz.Tests/Renderers/EdgeMergeCondensatedGraphRendererTests.cs::Constructor_Throws
+test('Condensation renderer constructors retain graph and reject null',()=>{for(const Type of[G.CondensatedGraphRenderer,G.EdgeMergeCondensatedGraphRenderer]){const graph=new AdjacencyGraph(),r=new Type(graph);assert.equal(r.VisitedGraph,graph);assert.ok(r.Graphviz);assert.throws(()=>new Type(null),TypeError);const before=r.Graphviz.FormatVertex.Count;r.Generate();assert.equal(r.Graphviz.FormatVertex.Count,before);}});
+test('Graphviz custom Equals endpoints use canonical vertex identifiers',()=>{class V{constructor(id){this.ID=id;}Equals(other){return other instanceof V&&this.ID===other.ID;}GetHashCode(){return this.ID;}}const g=new AdjacencyGraph();g.AddVertexRange([new V(1),new V(2)]);g.AddEdge(new Edge(new V(1),new V(2)));assert.equal(G.ToGraphviz(g),'digraph G {\n0;\n1;\n0 -> 1;\n}');const label=new G.GraphvizEdgeLabel();label.Value='native';const properties=new globalThis.Map();label.AddParameters(properties);assert.equal(properties.get('label'),'native');});
+
+// upstream: tests/QuikGraph.Graphviz.Tests/Extensions/GraphvizExtensionsTests.cs::ToSvg_Failure
+// upstream: tests/QuikGraph.Graphviz.Tests/Extensions/GraphvizExtensionsTests.cs::ToSvgWithInit_Failure
+test('Graphviz SVG absent response content returns empty string through adapter',async()=>{const g=new AdjacencyGraph();g.AddVerticesAndEdgeRange([new Edge(1,2),new Edge(2,3),new Edge(3,1)]);g.AddVertexRange([4,5]);assert.equal(G.ToSvg(g,()=>null),'');assert.equal(await G.ToSvg(g,async dot=>{assert.match(dot,/tooltip="Test vertex"/);return null;},a=>{a.CommonVertexFormat.ToolTip='Test vertex';}),'');});

@@ -1,9 +1,15 @@
 import assert from 'node:assert/strict';
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { sourceComments } from './source-comments.mjs';
 
 const api = JSON.parse(await readFile('docs/api-inventory.json', 'utf8'));
 const inventory = JSON.parse(await readFile('docs/test-inventory.json', 'utf8'));
+const platformManifest = JSON.parse(await readFile('docs/platform-test-boundaries.json', 'utf8'));
+assert.equal(platformManifest.upstreamCommit, inventory.upstream.commit);
+const platformBoundaries = new Map(platformManifest.tests.map(boundary => [boundary.id, boundary]));
+assert.equal(platformBoundaries.size, platformManifest.tests.length, 'Platform dispositions must have unique source IDs.');
+for (const boundary of platformBoundaries.values()) assert(inventory.tests.some(test => test.id === boundary.id), `Unknown source runtime boundary ${boundary.id}`);
 const runtime = await import('../src/index.js');
 assert.equal(api.upstream.commit, inventory.upstream.commit);
 assert.equal(api.types.length, api.counts.publicTypeDeclarations);
@@ -77,9 +83,16 @@ const memberResults = (api.members ?? []).map(member => {
 const testFiles = (await readdir('test', { recursive: true })).filter(file => /\.(test|spec)\.(?:m?js)$/.test(file)).sort();
 const sources = await Promise.all(testFiles.map(async file => ({ file: 'test/' + file, text: await readFile('test/' + file, 'utf8') })));
 const mappings = new Map();
+const mappingEvidence = new Map();
 const fileReferences = [];
+function addMapping(test, file, evidence) {
+  if (!mappings.has(test.id)) mappings.set(test.id, new Set());
+  mappings.get(test.id).add(file);
+  if (!mappingEvidence.has(test.id)) mappingEvidence.set(test.id, []);
+  mappingEvidence.get(test.id).push(evidence);
+}
 for (const { file, text } of sources) {
-  for (const match of text.matchAll(/^[ \t]*\/\/[ \t]*upstream:[ \t]*([^\r\n]+)/gmi)) {
+  for (const comment of sourceComments(text)) for (const match of comment.matchAll(/^[ \t*]*upstream:[ \t]*([^\r\n]+)/gmi)) {
     for (const reference of match[1].split(/\s*,\s*/)) {
       const rawId = reference.trim();
       const id = rawId.startsWith('QuikGraph') && rawId.includes('/') ? 'tests/' + rawId : rawId;
@@ -89,24 +102,68 @@ for (const { file, text } of sources) {
       const short = inventory.tests.filter(test => `${test.fixture}.${test.name}` === id);
       const test = exact ?? (short.length === 1 ? short[0] : undefined);
       assert(test, `Unknown or ambiguous upstream test reference ${id} in ${file}`);
-      if (!mappings.has(test.id)) mappings.set(test.id, []);
-      mappings.get(test.id).push(file);
+      addMapping(test, file, { kind: 'explicit-source-reference', file, reference: id });
     }
   }
 }
-const tests = inventory.tests.map(test => ({ id: test.id, status: mappings.has(test.id) ? 'mapped-js-test-unverified' : 'unported', mappedFiles: mappings.get(test.id) ?? [] }));
+const executedMapping = { capturedPassedTests: 0, matchedPassedNames: 0, staleSourceFiles: [], available: false };
+let runManifest;
+try { runManifest = JSON.parse(await readFile('test-results/test-run.json', 'utf8')); }
+catch (error) { if (error.code !== 'ENOENT') throw error; }
+if (runManifest) {
+  executedMapping.available = true;
+  executedMapping.runExitCode = runManifest.exitCode;
+  executedMapping.nodeVersion = runManifest.nodeVersion;
+  executedMapping.testSourceHashes = runManifest.sourceFiles;
+  const currentHashes = new Map(sources.map(source => [source.file, createHash('sha256').update(source.text).digest('hex')]));
+  const validFiles = new Set();
+  for (const source of runManifest.sourceFiles) {
+    if (currentHashes.get(source.file) === source.sha256) validFiles.add(source.file);
+    else executedMapping.staleSourceFiles.push(source.file);
+  }
+  const eventText = await readFile('test-results/test-events.jsonl', 'utf8');
+  executedMapping.eventStreamSha256 = createHash('sha256').update(eventText).digest('hex');
+  const events = eventText.split(/\r?\n/).filter(Boolean).map(line => JSON.parse(line));
+  for (const event of events) {
+    if (event.status !== 'passed' || !validFiles.has(event.file)) continue;
+    executedMapping.capturedPassedTests++;
+    const name = /^(\w+)\.([\w]+(?:\s*\/\s*[\w]+)*)(?:$|[\s(:-])/.exec(event.name);
+    if (!name) continue;
+    let matched = false;
+    for (const method of name[2].split(/\s*\/\s*/)) {
+      const candidates = inventory.tests.filter(test => test.fixture === name[1] && test.name === method);
+      if (candidates.length !== 1) continue;
+      addMapping(candidates[0], event.file, { kind: 'passed-test-name-reference', file: event.file, testName: event.name, line: event.line }); matched = true;
+    }
+    if (matched) executedMapping.matchedPassedNames++;
+  }
+}
+const tests = inventory.tests.map(test => ({ id: test.id, status: mappings.has(test.id) ? 'mapped-js-test-unverified' : platformBoundaries.has(test.id) ? 'requires-host-runtime' : 'unported', mappedFiles: [...(mappings.get(test.id) ?? [])], evidence: mappingEvidence.get(test.id) ?? [], ...(platformBoundaries.has(test.id) ? { runtimeBoundary: platformBoundaries.get(test.id) } : {}) }));
 const countBy = list => list.reduce((counts, item) => (counts[item.status] = (counts[item.status] ?? 0) + 1, counts), {});
 const report = {
   schemaVersion: 1,
   upstreamCommit: api.upstream.commit,
-  explanation: 'Export presence establishes name coverage only. Mapped JavaScript tests identify related executable test files; they do not prove all upstream assertions, parameters, fixture inheritance or exception semantics have been ported. No method is counted as fully ported without a behavioral review. Member presence uses runtime static/prototype reflection and lexical constructor-field/event initialization; it does not validate overloads, parameter rules, instance defaults or algorithm results.',
-  counts: { runtimeExports: sourceNames.size, publicTypeDeclarations: declarations.length, api: countBy(declarations), publicMemberSignatures: memberResults.length, members: countBy(memberResults), upstreamTestMethods: tests.length, javascriptTestFiles: testFiles.length, testMappings: countBy(tests), fileLevelReferences: fileReferences.length, verifiedFullTestPorts: 0 },
+  explanation: 'Export presence establishes name coverage only. Mappings come from explicit source comments or exact existing Fixture.Method identities in passing Node test names, with source-file hashes checked against the recorded run. They do not prove all upstream assertions, parameters, fixture inheritance or exception semantics have been ported. No method is counted as fully ported without a behavioral review. The requires-host-runtime disposition comes from the explicitly reviewed CLR backend method list; it is not a passing test or a browser serialization equivalence claim. Member presence uses runtime static/prototype reflection and lexical constructor-field/event initialization; it does not validate overloads, parameter rules, instance defaults or algorithm results.',
+  counts: { runtimeExports: sourceNames.size, publicTypeDeclarations: declarations.length, api: countBy(declarations), publicMemberSignatures: memberResults.length, members: countBy(memberResults), upstreamTestMethods: tests.length, javascriptTestFiles: testFiles.length, testMappings: countBy(tests), platformSpecificSourceMethods: platformBoundaries.size, fileLevelReferences: fileReferences.length, verifiedFullTestPorts: 0 },
   api: declarations,
   members: memberResults,
   fileReferences,
+  executedMapping,
   tests,
 };
 await mkdir('test-results', { recursive: true });
-await writeFile('test-results/conformance-audit.json', JSON.stringify(report, null, 2) + '\n');
+const serializedReport = JSON.stringify(report, null, 2) + '\n';
+await writeFile('test-results/conformance-audit.json', serializedReport);
 await writeFile('test-results/missing-members.json', JSON.stringify(memberResults.filter(member => member.status === 'runtime-member-name-missing'), null, 2) + '\n');
+// Keep reviewable, reproducible evidence inside the repository and npm package.
+// A source-test mapping is deliberately not counted as a complete test port.
+await writeFile('docs/conformance-audit.json', serializedReport);
+await writeFile('docs/conformance-summary.json', JSON.stringify({
+  schemaVersion: report.schemaVersion,
+  upstreamCommit: report.upstreamCommit,
+  report: 'conformance-audit.json',
+  reportSha256: createHash('sha256').update(serializedReport).digest('hex'),
+  explanation: report.explanation,
+  counts: report.counts,
+}, null, 2) + '\n');
 console.log(JSON.stringify({ upstreamCommit: report.upstreamCommit, ...report.counts }, null, 2));

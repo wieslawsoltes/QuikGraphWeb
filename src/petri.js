@@ -1,3 +1,4 @@
+import { EqualityMap as Map, EqualitySet as Set } from './equality.js';
 /** High-level Petri net semantics ported from QuikGraph.Petri. */
 import { BidirectionalGraph, Edge, equals } from './core.js';
 const required=(v,name='value')=>{if(v==null)throw new TypeError(`${name} cannot be null`);return v;};

@@ -68,11 +68,11 @@ for(const [rows,vertices,initialIndices,expectedIndices]of [[[],[],[],[]],[[],[1
 // upstream: tests/QuikGraph.Tests/Algorithms/Observers/VertexDistanceRecorderObserverTests.cs::Attach
 // upstream: tests/QuikGraph.Tests/Algorithms/Observers/VertexPredecessorPathRecorderObserverTests.cs::Attach
 // upstream: tests/QuikGraph.Tests/Algorithms/Observers/VertexPredecessorPathRecorderObserverTests.cs::AllPaths
-for(const variant of ['empty','vertices','acyclic','cyclic'])test(`directed observer Attach/AllPaths complete fixture ${variant}`,()=>{const rows=variant==='empty'||variant==='vertices'?[]:[[1,2],[1,3],[1,4],[2,4],[3,1],[3,3],[3,4]];if(variant==='cyclic')rows.push([4,1]);const g=graph(rows,variant==='vertices'?[1,2]:[]),a=new DepthFirstSearchAlgorithm(g),d=new O.VertexDistanceRecorderObserver(()=>1),r=new O.VertexPredecessorPathRecorderObserver();d.Attach(a);r.Attach(a);a.Compute();if(!rows.length){assert.equal(d.Distances.size,0);assert.equal(r.VerticesPredecessors.size,0);assert.deepEqual(r.EndPathVertices,variant==='vertices'?[1,2]:[]);assert.deepEqual([...r.AllPaths()],[]);}else{assert.deepEqual(d.Distances,new Map([[1,0],[2,1],[3,1],[4,2]]));assert.deepEqual(new Set(r.EndPathVertices),new Set([3,4]));assert.deepEqual(new Set([...r.AllPaths()].map(p=>p.map(e=>`${e.Source}${e.Target}`).join(','))),new Set(['13','12,24']));}});
+for(const variant of ['empty','vertices','acyclic','cyclic'])test(`directed observer Attach/AllPaths complete fixture ${variant}`,()=>{const rows=variant==='empty'||variant==='vertices'?[]:[[1,2],[1,3],[1,4],[2,4],[3,1],[3,3],[3,4]];if(variant==='cyclic')rows.push([4,1]);const g=graph(rows,variant==='vertices'?[1,2]:[]),a=new DepthFirstSearchAlgorithm(g),d=new O.VertexDistanceRecorderObserver(()=>1),r=new O.VertexPredecessorPathRecorderObserver();d.Attach(a);r.Attach(a);a.Compute();if(!rows.length){assert.equal(d.Distances.size,0);assert.equal(r.VerticesPredecessors.size,0);assert.deepEqual(r.EndPathVertices,variant==='vertices'?[1,2]:[]);assert.deepEqual([...r.AllPaths()],[]);}else{assert.deepEqual(new Map(d.Distances),new Map([[1,0],[2,1],[3,1],[4,2]]));assert.deepEqual(new Set(r.EndPathVertices),new Set([3,4]));assert.deepEqual(new Set([...r.AllPaths()].map(p=>p.map(e=>`${e.Source}${e.Target}`).join(','))),new Set(['13','12,24']));}});
 // upstream: tests/QuikGraph.Tests/Algorithms/Observers/UndirectedVertexDistanceRecorderObserverTests.cs::Attach
 // upstream: tests/QuikGraph.Tests/Algorithms/Observers/UndirectedVertexPredecessorRecorderObserverTests.cs::Attach
 // upstream: tests/QuikGraph.Tests/Algorithms/Observers/UndirectedVertexPredecessorRecorderObserverTests.cs::TryGetPath
-for(const variant of ['empty','vertices','graph'])test(`undirected observer Attach/TryGetPath complete fixture ${variant}`,()=>{const g=graph(variant==='graph'?[[1,2],[1,4],[3,1],[3,3],[3,4],[4,2]]:[],variant==='vertices'?[1,2]:[],UndirectedGraph),a=new UndirectedDepthFirstSearchAlgorithm(g),d=new O.UndirectedVertexDistanceRecorderObserver(()=>1),r=new O.UndirectedVertexPredecessorRecorderObserver();d.Attach(a);r.Attach(a);a.Compute();if(variant!=='graph'){assert.equal(d.Distances.size,0);assert.equal(r.VerticesPredecessors.size,0);assert.equal(r.TryGetPath(2),undefined);}else{assert.deepEqual(d.Distances,new Map([[1,0],[2,1],[3,3],[4,2]]));assert.deepEqual([...r.VerticesPredecessors].map(([v,e])=>[v,e.Source,e.Target]).sort(),[[2,1,2],[3,3,4],[4,4,2]]);assert.deepEqual(r.TryGetPath(4).map(e=>[e.Source,e.Target]),[[1,2],[4,2]]);}});
+for(const variant of ['empty','vertices','graph'])test(`undirected observer Attach/TryGetPath complete fixture ${variant}`,()=>{const g=graph(variant==='graph'?[[1,2],[1,4],[3,1],[3,3],[3,4],[4,2]]:[],variant==='vertices'?[1,2]:[],UndirectedGraph),a=new UndirectedDepthFirstSearchAlgorithm(g),d=new O.UndirectedVertexDistanceRecorderObserver(()=>1),r=new O.UndirectedVertexPredecessorRecorderObserver();d.Attach(a);r.Attach(a);a.Compute();if(variant!=='graph'){assert.equal(d.Distances.size,0);assert.equal(r.VerticesPredecessors.size,0);assert.equal(r.TryGetPath(2),undefined);}else{assert.deepEqual(new Map(d.Distances),new Map([[1,0],[2,1],[3,3],[4,2]]));assert.deepEqual([...r.VerticesPredecessors].map(([v,e])=>[v,e.Source,e.Target]).sort(),[[2,1,2],[3,3,4],[4,4,2]]);assert.deepEqual(r.TryGetPath(4).map(e=>[e.Source,e.Target]),[[1,2],[4,2]]);}});
 // upstream: tests/QuikGraph.Tests/Algorithms/Observers/VertexPredecessorRecorderObserverTests.cs::TryGetPath_Throws
 // upstream: tests/QuikGraph.Tests/Algorithms/Observers/UndirectedVertexPredecessorRecorderObserverTests.cs::TryGetPath_Throws
 test('predecessor TryGetPath null argument branches',()=>{assert.throws(()=>new O.VertexPredecessorRecorderObserver().TryGetPath(null),TypeError);assert.throws(()=>new O.UndirectedVertexPredecessorRecorderObserver().TryGetPath(null),TypeError);});
@@ -85,3 +85,43 @@ for(const variant of ['empty','vertices','acyclic','cyclic'])test(`edge predeces
 // upstream: tests/QuikGraph.Tests/Algorithms/Observers/EdgePredecessorRecorderObserverTests.cs::Path_Throws
 // upstream: tests/QuikGraph.Tests/Algorithms/Observers/EdgePredecessorRecorderObserverTests.cs::MergedPath_Throws
 test('edge predecessor null and missing-color argument branches',()=>{const r=new O.EdgePredecessorRecorderObserver();assert.throws(()=>r.Path(null),TypeError);for(const args of [[null,new Map()],[new Edge(1,2),null],[null,null]])assert.throws(()=>r.MergedPath(...args),TypeError);assert.throws(()=>r.MergedPath(new Edge(1,2),new Map()),{name:'KeyNotFoundException'});});
+
+class CopiedObserverVertex {
+  constructor(id){this.id=id;}
+  Equals(other){return other instanceof CopiedObserverVertex&&other.id===this.id;}
+  GetHashCode(){return 0;}
+}
+test('vertex observers resolve copied vertices and distinguish colliding values',()=>{
+  const copy=id=>new CopiedObserverVertex(id);
+  for(const undirected of [false,true]){
+    const g=graph([[copy(0),copy(1)],[copy(1),copy(2)],[copy(2),copy(3)]],[0,1,2,3,4].map(copy),undirected?UndirectedGraph:AdjacencyGraph),
+      a=undirected?new UndirectedDepthFirstSearchAlgorithm(g):new DepthFirstSearchAlgorithm(g),
+      predecessor=undirected?new O.UndirectedVertexPredecessorRecorderObserver():new O.VertexPredecessorPathRecorderObserver(),
+      distance=undirected?new O.UndirectedVertexDistanceRecorderObserver(()=>1):new O.VertexDistanceRecorderObserver(()=>1),
+      times=new O.VertexTimeStamperObserver();
+    const subscriptions=[predecessor.Attach(a),distance.Attach(a),times.Attach(a)];
+    const root=undirected?3:0,target=undirected?0:3;a.Compute(copy(root));
+    assert.equal(predecessor.VerticesPredecessors.size,3);assert.equal(predecessor.TryGetPath(copy(target)).length,3);
+    assert.equal(predecessor.TryGetPath(copy(root)),undefined);assert.equal(predecessor.TryGetPath(copy(4)),undefined);
+    assert.equal(distance.Distances.size,4);assert.equal(distance.Distances.get(copy(target)),3);assert.equal(distance.Distances.get(copy(root)),0);
+    assert.equal(times.DiscoverTimes.size,4);assert.equal(times.FinishTimes.size,4);
+    for(let id=0;id<4;id++)assert.ok(times.DiscoverTimes.get(copy(id))<times.FinishTimes.get(copy(id)));
+    if(!undirected){assert.deepEqual(predecessor.EndPathVertices.map(v=>v.id),[3]);assert.equal([...predecessor.AllPaths()][0].length,3);}
+    for(const subscription of subscriptions)subscription.Dispose();
+  }
+});
+class CopiedObserverEdge extends Edge {
+  Equals(other){return other instanceof CopiedObserverEdge&&this.Source.Equals(other.Source)&&this.Target.Equals(other.Target);}
+  GetHashCode(){return 0;}
+}
+test('edge predecessor observers use equality for copied edges and avoid equal self-predecessors',()=>{
+  const edge=(s,t)=>new CopiedObserverEdge(new CopiedObserverVertex(s),new CopiedObserverVertex(t)),
+    algorithm={DiscoverTreeEdge:new EventHook(),FinishEdge:new EventHook()},r=new O.EdgePredecessorRecorderObserver();
+  r.Attach(algorithm);algorithm.DiscoverTreeEdge.emit(edge(0,1),edge(1,2));algorithm.DiscoverTreeEdge.emit(edge(1,2),edge(2,3));
+  algorithm.DiscoverTreeEdge.emit(edge(2,3),edge(2,3));
+  for(const[s,t]of [[0,1],[1,2],[2,3]])algorithm.FinishEdge.emit(edge(s,t));
+  const encode=path=>path.map(e=>[e.Source.id,e.Target.id]);
+  assert.equal(r.EdgesPredecessors.size,2);assert.equal(r.EndPathEdges.length,1);
+  assert.deepEqual(encode(r.Path(edge(2,3))),[[0,1],[1,2],[2,3]]);
+  assert.deepEqual([...r.AllMergedPaths()].map(encode),[[[0,1],[1,2],[2,3]]]);
+});

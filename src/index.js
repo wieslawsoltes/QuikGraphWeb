@@ -1,3 +1,4 @@
+export * from './equality.js';
 export * from './core.js';
 export * from './collections.js';
 export * from './algorithm-base.js';

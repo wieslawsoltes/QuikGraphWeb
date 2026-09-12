@@ -1,3 +1,4 @@
+import { EqualityMap as Map, EqualitySet as Set } from './equality.js';
 // Collection algorithms adapted from QuikGraph under the Microsoft Public License.
 import { requireValue, equals, defaultCompare, InvalidOperationException } from './core.js';
 const pair = (Key, Value) => ({ Key, Value });
@@ -24,13 +25,6 @@ export class VertexList extends List {}
 export class EdgeList extends List {}
 class Dictionary extends Map {
   constructor(input) { if (typeof input === 'number') { if (input < 0) throw new RangeError('Negative capacity.'); super(); } else super(input); }
-  _hashKey(key) { return typeof key?.Equals === 'function' ? (typeof key.GetHashCode === 'function' ? key.GetHashCode() : 'equatable') : undefined; }
-  _canonical(key) { if (super.has(key)) return key; const h = this._hashKey(key); if (h !== undefined) for (const k of this._buckets?.get(h) ?? []) if (equals(k, key)) return k; return key; }
-  set(key, value) { const canonical = this._canonical(key); if (!super.has(canonical)) { const h = this._hashKey(key); if (h !== undefined) { this._buckets ??= new Map(); if (!this._buckets.has(h)) this._buckets.set(h, []); this._buckets.get(h).push(key); } } return super.set(canonical, value); }
-  get(key) { return super.get(this._canonical(key)); }
-  has(key) { return super.has(this._canonical(key)); }
-  delete(key) { const canonical = this._canonical(key); if (!super.delete(canonical)) return false; const h = this._hashKey(canonical), bucket = this._buckets?.get(h); if (bucket) { const i = bucket.indexOf(canonical); if (i >= 0) bucket.splice(i, 1); if (!bucket.length) this._buckets.delete(h); } return true; }
-  clear() { super.clear(); this._buckets?.clear(); }
   get Count() { return this.size; } get Keys() { return Array.from(this.keys()); } get Values() { return Array.from(this.values()); }
   Add(key, value) { requireValue(key); if (this.has(key)) throw new TypeError('Duplicate key.'); this.set(key, value); }
   ContainsKey(key) { return this.has(requireValue(key)); }
@@ -132,7 +126,7 @@ export class FibonacciHeap {
   DrawHeap() { const lines = []; let column = 0; const stack = Array.from(this._roots, c => ({ c, level: 0 })).reverse(); while (stack.length) { const { c, level } = stack.pop(); const label = `${c.Priority}${c.Marked ? '*' : ''} `; lines[level] = (lines[level] ?? '').padEnd(column, ' ') + label; const children = Array.from(c.Children); if (children.length) { for (let i = children.length - 1; i >= 0; --i) stack.push({ c: children[i], level: level + 1 }); } else column += label.length; } return lines.join('\n'); }
 }
 export class FibonacciQueue {
-  constructor(...args) { let distance, compare = defaultCompare; if (typeof args[0] === 'number') { if (args[0] < 0) throw new RangeError('Negative capacity.'); distance = args[2]; compare = args.length > 3 ? args[3] : defaultCompare; } else if (args[0] instanceof Map) { const map = args[0]; distance = v => { if (!map.has(v)) throw new TypeError('Key not found.'); return map.get(v); }; compare = args.length > 1 ? args[1] : defaultCompare; } else { distance = args[0]; compare = args.length > 1 ? args[1] : defaultCompare; } this._distance = requireValue(distance); this._heap = new FibonacciHeap(HeapDirection.Increasing, requireValue(compare)); this._cells = new Map(); }
+  constructor(...args) { let distance, compare = defaultCompare; if (typeof args[0] === 'number') { if (args[0] < 0) throw new RangeError('Negative capacity.'); distance = args[2]; compare = args.length > 3 ? args[3] : defaultCompare; } else if (args[0] instanceof globalThis.Map) { const map = args[0]; distance = v => { if (!map.has(v)) throw new TypeError('Key not found.'); return map.get(v); }; compare = args.length > 1 ? args[1] : defaultCompare; } else { distance = args[0]; compare = args.length > 1 ? args[1] : defaultCompare; } this._distance = requireValue(distance); this._heap = new FibonacciHeap(HeapDirection.Increasing, requireValue(compare)); this._cells = new Map(); }
   get Count() { return this._heap.Count; }
   Contains(v) { return this._cells.has(v) && !this._cells.get(v).Removed; }
   Enqueue(v) { requireValue(v); this._cells.set(v, this._heap.Enqueue(this._distance(v), v)); }

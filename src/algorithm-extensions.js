@@ -1,4 +1,5 @@
 // Adapted from QuikGraph AlgorithmExtensions. MS-PL; see LICENSE and NOTICE.
+import { EqualityMap as Map, EqualitySet as Set, valueEquals as same } from './equality.js';
 import * as Core from './core.js';
 import * as Collections from './collections.js';
 import * as Search from './search.js';
@@ -7,17 +8,14 @@ import * as Structural from './structural.js';
 import * as Advanced from './advanced.js';
 import * as Observers from './observers.js';
 const required = (value,name) => {if(value==null)throw new TypeError(`${name} is required.`);return value;};
-const same = (a,b) => a === b || (a !== a && b !== b);
-export function GetIndexer(dictionary){required(dictionary,'dictionary');return key=>{if(dictionary instanceof Map){if(!dictionary.has(key))throw new Error('Key not found.');return dictionary.get(key);}if(!Object.hasOwn(dictionary,key))throw new Error('Key not found.');return dictionary[key];};}
+export function GetIndexer(dictionary){required(dictionary,'dictionary');return key=>{if(dictionary instanceof globalThis.Map){if(!dictionary.has(key))throw new Error('Key not found.');return dictionary.get(key);}if(!Object.hasOwn(dictionary,key))throw new Error('Key not found.');return dictionary[key];};}
 function identityAllocator(primitiveStrings) {
-  const ids=new Map(),owners=new Map(),buckets=new Map();let next=0;
+  const ids=new Map(),owners=new Map();let next=0;
   return value=>{
     required(value,'identity value');if(ids.has(value))return ids.get(value);
-    let bucket;
-    if(typeof value?.Equals==='function') { const hash=typeof value.GetHashCode==='function'?value.GetHashCode():'custom';bucket=buckets.get(hash);if(!bucket)buckets.set(hash,bucket=[]);for(const other of bucket)if(Core.equals(other,value)){const id=ids.get(other);ids.set(value,id);return id;} }
     const type=typeof value;let id=primitiveStrings&&['string','number','boolean','bigint'].includes(type)?(type==='boolean'?value?'True':'False':String(value)):undefined;
     if(id===undefined||owners.has(id)){do{id=String(next++);}while(owners.has(id));}
-    ids.set(value,id);owners.set(id,value);bucket?.push(value);return id;
+    ids.set(value,id);owners.set(id,value);return id;
   };
 }
 export function GetVertexIdentity(graph){required(graph,'graph');const types=new Set([...graph.Vertices].map(v=>typeof v));const homogeneous=types.size<=1&&![...types].some(t=>!['string','number','boolean','bigint'].includes(t));return identityAllocator(homogeneous);}

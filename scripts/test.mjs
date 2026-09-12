@@ -1,6 +1,10 @@
-import { readdir } from 'node:fs/promises';
+import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 const files = (await readdir('test', { recursive: true })).filter(file => /\.(test|spec)\.(?:m?js)$/.test(file)).sort().map(file => 'test/' + file);
 if (!files.length) throw new Error('No JavaScript tests found.');
-const result = spawnSync(process.execPath, ['--test', ...files], { stdio: 'inherit' });
+await mkdir('test-results', { recursive: true });
+const sourceFiles = await Promise.all(files.map(async file => ({ file, sha256: createHash('sha256').update(await readFile(file)).digest('hex') })));
+const result = spawnSync(process.execPath, ['--test', '--test-reporter=spec', '--test-reporter-destination=stdout', '--test-reporter=./scripts/test-report.mjs', '--test-reporter-destination=test-results/test-events.jsonl', ...files], { stdio: 'inherit' });
+await writeFile('test-results/test-run.json', JSON.stringify({ schemaVersion: 1, exitCode: result.status, nodeVersion: process.version, sourceFiles }, null, 2) + '\n');
 process.exit(result.status ?? 1);

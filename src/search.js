@@ -1,11 +1,12 @@
 // QuikGraph searches: iterative traversal avoids the JavaScript recursion limit.
+import { EqualityMap as Map, EqualitySet as Set } from './equality.js';
 import { sameVertex, RootedAlgorithmBase, RootedSearchAlgorithmBase, GraphColor, DistanceRelaxers, AlgorithmHeap, events, algorithmError, requireValue } from './algorithm-base.js';
 import { UndirectedEdgeEventArgs } from './core.js';
 const { White, Gray, Black } = GraphColor;
 function parseSearch(args) {
   args = [...args]; let host = null;
   if (args[0] == null || (args[0]?.Services && args[1]?.ContainsVertex)) host = args.shift();
-  const graph = requireValue(args.shift(), 'visitedGraph'); if (typeof graph.ContainsVertex !== 'function') throw new TypeError('visitedGraph must implement ContainsVertex.');
+  const graph = requireValue(args.shift(), 'visitedGraph'); if (typeof graph.ContainsVertex !== 'function') throw algorithmError('ArgumentException', 'visitedGraph must implement ContainsVertex.');
   return { host, graph, args };
 }
 function color(map, vertex) { if (!map.has(vertex)) throw algorithmError('VertexNotFoundException', 'Vertex color not available.'); return map.get(vertex); }
@@ -17,9 +18,9 @@ export class BreadthFirstSearchAlgorithm extends RootedAlgorithmBase {
   constructor(...input) {
     const { host, graph, args } = parseSearch(input); super(host, graph);
     this.VertexQueue = args[0] ?? null; this.VerticesColors = args[1] ?? new Map(); this.OutEdgesFilter = args[2] ?? (edges => edges);
-    if (args.length && args[0] == null) throw new TypeError('vertexQueue cannot be null.');
-    if (args.length > 1 && args[1] == null) throw new TypeError('verticesColors cannot be null.');
-    if (args.length > 2 && args[2] == null) throw new TypeError('outEdgesFilter cannot be null.');
+    if (args.length && args[0] == null) throw algorithmError('ArgumentNullException', 'vertexQueue cannot be null.');
+    if (args.length > 1 && args[1] == null) throw algorithmError('ArgumentNullException', 'verticesColors cannot be null.');
+    if (args.length > 2 && args[2] == null) throw algorithmError('ArgumentNullException', 'outEdgesFilter cannot be null.');
     events(this, 'InitializeVertex StartVertex DiscoverVertex ExamineVertex ExamineEdge TreeEdge NonTreeEdge GrayTarget BlackTarget FinishVertex');
   }
   GetVertexColor(vertex) { return color(this.VerticesColors, vertex); }
@@ -55,15 +56,15 @@ export class UndirectedBreadthFirstSearchAlgorithm extends BreadthFirstSearchAlg
 export class DepthFirstSearchAlgorithm extends RootedAlgorithmBase {
   constructor(...input) {
     const { host, graph, args } = parseSearch(input); super(host, graph);
-    this.VerticesColors = args[0] instanceof Map ? args[0] : new Map();
+    this.VerticesColors = args[0] instanceof globalThis.Map ? args[0] : new Map();
     this.OutEdgesFilter = args.find(a => typeof a === 'function') ?? (edges => edges);
-    if (args.length && args[0] == null) throw new TypeError('verticesColors cannot be null.');
-    if (args.length > 1 && args[1] == null) throw new TypeError('outEdgesFilter cannot be null.');
+    if (args.length && args[0] == null) throw algorithmError('ArgumentNullException', 'verticesColors cannot be null.');
+    if (args.length > 1 && args[1] == null) throw algorithmError('ArgumentNullException', 'outEdgesFilter cannot be null.');
     this.AdjacentEdgesFilter = this.OutEdgesFilter; this.ProcessAllComponents = false; this._maxDepth = 2147483647;
     events(this, 'InitializeVertex StartVertex DiscoverVertex ExamineEdge TreeEdge BackEdge ForwardOrCrossEdge FinishVertex VertexMaxDepthReached');
   }
   get MaxDepth() { return this._maxDepth; }
-  set MaxDepth(value) { if (!Number.isInteger(value) || value < 0) throw new RangeError('MaxDepth must be a non-negative integer.'); this._maxDepth = value; }
+  set MaxDepth(value) { if (!Number.isInteger(value) || value < 0) throw algorithmError('ArgumentOutOfRangeException', 'MaxDepth must be a non-negative integer.'); this._maxDepth = value; }
   GetVertexColor(vertex) { return this._implicit ? this.VerticesColors.get(vertex) ?? White : color(this.VerticesColors, vertex); }
   Initialize() { this.VerticesColors.clear(); if (!this._implicit) for (const v of this.VisitedGraph.Vertices) { this.VerticesColors.set(v, White); this.InitializeVertex.emit(v); } }
   *_edges(v) {
@@ -103,7 +104,7 @@ export class EdgeDepthFirstSearchAlgorithm extends RootedAlgorithmBase {
     events(this, 'InitializeEdge StartVertex StartEdge DiscoverTreeEdge TreeEdge BackEdge ForwardOrCrossEdge FinishEdge');
   }
   get MaxDepth() { return this._maxDepth; }
-  set MaxDepth(value) { if (!Number.isInteger(value) || value < 0) throw new RangeError('MaxDepth must be a non-negative integer.'); this._maxDepth = value; }
+  set MaxDepth(value) { if (!Number.isInteger(value) || value < 0) throw algorithmError('ArgumentOutOfRangeException', 'MaxDepth must be a non-negative integer.'); this._maxDepth = value; }
   Initialize() { this.EdgesColors.clear(); if (!this._implicit) for (const edge of this.VisitedGraph.Edges) { this.EdgesColors.set(edge, White); this.InitializeEdge.emit(edge); } }
   InternalCompute() {
     if (this._implicit && !this._hasRoot) this.GetAndAssertRootInGraph();

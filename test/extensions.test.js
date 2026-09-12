@@ -1,4 +1,46 @@
 import test from 'node:test';import assert from 'node:assert/strict';import * as Q from '../src/index.js';import {readFileSync,readdirSync} from 'node:fs';
+import { EqualityMap } from '../src/equality.js';
+
+class ValueVertex {
+  constructor(id) { this.id=id; }
+  Equals(other) { return other instanceof ValueVertex && other.id===this.id; }
+  GetHashCode() { return -17; }
+}
+const valueVertex=id=>new ValueVertex(id);
+function valueGraph(pairs,ids=[0,1,2,3],EdgeType=Q.Edge) {
+  const g=new Q.BidirectionalGraph();g.AddVertexRange(ids.map(valueVertex));
+  g.AddEdgeRange(pairs.map(([s,t])=>new EdgeType(valueVertex(s),valueVertex(t))));return g;
+}
+test('Extension identities, cloning, queries and native output dictionaries preserve explicit vertex equality',()=>{
+  const g=valueGraph([[0,1],[1,2]]),identity=Q.GetVertexIdentity(g),edgeIdentity=Q.GetEdgeIdentity(g);
+  for(const vertex of g.Vertices)assert.equal(identity(vertex),identity(valueVertex(vertex.id)));
+  assert.equal(new Set([...g.Vertices].map(identity)).size,4);
+  assert.equal(edgeIdentity(new Q.EquatableEdge(valueVertex(0),valueVertex(1))),edgeIdentity(new Q.EquatableEdge(valueVertex(0),valueVertex(1))));
+  assert.notEqual(edgeIdentity(new Q.EquatableEdge(valueVertex(0),valueVertex(1))),edgeIdentity(new Q.EquatableEdge(valueVertex(0),valueVertex(2))));
+  assert.deepEqual(Q.Roots(g).map(v=>v.id),[0,3]);assert.deepEqual(Q.Sinks(g).map(v=>v.id),[2,3]);assert.deepEqual(Q.IsolatedVertices(g).map(v=>v.id),[3]);assert.deepEqual(Q.OddVertices(g).map(v=>v.id),[0,2]);
+  const native=new globalThis.Map();assert.equal(Q.WeaklyConnectedComponents(g,native),2);assert.equal(native.size,4);for(const vertex of g.Vertices)assert.equal(native.has(vertex),true);
+  const clone=Q.Clone(g,v=>({name:v.id}),(e,s,t)=>new Q.Edge(s,t),new Q.BidirectionalGraph());
+  assert.equal(clone.VertexCount,4);assert.equal(clone.EdgeCount,2);assert.deepEqual([...clone.Edges].map(e=>[e.Source.name,e.Target.name]),[[0,1],[1,2]]);
+  const sets=Q.ComputeDisjointSet(g);assert.equal(sets.AreInSameSet(valueVertex(0),valueVertex(2)),true);assert.equal(sets.AreInSameSet(valueVertex(0),valueVertex(3)),false);
+  assert.equal(Q.IsDirectedAcyclicGraph(g),true);assert.equal(Q.IsUndirectedAcyclicGraph(g),true);g.AddEdge(new Q.Edge(valueVertex(2),valueVertex(0)));assert.equal(Q.IsDirectedAcyclicGraph(g),false);assert.equal(Q.IsUndirectedAcyclicGraph(g),false);
+});
+test('Dictionary, ancestor, flow and cycle-popping wrappers distinguish equal values from hash collisions',()=>{
+  const canonical=valueVertex(1),native=new globalThis.Map([[canonical,42]]),values=new EqualityMap(native);
+  assert.equal(Q.GetIndexer(native)(canonical),42);assert.throws(()=>Q.GetIndexer(native)(valueVertex(1)));
+  assert.equal(Q.GetIndexer(values)(valueVertex(1)),42);assert.throws(()=>Q.GetIndexer(values)(valueVertex(2)));
+  const predecessors=new EqualityMap([[valueVertex(1),new Q.Edge(valueVertex(0),valueVertex(1))],[valueVertex(2),new Q.Edge(valueVertex(1),valueVertex(2))]]);
+  assert.equal(Q.ComputePredecessorCost(predecessors,()=>3,valueVertex(2)),6);
+  const tree=valueGraph([[0,1],[0,2],[1,3],[1,4]],[0,1,2,3,4]);
+  const ancestor=Q.OfflineLeastCommonAncestor(tree,valueVertex(0),[new Q.SEquatableEdge(valueVertex(3),valueVertex(4))]);
+  assert.equal(ancestor(new Q.SEquatableEdge(valueVertex(3),valueVertex(4))).id,1);
+  assert.throws(()=>Q.MaximumFlow(tree,()=>1,valueVertex(0),valueVertex(0)),/must differ/);
+  const directed=valueGraph([[0,1],[1,2]], [0,1,2,3]),path=Q.TreeCyclePoppingRandom(directed,valueVertex(2),{TryGetSuccessor:(graph,vertex)=>[...graph.OutEdges(vertex)][0]});
+  assert.deepEqual(path(valueVertex(0)).map(e=>[e.Source.id,e.Target.id]),[[0,1],[1,2]]);assert.equal(path(valueVertex(2)),undefined);assert.equal(path(valueVertex(3)),undefined);
+});
+test('Graph equality compares custom value vertices and equatable edges across independent copies',()=>{
+  const a=valueGraph([[0,1],[1,2]],[0,1,2,3],Q.EquatableEdge),b=valueGraph([[0,1],[1,2]],[0,1,2,3],Q.EquatableEdge);
+  assert.equal(Q.EquateGraphs.Equate(a,b),true);b.RemoveVertex(valueVertex(3));b.AddVertex(valueVertex(4));assert.equal(Q.EquateGraphs.Equate(a,b),false);
+});
 const graph=()=>{const g=new Q.BidirectionalGraph();g.AddVertexRange(['a','b','c','d','alone']);g.AddEdgeRange([new Q.TaggedEdge('a','b',2),new Q.TaggedEdge('b','c',3),new Q.TaggedEdge('a','c',9),new Q.TaggedEdge('c','d',1)]);return g;};
 test('AlgorithmExtensions tree and shortest-path delegates reconstruct edge chains',()=>{for(const name of ['TreeBreadthFirstSearch','TreeDepthFirstSearch','ShortestPathsDijkstra','ShortestPathsBellmanFord','ShortestPathsDag']){const g=graph(),fn=name.startsWith('Tree')?Q[name](g,'a'):Q[name](g,e=>e.Tag,'a');assert.equal(fn('d').at(-1).Target,'d');assert.equal(fn('alone'),undefined);assert.ok(Q.IsPath(fn('d')));}const path=Q.ShortestPathsAStar(graph(),e=>e.Tag,()=>0,'a')('d');assert.equal(path.reduce((n,e)=>n+e.Tag,0),6);});
 test('AlgorithmExtensions structural wrappers preserve components and graph reachability',()=>{const g=graph(),components=new Map();assert.equal(Q.WeaklyConnectedComponents(g,components),2);assert.equal(components.size,5);assert.deepEqual(Q.Roots(g),['a','alone']);assert.deepEqual(Q.Sinks(g),['d','alone']);assert.deepEqual(Q.IsolatedVertices(g),['alone']);assert.equal(Q.IsDirectedAcyclicGraph(g),true);assert.equal(Q.ComputeTransitiveClosure(g).EdgeCount,6);assert.equal(Q.ComputeTransitiveReduction(g).EdgeCount,3);assert.equal(Q.CondensateEdges(g,v=>v!=='b').ContainsVertex('b'),false);const out=[];assert.equal(Q.TopologicalSort(g,out),out);assert.equal(out.length,5);g.AddEdge(new Q.Edge('d','a'));assert.equal(Q.IsDirectedAcyclicGraph(g),false);});

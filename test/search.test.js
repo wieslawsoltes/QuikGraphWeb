@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { AdjacencyGraph, BidirectionalGraph, UndirectedGraph, Edge, TaggedEdge, GraphColor, VertexNotFoundException } from '../src/core.js';
+import { AdjacencyGraph, BidirectionalGraph, UndirectedGraph, Edge, TaggedEdge, GraphColor, VertexNotFoundException, ArgumentNullException, InvalidOperationException, ArgumentException, ArgumentOutOfRangeException } from '../src/core.js';
 import { AlgorithmBase, RootedAlgorithmBase, RootedSearchAlgorithmBase, ComputationState, CancelManager, DistanceRelaxers } from '../src/algorithm-base.js';
 import * as S from '../src/search.js';
 import { VertexRecorderObserver, VertexDistanceRecorderObserver } from '../src/observers.js';
@@ -326,3 +326,139 @@ for(const Algorithm of [S.BidirectionalDepthFirstSearchAlgorithm,S.UndirectedDep
 for(const Algorithm of [S.DepthFirstSearchAlgorithm,S.BidirectionalDepthFirstSearchAlgorithm,S.UndirectedDepthFirstSearchAlgorithm,S.EdgeDepthFirstSearchAlgorithm])test(`${Algorithm.name}.Constructor_Throws full overload matrix`,()=>{const g=graph([],[],Algorithm===S.UndirectedDepthFirstSearchAlgorithm?UndirectedGraph:BidirectionalGraph),colors=new Map(),filter=edges=>edges;for(const args of [[g,colors],[null,g,colors]]){const a=new Algorithm(...args);assert.equal(a.VisitedGraph,g);assert.equal(a.VerticesColors??a.EdgesColors,colors);assert.equal(a.ProcessAllComponents,false);assert.equal(a.MaxDepth,2147483647);a.MaxDepth=12;a.ProcessAllComponents=true;assert.equal(a.MaxDepth,12);assert.equal(a.ProcessAllComponents,true);assert.throws(()=>a.MaxDepth=-1,RangeError);}for(let mask=1;mask<4;mask++){const args=[g,colors].map((v,i)=>mask&(1<<i)?null:v);assert.throws(()=>new Algorithm(...args),TypeError);assert.throws(()=>new Algorithm(null,...args),TypeError);}if(Algorithm===S.DepthFirstSearchAlgorithm||Algorithm===S.UndirectedDepthFirstSearchAlgorithm){const a=new Algorithm(null,g,colors,filter);assert.equal(a.OutEdgesFilter,filter);for(let mask=1;mask<8;mask++){const args=[g,colors,filter].map((v,i)=>mask&(1<<i)?null:v);assert.throws(()=>new Algorithm(null,...args),TypeError);}}});
 for(const Algorithm of [S.BreadthFirstSearchAlgorithm,S.UndirectedBreadthFirstSearchAlgorithm])test(`${Algorithm.name}.Constructor_Throws full queue/map/filter matrix`,()=>{const g=graph([],[],Algorithm===S.UndirectedBreadthFirstSearchAlgorithm?UndirectedGraph:AdjacencyGraph),items=[],queue={get Count(){return items.length;},Enqueue(v){items.push(v);},Dequeue(){return items.shift();}},colors=new Map(),filter=edges=>edges;for(const args of [[g,queue,colors],[null,g,queue,colors],[null,g,queue,colors,filter]]){const a=new Algorithm(...args);assert.equal(a.VisitedGraph,g);assert.equal(a.VerticesColors,colors);if(args.length===5)assert.equal(a.OutEdgesFilter,filter);}for(let mask=1;mask<8;mask++){const args=[g,queue,colors].map((v,i)=>mask&(1<<i)?null:v);assert.throws(()=>new Algorithm(...args),TypeError);assert.throws(()=>new Algorithm(null,...args),TypeError);}for(let mask=1;mask<16;mask++){const args=[g,queue,colors,filter].map((v,i)=>mask&(1<<i)?null:v);assert.throws(()=>new Algorithm(null,...args),TypeError);}});
 for(const Algorithm of [S.ImplicitDepthFirstSearchAlgorithm,S.ImplicitEdgeDepthFirstSearchAlgorithm])test(`${Algorithm.name}.Constructor complete host/depth branches`,()=>{const g=graph([]);for(const args of [[g],[null,g]]){const a=new Algorithm(...args);assert.equal(a.VisitedGraph,g);assert.equal(a.MaxDepth,2147483647);assert.equal((a.VerticesColors??a.EdgesColors).size,0);a.MaxDepth=12;assert.equal(a.MaxDepth,12);assert.throws(()=>a.MaxDepth=-1,RangeError);}assert.throws(()=>new Algorithm(null),TypeError);assert.throws(()=>new Algorithm(null,null),TypeError);});
+
+class CopiedSearchVertex {
+  constructor(id) { this.id = id; }
+  Equals(other) { return other instanceof CopiedSearchVertex && other.id === this.id; }
+  GetHashCode() { return 1; } // Deliberately collide every distinct value.
+}
+test('searches and rooted events honor copied value vertices despite hash collisions', () => {
+  const copy = id => new CopiedSearchVertex(id);
+  for (const undirected of [false, true]) {
+    const g = graph([[copy(0),copy(1)],[copy(1),copy(2)],[copy(2),copy(3)],[copy(3),copy(1)]], [0,1,2,3,4].map(copy), undirected ? UndirectedGraph : BidirectionalGraph);
+    assert.equal(g.VertexCount, 5);
+    const algorithms = undirected ? [S.UndirectedBreadthFirstSearchAlgorithm,S.UndirectedDepthFirstSearchAlgorithm] : [S.BreadthFirstSearchAlgorithm,S.DepthFirstSearchAlgorithm,S.ImplicitDepthFirstSearchAlgorithm,S.BidirectionalDepthFirstSearchAlgorithm];
+    for (const Algorithm of algorithms) {
+      const a = new Algorithm(g), discovered = [];
+      let rootChanges = 0;
+      a.RootVertexChanged.add(() => rootChanges++);
+      a.SetRootVertex(copy(0)); a.SetRootVertex(copy(0));
+      assert.equal(rootChanges, 1);
+      a.DiscoverVertex.add(v => discovered.push(v.id)); a.Compute(copy(0));
+      assert.deepEqual(discovered.slice().sort(), [0,1,2,3]);
+      for (let id=0;id<4;id++) assert.equal(a.GetVertexColor(copy(id)), Black);
+      assert.equal(a.GetVertexColor(copy(4)), White);
+      assert.equal(a.VerticesColors.size, Algorithm === S.ImplicitDepthFirstSearchAlgorithm ? 4 : 5);
+    }
+    if (!undirected) {
+      for (const Algorithm of [S.EdgeDepthFirstSearchAlgorithm,S.ImplicitEdgeDepthFirstSearchAlgorithm]) {
+        const a = new Algorithm(g); a.Compute(copy(0));
+        assert.equal(a.EdgesColors.size, g.EdgeCount);
+        assert.ok([...a.EdgesColors.values()].every(color => color === Black));
+      }
+      const a = new S.BestFirstFrontierSearchAlgorithm(g,()=>1); let reached=0,targetChanges=0;
+      a.TargetReached.add(()=>reached++); a.TargetVertexChanged.add(()=>targetChanges++);
+      a.SetTargetVertex(copy(3)); a.SetTargetVertex(copy(3)); assert.equal(targetChanges,1);
+      a.Compute(copy(0),copy(3)); a.Compute(copy(0),copy(4)); a.Compute(copy(1),copy(1));
+      assert.equal(reached,2);
+    }
+  }
+});
+test('search constructors preserve explicitly supplied native Map objects', () => {
+  const g=graph([[1,2]]),colors=new globalThis.Map();
+  const a=new S.DepthFirstSearchAlgorithm(g,colors); assert.equal(a.VerticesColors,colors);a.Compute(1);
+  assert.deepEqual(colors,new globalThis.Map([[1,Black],[2,Black]]));
+});
+
+// Cooperative hooks replace the source fixture's worker-thread rendezvous;
+// the same state transitions and event multiplicities are asserted in each phase.
+class LifecycleProbe extends AlgorithmBase {
+  constructor(action) { super(graph([])); this.action=action; this.phases=[]; }
+  Initialize() { this.phases.push(['initialize',this.State]); this.ThrowIfCancellationRequested(); }
+  InternalCompute() { this.phases.push(['compute',this.State]); this.action?.(this); this.ThrowIfCancellationRequested(); }
+  Clean() { this.phases.push(['clean',this.State]); }
+}
+function monitorLifecycle(a) {
+  const states=[], events=[];
+  for (const name of ['Started','Finished','Aborted']) a[name].add(()=>events.push(name));
+  a.StateChanged.add(()=>states.push(a.State));
+  assert.equal(a.State,ComputationState.NotRunning);
+  return {states,events};
+}
+// upstream: tests/QuikGraph.Tests/Algorithms/AlgorithmFeaturesTests.cs::AlgorithmNormalStates
+test('AlgorithmFeaturesTests.AlgorithmNormalStates all lifecycle phases',()=>{
+  const a=new LifecycleProbe(),log=monitorLifecycle(a); a.Compute();
+  assert.deepEqual(a.phases,[['initialize',1],['compute',1],['clean',1]]);
+  assert.deepEqual(log,{states:[1,3],events:['Started','Finished']});assert.equal(a.State,3);
+});
+// upstream: tests/QuikGraph.Tests/Algorithms/AlgorithmFeaturesTests.cs::AlgorithmStates_AbortBeforeStart
+test('AlgorithmFeaturesTests.AlgorithmStates_AbortBeforeStart emits nothing',()=>{
+  const a=new LifecycleProbe(),log=monitorLifecycle(a);a.Abort();
+  assert.equal(a.State,0);assert.deepEqual(a.phases,[]);assert.deepEqual(log,{states:[],events:[]});
+});
+// upstream: tests/QuikGraph.Tests/Algorithms/AlgorithmFeaturesTests.cs::AlgorithmStates_AbortDuringRun
+test('AlgorithmFeaturesTests.AlgorithmStates_AbortDuringRun pending and final abortion',()=>{
+  const a=new LifecycleProbe(a=>{a.Abort();assert.equal(a.State,2);}),log=monitorLifecycle(a);a.Compute();
+  assert.deepEqual(a.phases,[['initialize',1],['compute',1],['clean',2]]);
+  assert.deepEqual(log,{states:[1,2,4],events:['Started','Aborted']});assert.equal(a.State,4);
+});
+// upstream: tests/QuikGraph.Tests/Algorithms/AlgorithmFeaturesTests.cs::AlgorithmStates_CancelDuringRun
+test('AlgorithmFeaturesTests.AlgorithmStates_CancelDuringRun does not imply abortion',()=>{
+  const a=new LifecycleProbe(a=>{const manager=a.Services.CancelManager;manager.Cancel();manager.ResetCancel();manager.Cancel();assert.equal(a.State,1);}),log=monitorLifecycle(a);a.Compute();
+  assert.deepEqual(a.phases,[['initialize',1],['compute',1],['clean',1]]);
+  assert.deepEqual(log,{states:[1,3],events:['Started','Finished']});assert.equal(a.State,3);
+});
+class TestService {}
+class TestNullService {}
+class TestNotInService {}
+class ServiceProbe extends LifecycleProbe {
+  TryGetService(type) { if(type===TestService)return new TestService();if(type===TestNullService)return super.TryGetService(null);return super.TryGetService(type); }
+}
+// upstream: tests/QuikGraph.Tests/Algorithms/AlgorithmFeaturesTests.cs::GetService
+test('AlgorithmFeaturesTests.GetService resolves custom typed service',()=>{assert.ok(new ServiceProbe().GetService(TestService) instanceof TestService);});
+// upstream: tests/QuikGraph.Tests/Algorithms/AlgorithmFeaturesTests.cs::GetService_Throws
+test('AlgorithmFeaturesTests.GetService_Throws exported exception classes',()=>{
+  const a=new ServiceProbe();assert.throws(()=>a.GetService(TestNullService),ArgumentNullException);assert.throws(()=>a.GetService(TestNotInService),InvalidOperationException);
+});
+// upstream: tests/QuikGraph.Tests/Algorithms/AlgorithmFeaturesTests.cs::TryGetService
+test('AlgorithmFeaturesTests.TryGetService custom and absent services',()=>{const a=new ServiceProbe();assert.ok(a.TryGetService(TestService) instanceof TestService);assert.equal(a.TryGetService(TestNotInService),undefined);});
+
+import * as PathContracts from '../src/shortest-paths.js';
+import { CyclePoppingRandomTreeAlgorithm, NormalizedMarkovEdgeChain, EdmondsKarpMaximumFlowAlgorithm, ReversedEdgeAugmentorAlgorithm } from '../src/advanced.js';
+const colorContractAlgorithms=[PathContracts.AStarShortestPathAlgorithm,PathContracts.BellmanFordShortestPathAlgorithm,PathContracts.DagShortestPathAlgorithm,PathContracts.DijkstraShortestPathAlgorithm,PathContracts.UndirectedDijkstraShortestPathAlgorithm,S.BidirectionalDepthFirstSearchAlgorithm,S.BreadthFirstSearchAlgorithm,S.DepthFirstSearchAlgorithm,S.UndirectedBreadthFirstSearchAlgorithm,S.UndirectedDepthFirstSearchAlgorithm,CyclePoppingRandomTreeAlgorithm,EdmondsKarpMaximumFlowAlgorithm];
+function colorContractScenario(Algorithm,computed=true,isolated=false) {
+  const g=graph([[1,2]],isolated?[3]:[],Algorithm.name.startsWith('Undirected')?UndirectedGraph:BidirectionalGraph);
+  let a;
+  if(Algorithm===PathContracts.AStarShortestPathAlgorithm)a=new Algorithm(g,()=>1,()=>0);
+  else if(Algorithm.prototype instanceof PathContracts.ShortestPathAlgorithmBase)a=new Algorithm(g,()=>1);
+  else if(Algorithm===CyclePoppingRandomTreeAlgorithm)a=new Algorithm(g,new NormalizedMarkovEdgeChain());
+  else if(Algorithm===EdmondsKarpMaximumFlowAlgorithm){const factory=(s,t)=>new Edge(s,t),reverser=new ReversedEdgeAugmentorAlgorithm(g,factory);reverser.AddReversedEdges();a=new Algorithm(g,()=>1,factory,reverser);}
+  else a=new Algorithm(g);
+  if(computed){if(Algorithm===EdmondsKarpMaximumFlowAlgorithm)a.Compute(1,2);else a.Compute(1);}
+  return a;
+}
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/VertexColorizerContract.cs::ExceptionThrown_WhenVertexDoesNotExistInGraph
+test('VertexColorizerContract.ExceptionThrown_WhenVertexDoesNotExistInGraph all twelve source fixtures',()=>{
+  for(const Algorithm of colorContractAlgorithms)assert.throws(()=>colorContractScenario(Algorithm).GetVertexColor(3),VertexNotFoundException);
+});
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/VertexColorizerContract.cs::ExceptionThrown_WhenAlgorithmHasNotYetBeenComputed
+test('VertexColorizerContract.ExceptionThrown_WhenAlgorithmHasNotYetBeenComputed all twelve source fixtures',()=>{
+  for(const Algorithm of colorContractAlgorithms){const a=colorContractScenario(Algorithm,false);assert.throws(()=>a.GetVertexColor(2),a instanceof PathContracts.ShortestPathAlgorithmBase?TypeError:VertexNotFoundException);}
+});
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/VertexColorizerContract.cs::ColorReturned_WhenVertexIsAccessibleFromRoot
+test('VertexColorizerContract.ColorReturned_WhenVertexIsAccessibleFromRoot all twelve source fixtures',()=>{
+  for(const Algorithm of colorContractAlgorithms)assert.ok([White,Gray,Black].includes(colorContractScenario(Algorithm).GetVertexColor(2)));
+});
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/VertexColorizerContract.cs::ColorReturned_WhenVertexExistsButIsInaccessibleFromRoot
+test('VertexColorizerContract.ColorReturned_WhenVertexExistsButIsInaccessibleFromRoot all twelve source fixtures',()=>{
+  for(const Algorithm of colorContractAlgorithms)assert.ok([White,Gray,Black].includes(colorContractScenario(Algorithm,true,true).GetVertexColor(3)));
+});
+test('search and lifecycle errors instantiate exported exception types',()=>{
+  const g=graph([[1,2]]),a=new S.DepthFirstSearchAlgorithm(g);
+  assert.throws(()=>new S.DepthFirstSearchAlgorithm(null),ArgumentNullException);
+  assert.throws(()=>new S.DepthFirstSearchAlgorithm(g,null),ArgumentNullException);
+  assert.throws(()=>new S.BreadthFirstSearchAlgorithm(g,null),ArgumentNullException);
+  assert.throws(()=>a.Compute(null),ArgumentNullException);assert.throws(()=>a.Compute(3),ArgumentException);
+  assert.throws(()=>a.MaxDepth=-1,ArgumentOutOfRangeException);assert.throws(()=>a.GetVertexColor(3),VertexNotFoundException);
+  assert.throws(()=>a.GetService(TestNotInService),InvalidOperationException);
+});

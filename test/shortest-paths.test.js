@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { AdjacencyGraph, BidirectionalGraph, UndirectedGraph, TaggedEdge, NoPathFoundException, NegativeWeightException, NegativeCycleGraphException, NonAcyclicGraphException } from '../src/core.js';
+import { AdjacencyGraph, BidirectionalGraph, UndirectedGraph, TaggedEdge, NoPathFoundException, NegativeWeightException, NegativeCycleGraphException, NonAcyclicGraphException, ArgumentNullException, InvalidOperationException, VertexNotFoundException } from '../src/core.js';
 import { DistanceRelaxers, GraphColor } from '../src/algorithm-base.js';
 import * as P from '../src/shortest-paths.js';
 import { VertexPredecessorRecorderObserver } from '../src/observers.js';
@@ -306,3 +306,109 @@ test('DijkstraRepro12359 full 352-vertex 9766-edge source regression first six r
 test('Dijkstra Scenario exact ten-vertex weighted source fixture',()=>{const g=graph([["A", "B", 4], ["A", "D", 1], ["B", "A", 74], ["B", "C", 2], ["B", "E", 12], ["C", "B", 12], ["C", "F", 74], ["C", "J", 12], ["D", "E", 32], ["D", "G", 22], ["E", "D", 66], ["E", "F", 76], ["E", "H", 33], ["F", "I", 11], ["F", "J", 21], ["G", "D", 12], ["G", "H", 10], ["H", "G", 2], ["H", "I", 72], ["I", "F", 31], ["I", "H", 18], ["I", "J", 7], ["J", "F", 8]],'ABCDEFGHIJ'),a=new P.DijkstraShortestPathAlgorithm(g,weight),r=new VertexPredecessorRecorderObserver();r.Attach(a);a.Compute('A');const f=new P.FloydWarshallAllShortestPathAlgorithm(g,weight).Compute();for(const vertex of g.Vertices){assert.equal(a.GetDistance(vertex),f.TryGetDistance('A',vertex));if(vertex!=='A')assert.equal(pathCost(r.TryGetPath(vertex)),a.GetDistance(vertex));}});
 for(const Algorithm of [P.DijkstraShortestPathAlgorithm,P.UndirectedDijkstraShortestPathAlgorithm,P.BellmanFordShortestPathAlgorithm,P.DagShortestPathAlgorithm])test(`${Algorithm.name}.Constructor_Throws full overload matrix`,()=>{const g=graph([],[],Algorithm===P.UndirectedDijkstraShortestPathAlgorithm?UndirectedGraph:AdjacencyGraph),r=DistanceRelaxers.CriticalDistance;for(const base of [[g,weight],[g,weight,r]])for(let mask=1;mask<(1<<base.length);mask++){const args=base.map((v,i)=>mask&(1<<i)?null:v);assert.throws(()=>new Algorithm(...args),TypeError);if(base.length===3)assert.throws(()=>new Algorithm(null,...args),TypeError);}});
 test('AStar.Constructor_Throws full heuristic/relaxer overload matrix',()=>{const g=graph([]),h=()=>0,r=DistanceRelaxers.CriticalDistance;for(const base of [[g,weight,h],[g,weight,h,r]])for(let mask=1;mask<(1<<base.length);mask++){const args=base.map((v,i)=>mask&(1<<i)?null:v);assert.throws(()=>new P.AStarShortestPathAlgorithm(...args),TypeError);if(base.length===4)assert.throws(()=>new P.AStarShortestPathAlgorithm(null,...args),TypeError);}});
+
+class CopiedPathVertex {
+  constructor(id) { this.id=id; }
+  Equals(other) { return other instanceof CopiedPathVertex && this.id===other.id; }
+  GetHashCode() { return 7; }
+}
+test('shortest and ranked paths honor equal vertex copies with colliding hashes',()=>{
+  const copy=id=>new CopiedPathVertex(id),rows=[[0,1,1],[1,2,2],[0,2,9],[2,3,3],[1,3,10],[0,3,50]],
+    g=graph(rows.map(([s,t,w])=>[copy(s),copy(t),w]),[0,1,2,3,4].map(copy),BidirectionalGraph);
+  for(const Algorithm of [P.DijkstraShortestPathAlgorithm,P.AStarShortestPathAlgorithm,P.BellmanFordShortestPathAlgorithm,P.DagShortestPathAlgorithm]) {
+    const a=Algorithm===P.AStarShortestPathAlgorithm?new Algorithm(g,weight,()=>0):new Algorithm(g,weight);
+    a.Compute(copy(0));assert.equal(a.Distances.size,5);assert.equal(a.GetDistance(copy(3)),6);
+    assert.deepEqual(a.TryGetPath(copy(3)).map(e=>[e.Source.id,e.Target.id]),[[0,1],[1,2],[2,3]]);
+    assert.equal(a.TryGetPath(copy(0)),undefined);assert.equal(a.TryGetPath(copy(4)),undefined);
+    assert.equal(a.Predecessors.size,3);
+  }
+  const floyd=new P.FloydWarshallAllShortestPathAlgorithm(g,weight);floyd.Compute();
+  assert.equal(floyd.TryGetDistance(copy(0),copy(3)),6);assert.equal(floyd.TryGetDistance(copy(0),copy(0)),0);
+  assert.equal(floyd.TryGetPath(copy(0),copy(0)),undefined);assert.equal(floyd.TryGetPath(copy(0),copy(4)),undefined);
+  assert.equal(pathCost(floyd.TryGetPath(copy(0),copy(3))),6);
+  const yen=new P.YenShortestPathsAlgorithm(g,copy(0),copy(3),8,weight).Execute();
+  assert.deepEqual(yen.map(pathCost),[6,11,12,50]);
+  const hp=new P.HoffmanPavleyRankedShortestPathAlgorithm(g,weight);hp.ShortestPathCount=8;hp.Compute(copy(0),copy(3));
+  assert.deepEqual(hp.ComputedShortestPaths.map(pathCost),[6,11,12,50]);
+  const undirected=graph(rows.map(([s,t,w])=>[copy(s),copy(t),w]),[0,1,2,3,4].map(copy),UndirectedGraph),a=new P.UndirectedDijkstraShortestPathAlgorithm(undirected,weight);
+  a.Compute(copy(3));assert.equal(a.GetDistance(copy(0)),6);assert.equal(pathCost(a.TryGetPath(copy(0))),6);
+});
+
+const distanceContractAlgorithms=[P.AStarShortestPathAlgorithm,P.BellmanFordShortestPathAlgorithm,P.DagShortestPathAlgorithm,P.DijkstraShortestPathAlgorithm,P.UndirectedDijkstraShortestPathAlgorithm];
+function distanceContractScenario(Algorithm,computed=true,isolated=false,strings=false) {
+  const v=number=>strings?String(number):number,g=graph([[v(1),v(2),1]],isolated?[v(3)]:[],Algorithm===P.UndirectedDijkstraShortestPathAlgorithm?UndirectedGraph:AdjacencyGraph);
+  const a=Algorithm===P.AStarShortestPathAlgorithm?new Algorithm(g,weight,()=>0):new Algorithm(g,weight);
+  if(computed)a.Compute(v(1));return a;
+}
+
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionContractBase.cs::NoDistanceFound_WhenVertexDoesNotExistInGraph
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionTryGetDistanceContract.cs::NoDistanceFound_WhenVertexDoesNotExistInGraph
+test('DistancesCollectionTryGetDistanceContract.NoDistanceFound_WhenVertexDoesNotExistInGraph all five source algorithm fixtures',()=>{
+  for(const Algorithm of distanceContractAlgorithms){assert.equal(distanceContractScenario(Algorithm).TryGetDistance(3),undefined);}
+});
+
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionContractBase.cs::TheTryGetDistanceMethod.ExceptionThrown_WhenAlgorithmHasNotYetBeenComputed
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionTryGetDistanceContract.cs::ExceptionThrown_WhenAlgorithmHasNotYetBeenComputed
+test('DistancesCollectionTryGetDistanceContract.ExceptionThrown_WhenAlgorithmHasNotYetBeenComputed all five source algorithm fixtures',()=>{
+  for(const Algorithm of distanceContractAlgorithms){assert.throws(()=>distanceContractScenario(Algorithm,false).TryGetDistance(2),InvalidOperationException);}
+});
+
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionContractBase.cs::TheTryGetDistanceMethod.ExceptionThrown_WhenTargetVertexIsNull
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionTryGetDistanceContract.cs::ExceptionThrown_WhenTargetVertexIsNull
+test('DistancesCollectionTryGetDistanceContract.ExceptionThrown_WhenTargetVertexIsNull all five source algorithm fixtures',()=>{
+  for(const Algorithm of distanceContractAlgorithms){assert.throws(()=>distanceContractScenario(Algorithm,false,false,true).TryGetDistance(null),ArgumentNullException);}
+});
+
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionContractBase.cs::DistanceReturned_WhenVertexIsAccessibleFromRoot
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionTryGetDistanceContract.cs::DistanceReturned_WhenVertexIsAccessibleFromRoot
+test('DistancesCollectionTryGetDistanceContract.DistanceReturned_WhenVertexIsAccessibleFromRoot all five source algorithm fixtures',()=>{
+  for(const Algorithm of distanceContractAlgorithms){assert.equal(distanceContractScenario(Algorithm).TryGetDistance(2),1);}
+});
+
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionContractBase.cs::DistanceReturned_WhenVertexExistsButIsInaccessibleFromRoot
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionTryGetDistanceContract.cs::DistanceReturned_WhenVertexExistsButIsInaccessibleFromRoot
+test('DistancesCollectionTryGetDistanceContract.DistanceReturned_WhenVertexExistsButIsInaccessibleFromRoot all five source algorithm fixtures',()=>{
+  for(const Algorithm of distanceContractAlgorithms){assert.notEqual(distanceContractScenario(Algorithm,true,true).TryGetDistance(3),undefined);}
+});
+
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionContractBase.cs::ExceptionThrown_WhenVertexDoesNotExistInGraph
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionGetDistanceContract.cs::ExceptionThrown_WhenVertexDoesNotExistInGraph
+test('DistancesCollectionGetDistanceContract.ExceptionThrown_WhenVertexDoesNotExistInGraph all five source algorithm fixtures',()=>{
+  for(const Algorithm of distanceContractAlgorithms){assert.throws(()=>distanceContractScenario(Algorithm).GetDistance(3),VertexNotFoundException);}
+});
+
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionContractBase.cs::TheGetDistanceMethod.ExceptionThrown_WhenAlgorithmHasNotYetBeenComputed
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionGetDistanceContract.cs::ExceptionThrown_WhenAlgorithmHasNotYetBeenComputed
+test('DistancesCollectionGetDistanceContract.ExceptionThrown_WhenAlgorithmHasNotYetBeenComputed all five source algorithm fixtures',()=>{
+  for(const Algorithm of distanceContractAlgorithms){assert.throws(()=>distanceContractScenario(Algorithm,false).GetDistance(2),InvalidOperationException);}
+});
+
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionContractBase.cs::TheGetDistanceMethod.ExceptionThrown_WhenTargetVertexIsNull
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionGetDistanceContract.cs::ExceptionThrown_WhenTargetVertexIsNull
+test('DistancesCollectionGetDistanceContract.ExceptionThrown_WhenTargetVertexIsNull all five source algorithm fixtures',()=>{
+  for(const Algorithm of distanceContractAlgorithms){assert.throws(()=>distanceContractScenario(Algorithm,false,false,true).GetDistance(null),ArgumentNullException);}
+});
+
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionContractBase.cs::NoExceptionThrown_WhenVertexIsAccessibleFromRoot
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionGetDistanceContract.cs::NoExceptionThrown_WhenVertexIsAccessibleFromRoot
+test('DistancesCollectionGetDistanceContract.NoExceptionThrown_WhenVertexIsAccessibleFromRoot all five source algorithm fixtures',()=>{
+  for(const Algorithm of distanceContractAlgorithms){assert.equal(distanceContractScenario(Algorithm).GetDistance(2),1);}
+});
+
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionContractBase.cs::NoExceptionThrown_WhenVertexExistsButIsInaccessibleFromRoot
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionGetDistanceContract.cs::NoExceptionThrown_WhenVertexExistsButIsInaccessibleFromRoot
+test('DistancesCollectionGetDistanceContract.NoExceptionThrown_WhenVertexExistsButIsInaccessibleFromRoot all five source algorithm fixtures',()=>{
+  for(const Algorithm of distanceContractAlgorithms){assert.doesNotThrow(()=>distanceContractScenario(Algorithm,true,true).GetDistance(3));}
+});
+
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionContractBase.cs::DistancesForAllVerticesInGraphReturnedWhenAlgorithmHasBeenRun
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionGetDistancesContract.cs::DistancesForAllVerticesInGraphReturnedWhenAlgorithmHasBeenRun
+test('DistancesCollectionGetDistancesContract.DistancesForAllVerticesInGraphReturnedWhenAlgorithmHasBeenRun all five source algorithm fixtures',()=>{
+  for(const Algorithm of distanceContractAlgorithms){assert.deepEqual([...distanceContractScenario(Algorithm,true,true).GetDistances()].map(([v])=>v).sort(),[1,2,3]);}
+});
+
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionContractBase.cs::EmptyCollectionReturned_WhenAlgorithmHasNotYetBeenRun
+// upstream: tests/QuikGraph.Tests/Algorithms/Contracts/DistancesCollectionGetDistancesContract.cs::EmptyCollectionReturned_WhenAlgorithmHasNotYetBeenRun
+test('DistancesCollectionGetDistancesContract.EmptyCollectionReturned_WhenAlgorithmHasNotYetBeenRun all five source algorithm fixtures',()=>{
+  for(const Algorithm of distanceContractAlgorithms){assert.deepEqual([...distanceContractScenario(Algorithm,false,true).GetDistances()],[]);}
+});

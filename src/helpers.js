@@ -1,5 +1,5 @@
 // Adapted from QuikGraph. Microsoft Public License (MS-PL); see LICENSE and NOTICE.
-import { equals } from './core.js';
+import { valueEquals as equals } from './equality.js';
 /** Cryptographically secure random source; the seed is intentionally ignored. */
 export class CryptoRandom {
   constructor(_ignoredSeed) { this._buffer = new Uint32Array(1); }

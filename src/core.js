@@ -1,7 +1,14 @@
+import { EqualityMap as Map, EqualitySet as Set } from './equality.js';
 // QuikGraph Web. Graph contracts ported from QuikGraph (Microsoft Public License).
 // JavaScript adaptation: TryGet* returns the out value, or undefined on failure.
 export const GraphColor = Object.freeze({ White: 0, Gray: 1, Black: 2 });
-export class QuikGraphException extends Error { constructor(message = 'A graph operation failed.', options) { super(message, options); this.name = new.target.name; } }
+export class QuikGraphException extends Error {
+  constructor(message = 'A graph operation failed.', innerExceptionOrOptions) { super(message, innerExceptionOrOptions instanceof Error ? { cause: innerExceptionOrOptions } : innerExceptionOrOptions ?? undefined); this.name = new.target.name; }
+  get Message() { return this.message; }
+  get InnerException() { return this.cause ?? null; }
+  get StackTrace() { return this.stack; }
+  ToString() { return this.toString(); }
+}
 export class VertexNotFoundException extends QuikGraphException {}
 export class NegativeCycleGraphException extends QuikGraphException {}
 export class NegativeWeightException extends QuikGraphException {}
@@ -15,11 +22,11 @@ export class ArgumentNullException extends ArgumentException {}
 export class ArgumentOutOfRangeException extends RangeError { constructor(message = 'Argument out of range.') { super(message); this.name = new.target.name; } }
 export class InvalidOperationException extends Error { constructor(message = 'Operation is not valid.') { super(message); this.name = new.target.name; } }
 export class NotSupportedException extends Error { constructor(message = 'Operation is not supported.') { super(message); this.name = new.target.name; } }
-export function requireValue(value, name = 'value') { if (value == null) throw new TypeError(`${name} must not be null.`); return value; }
+export function requireValue(value, name = 'value') { if (value == null) throw new ArgumentNullException(`${name} must not be null.`); return value; }
 export function equals(a, b) { return a === b || (a !== a && b !== b) || (a != null && typeof a.Equals === 'function' && a.Equals(b)); }
 export function defaultCompare(a, b) { return a === b ? 0 : typeof a?.CompareTo === 'function' ? a.CompareTo(b) : a < b ? -1 : a > b ? 1 : 0; }
 const batch = (items, name) => { const a = Array.from(requireValue(items, name)); a.forEach(x => requireValue(x, name)); return a; };
-const indexed = (a, i) => { if (!Number.isInteger(i) || i < 0 || i >= a.length) throw new RangeError('Index is outside the collection.'); return a[i]; };
+const indexed = (a, i) => { if (!Number.isInteger(i) || i < 0 || i >= a.length) throw new ArgumentOutOfRangeException('Index is outside the collection.'); return a[i]; };
 const removeOne = (a, v) => { const i = a.findIndex(x => equals(x, v)); if (i < 0) return false; a.splice(i, 1); return true; };
 
 /** Multicast event. Listeners run in registration order; duplicate registrations are supported. */
@@ -40,14 +47,15 @@ export class UndirectedEdgeEventArgs extends EdgeEventArgs {
   get Target() { return this.Reversed ? this.Edge.Source : this.Edge.Target; }
 }
 const objectHashes = new WeakMap(); let nextHash = 1;
-function hash(v) { if (v == null) return 0; if (typeof v === 'object' || typeof v === 'function') { if (!objectHashes.has(v)) objectHashes.set(v, nextHash++); return objectHashes.get(v); } let h = 0; for (const c of String(v)) h = ((h * 31) ^ c.charCodeAt(0)) | 0; return h; }
+function identityHash(v) { if (v == null) return 0; if (typeof v === 'object' || typeof v === 'function') { if (!objectHashes.has(v)) objectHashes.set(v, nextHash++); return objectHashes.get(v); } let h = 0; for (const c of String(v)) h = ((h * 31) ^ c.charCodeAt(0)) | 0; return h; }
+function hash(v) { return typeof v?.GetHashCode === 'function' ? v.GetHashCode() : typeof v?.Equals === 'function' ? 0 : identityHash(v); }
 function edgeHash(e) { return (Math.imul(hash(e.Source), 397) ^ hash(e.Target)) | 0; }
 function endpoints(e, source, target) { Object.defineProperties(e, { Source: { value: requireValue(source, 'source'), enumerable: true }, Target: { value: requireValue(target, 'target'), enumerable: true } }); }
 const structDefault = Symbol('struct default');
 export class Edge {
   constructor(source, target, mode) { if (mode === structDefault) Object.defineProperties(this, { Source: { value: null, enumerable: true }, Target: { value: null, enumerable: true } }); else endpoints(this, source, target); }
   Equals(other) { return this === other; }
-  GetHashCode() { return hash(this); }
+  GetHashCode() { return identityHash(this); }
   ToString() { return `${this.Source ?? ''} -> ${this.Target ?? ''}`; }
   toString() { return this.ToString(); }
 }
@@ -112,7 +120,7 @@ export class AdjacencyGraph extends GraphQueries {
     this.AllowParallelEdges = copy ? copy.AllowParallelEdges : !!allowParallelEdges; this.EdgeCapacity = copy ? copy.EdgeCapacity : edgeCapacity;
     this._out = new Map(); this._in = new Map(); this._count = 0;
     this.VertexAdded = new EventHook(); this.VertexRemoved = new EventHook(); this.EdgeAdded = new EventHook(); this.EdgeRemoved = new EventHook();
-    if (copy) { this.AddVertexRange(copy.Vertices); this.AddEdgeRange(copy.Edges); }
+    if (copy) { this.AddVertexRange(copy.Vertices); this.AddEdgeRange(copy.Edges); if (typeof copy.InEdges === 'function') for (const vertex of copy.Vertices) this._in.set(vertex, Array.from(copy.InEdges(vertex))); }
   }
   get IsDirected() { return true; }
   get VertexType() { return Object; } get EdgeType() { return Edge; }
@@ -207,7 +215,7 @@ class GraphView extends GraphQueries {
   InEdges(v) { return Array.from(this.OriginalGraph.InEdges(v)); } TryGetInEdges(v) { return this.ContainsVertex(v) ? this.InEdges(v) : undefined; }
 }
 export class ArrayAdjacencyGraph extends GraphView { constructor(graph) { const g = new AdjacencyGraph(requireValue(graph).AllowParallelEdges); g.AddVertexRange(graph.Vertices); g.AddEdgeRange(graph.Edges); super(g); } Clone() { return new this.constructor(this); } }
-export class ArrayBidirectionalGraph extends ArrayAdjacencyGraph {}
+export class ArrayBidirectionalGraph extends ArrayAdjacencyGraph { constructor(graph) { super(graph); for (const vertex of graph.Vertices) this.OriginalGraph._in.set(vertex, Array.from(graph.InEdges(vertex))); } }
 export class ArrayUndirectedGraph extends GraphView {
   constructor(graph) { const g = new UndirectedGraph(requireValue(graph).AllowParallelEdges, graph.EdgeEqualityComparer ?? UndirectedVertexEquality); g.AddVertexRange(graph.Vertices); g.AddEdgeRange(graph.Edges); super(g); this.EdgeEqualityComparer = g.EdgeEqualityComparer; }
   AdjacentEdges(v) { return this.OriginalGraph.AdjacentEdges(v); }
@@ -378,7 +386,7 @@ export const EdgeExtensions = Object.freeze({ IsSelfEdge, GetOtherVertex, IsAdja
 for (const [name, fn] of Object.entries({ IsSelfEdge, GetOtherVertex, IsAdjacent, ToVertexPair, SortedVertexEquality, UndirectedVertexEquality })) Object.defineProperty(Edge.prototype, name, { value(...args) { return fn(this, ...args); } });
 
 function convert(Graph, input, factoryOrParallel = true, parallel = true) {
-  requireValue(input); const factory = typeof factoryOrParallel === 'function' ? factoryOrParallel : null, g = new Graph(factory ? parallel : factoryOrParallel);
+  requireValue(input); requireValue(factoryOrParallel); const factory = typeof factoryOrParallel === 'function' ? factoryOrParallel : null, g = new Graph(factory ? parallel : factoryOrParallel);
   if (factory) { g.AddVertexRange(input); for (const v of g.Vertices) g.AddEdgeRange(factory(v)); }
   else if (input.Vertices && input.Edges) { g.AddVertexRange(input.Vertices); g.AddEdgeRange(input.Edges); }
   else { const a = Array.from(input); if (a.length && Array.isArray(a[0])) { if (a.length !== 2 || a[0].length !== a[1]?.length) throw new RangeError('Expected equally sized source and target columns.'); g.AddVerticesAndEdgeRange(a[0].map((s, i) => new SEquatableEdge(s, a[1][i]))); } else g.AddVerticesAndEdgeRange(a); }
@@ -393,7 +401,7 @@ export function ToArrayUndirectedGraph(graph) { return new ArrayUndirectedGraph(
 export function ToCompressedRowGraph(graph) { return CompressedSparseRowGraph.FromGraph(graph); }
 export function ToDelegateIncidenceGraph(getter) { return new DelegateIncidenceGraph(getter); }
 export function ToDelegateBidirectionalIncidenceGraph(outGetter, inGetter) { return new DelegateBidirectionalIncidenceGraph(outGetter, inGetter); }
-export function ToDelegateVertexAndEdgeListGraph(vertices, getter) { if (vertices instanceof Map) { const map = vertices; return new DelegateVertexAndEdgeListGraph(() => map.keys(), v => map.has(v) ? (getter ? getter({ Key: v, Value: map.get(v) }) : map.get(v)) : undefined); } return new DelegateVertexAndEdgeListGraph(vertices, getter); }
+export function ToDelegateVertexAndEdgeListGraph(vertices, getter) { if (vertices instanceof globalThis.Map) { if (arguments.length > 1) requireValue(getter); const map = vertices; return new DelegateVertexAndEdgeListGraph(() => map.keys(), v => map.has(v) ? (getter ? getter({ Key: v, Value: map.get(v) }) : map.get(v)) : undefined); } return new DelegateVertexAndEdgeListGraph(vertices, getter); }
 export function ToDelegateUndirectedGraph(vertices, getter) { return new DelegateUndirectedGraph(vertices, getter); }
 export const GraphExtensions = Object.freeze({ ToAdjacencyGraph, ToBidirectionalGraph, ToUndirectedGraph, ToArrayAdjacencyGraph, ToArrayBidirectionalGraph, ToArrayUndirectedGraph, ToCompressedRowGraph, ToDelegateIncidenceGraph, ToDelegateBidirectionalIncidenceGraph, ToDelegateVertexAndEdgeListGraph, ToDelegateUndirectedGraph });
 for (const [name, fn] of Object.entries(GraphExtensions)) if (!name.startsWith('ToDelegate')) Object.defineProperty(GraphQueries.prototype, name, { value(...args) { return fn(this, ...args); } });

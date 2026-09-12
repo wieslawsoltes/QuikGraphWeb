@@ -1,12 +1,12 @@
 /** Structural graph algorithms ported from QuikGraph (MS-PL).
- * Iterative traversals avoid browser call-stack limits. Maps preserve vertex identity.
+ * Iterative traversals avoid browser call-stack limits. Explicit vertex equality is retained.
  */
+import { EqualityMap as Map, EqualitySet as Set, valueEquals as same } from './equality.js';
 import { AlgorithmBase, RootedAlgorithmBase } from './algorithm-base.js';
 import { Edge, BidirectionalGraph, EventHook, ArgumentNullException, ArgumentException,
   ArgumentOutOfRangeException, InvalidOperationException, NonAcyclicGraphException } from './core.js';
 
 const required = (value, name) => { if (value == null) throw new ArgumentNullException(name); return value; };
-const same = (a, b) => a === b || (a !== a && b !== b);
 const other = (edge, vertex) => same(edge.Source, vertex) ? edge.Target : edge.Source;
 const vertices = graph => Array.from(graph.Vertices);
 const edges = graph => Array.from(graph.Edges);
@@ -24,7 +24,7 @@ class DisjointSets {
   add(v) { if (!this.parents.has(v)) { this.parents.set(v, v); this.ranks.set(v, 0); ++this.count; } }
   find(v) {
     if (!this.parents.has(v)) throw new ArgumentException('Vertex is not in the disjoint set.');
-    let root = v;
+    let root = this.parents.get(v);
     while (!same(this.parents.get(root), root)) root = this.parents.get(root);
     while (!same(v, root)) { const next = this.parents.get(v); this.parents.set(v, root); v = next; }
     return root;
@@ -57,12 +57,18 @@ function componentArguments(args) {
 }
 
 class ComponentsBase extends AlgorithmBase {
-  constructor(...args) { const { host, graph, components } = componentArguments(args); super(host, graph); this.Components = components; this.ComponentCount = 0; }
-  Initialize() { super.Initialize(); this.Components.clear(); this.ComponentCount = 0; }
+  constructor(...args) { const { host, graph, components } = componentArguments(args); super(host, graph); this.Components = components; this._componentMap = components instanceof Map ? components : new Map(); this.ComponentCount = 0; }
+  Initialize() { super.Initialize(); this.Components.clear(); this._componentMap.clear(); this.ComponentCount = 0; }
+  Clean() {
+    // Caller-supplied native Maps keep their own identity semantics. Compute using
+    // value equality, then expose their results with the graph's canonical keys.
+    if (this.Components !== this._componentMap) for (const vertex of this.VisitedGraph.Vertices) if (this._componentMap.has(vertex)) this.Components.set(vertex, this._componentMap.get(vertex));
+    super.Clean();
+  }
   get Graphs() {
     const graphs = Array.from({ length: this.ComponentCount }, () => new BidirectionalGraph());
-    for (const [v, i] of this.Components) graphs[i].AddVertex(v);
-    for (const e of this.VisitedGraph.Edges) if (this.Components.get(e.Source) === this.Components.get(e.Target)) graphs[this.Components.get(e.Source)].AddEdge(e);
+    for (const [v, i] of this._componentMap) graphs[i].AddVertex(v);
+    for (const e of this.VisitedGraph.Edges) if (this._componentMap.get(e.Source) === this._componentMap.get(e.Target)) graphs[this._componentMap.get(e.Source)].AddEdge(e);
     return graphs;
   }
 }
@@ -72,12 +78,12 @@ export class ConnectedComponentsAlgorithm extends ComponentsBase {
     const adjacent = adjacency(this.VisitedGraph, true);
     for (const start of this.VisitedGraph.Vertices) {
       this.ThrowIfCancellationRequested();
-      if (this.Components.has(start)) continue;
-      const component = this.ComponentCount++, pending = [start]; this.Components.set(start, component);
+      if (this._componentMap.has(start)) continue;
+      const component = this.ComponentCount++, pending = [start]; this._componentMap.set(start, component);
       while (pending.length) {
         this.ThrowIfCancellationRequested();
         const vertex = pending.pop();
-        for (const edge of adjacent.get(vertex)) { const next = other(edge, vertex); if (!this.Components.has(next)) { this.Components.set(next, component); pending.push(next); } }
+        for (const edge of adjacent.get(vertex)) { const next = other(edge, vertex); if (!this._componentMap.has(next)) { this._componentMap.set(next, component); pending.push(next); } }
       }
     }
   }
@@ -91,7 +97,7 @@ export class StronglyConnectedComponentsAlgorithm extends ComponentsBase {
   InternalCompute() {
     const stack = [], pending = [], out = adjacency(this.VisitedGraph);
     const discover = vertex => {
-      this.Roots.set(vertex, vertex); this.Components.set(vertex, 2147483647);
+      this.Roots.set(vertex, vertex); this._componentMap.set(vertex, 2147483647);
       this.ComponentsPerStep.push(this.ComponentCount); this.VerticesPerStep.push(vertex); ++this.Steps;
       this.DiscoverTimes.set(vertex, this.DiscoverTimes.size); stack.push(vertex); pending.push({ vertex, index: 0 });
     };
@@ -102,13 +108,13 @@ export class StronglyConnectedComponentsAlgorithm extends ComponentsBase {
         const frame = pending[pending.length - 1], list = out.get(frame.vertex);
         if (frame.index < list.length) { const next = list[frame.index++].Target; if (!this.DiscoverTimes.has(next)) discover(next); continue; }
         pending.pop();
-        for (const edge of list) if (this.Components.get(edge.Target) === 2147483647) {
+        for (const edge of list) if (this._componentMap.get(edge.Target) === 2147483647) {
           const a = this.Roots.get(frame.vertex), b = this.Roots.get(edge.Target);
           if (this.DiscoverTimes.get(b) <= this.DiscoverTimes.get(a)) this.Roots.set(frame.vertex, b);
         }
         if (same(this.Roots.get(frame.vertex), frame.vertex)) {
           let vertex;
-          do { vertex = stack.pop(); this.Components.set(vertex, this.ComponentCount); this.ComponentsPerStep.push(this.ComponentCount); this.VerticesPerStep.push(vertex); ++this.Steps; } while (!same(vertex, frame.vertex));
+          do { vertex = stack.pop(); this._componentMap.set(vertex, this.ComponentCount); this.ComponentsPerStep.push(this.ComponentCount); this.VerticesPerStep.push(vertex); ++this.Steps; } while (!same(vertex, frame.vertex));
           ++this.ComponentCount;
         }
       }

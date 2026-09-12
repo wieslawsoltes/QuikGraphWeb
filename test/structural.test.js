@@ -4,6 +4,18 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { Edge, SEdge, SEquatableEdge, EquatableEdge, TaggedEdge, AdjacencyGraph, BidirectionalGraph, UndirectedGraph, DelegateUndirectedGraph } from '../src/core.js';
 import * as S from '../src/structural.js';
 
+class EqualVertex {
+  constructor(id) { this.id = id; }
+  Equals(other) { return other instanceof EqualVertex && this.id === other.id; }
+  GetHashCode() { return 7; } // Deliberately collide every distinct vertex.
+}
+const equalVertex = id => new EqualVertex(id);
+function equalGraph(pairs, Type = BidirectionalGraph, ids = [0, 1, 2, 3, 4]) {
+  const graph = new Type(); graph.AddVertexRange(ids.map(equalVertex));
+  graph.AddEdgeRange(pairs.map(([s,t,w = 1]) => new TaggedEdge(equalVertex(s), equalVertex(t), w)));
+  return graph;
+}
+
 function graph(pairs = [], Type = BidirectionalGraph, extra = [], EdgeType = Edge) {
   const g = new Type(); g.AddVertexRange(extra); g.AddVerticesAndEdgeRange(pairs.map(([a, b, tag]) => tag === undefined ? new EdgeType(a, b) : new TaggedEdge(a, b, tag))); return g;
 }
@@ -55,7 +67,7 @@ test('SCC one cycle', () => { const a = new S.StronglyConnectedComponentsAlgorit
 // Upstream: tests/QuikGraph.Tests/Algorithms/ConnectedComponents/StronglyConnectedComponentsAlgorithmTests.cs::ThreeComponents
 test('SCC exact reverse-finish numbering', () => {
   const a = new S.StronglyConnectedComponentsAlgorithm(graph([[1, 2], [2, 3], [2, 4], [3, 1], [4, 5]])).Compute();
-  assert.equal(a.ComponentCount, 3); assert.deepEqual(a.Components, new Map([[1, 2], [2, 2], [3, 2], [4, 1], [5, 0]])); assert.deepEqual(a.Graphs.map(g => new Set(g.Vertices)), [new Set([5]), new Set([4]), new Set([1, 2, 3])]);
+  assert.equal(a.ComponentCount, 3); assert.deepEqual(new Map(a.Components), new Map([[1, 2], [2, 2], [3, 2], [4, 1], [5, 0]])); assert.deepEqual(a.Graphs.map(g => new Set(g.Vertices)), [new Set([5]), new Set([4]), new Set([1, 2, 3])]);
 });
 // Upstream: tests/QuikGraph.Tests/Algorithms/ConnectedComponents/StronglyConnectedComponentsAlgorithmTests.cs::MultipleComponents
 test('SCC larger upstream fixture and trace reset', () => {
@@ -89,7 +101,7 @@ test('Incremental components track graph additions and unsubscribe on dispose', 
   const g = graph([], BidirectionalGraph, [0,1,2,3]), a = new S.IncrementalConnectedComponentsAlgorithm(g).Compute();
   assert.equal(a.ComponentCount, 4); g.AddEdge(new Edge(0,1)); assert.equal(a.ComponentCount, 3); g.AddEdge(new Edge(2,3)); assert.equal(a.ComponentCount, 2); g.AddEdge(new Edge(1,3)); assert.equal(a.ComponentCount, 1);
   g.AddVerticesAndEdge(new Edge(4,5)); assert.equal(a.ComponentCount, 2); g.AddVertex(6); assert.equal(a.ComponentCount, 3);
-  assert.deepEqual(a.GetComponents(), { Key: 3, Value: new Map([[0,0],[1,0],[2,0],[3,0],[4,1],[5,1],[6,2]]) });
+  const result = a.GetComponents(); assert.equal(result.Key, 3); assert.deepEqual(new Map(result.Value), new Map([[0,0],[1,0],[2,0],[3,0],[4,1],[5,1],[6,2]]));
   const snapshot = a.GetComponents(); a.Compute(); a.Compute(); assert.equal(g.EdgeAdded.Count, 1); a.Dispose(); a.Dispose(); assert.equal(g.EdgeAdded.Count, 0); g.AddVertex(7); assert.equal(snapshot.Value.size, 7); assert.doesNotThrow(() => g.RemoveVertex(7)); a.Compute(); assert.equal(g.EdgeAdded.Count, 1); a.Dispose();
 });
 // Upstream: tests/QuikGraph.Tests/Algorithms/ConnectedComponents/IncrementalConnectedComponentsAlgorithmTests.cs::IncrementalConnectedComponent_Throws
@@ -374,4 +386,62 @@ test('Offline LCA original slow-corpus sampling, first 12 roots and every ordere
       for(const pair of pairs){let expected;if(seen.has(pair.Source)&&seen.has(pair.Target)){expected=pair.Target;while(!chains.get(pair.Source).has(expected))expected=parent.get(expected);}assert.equal(a.Ancestors.get(pair),expected,`${files[index]}, root ${root}, pair ${pair.Source}/${pair.Target}`);}
     }
   }
+});
+
+test('Structural components preserve Equals/GetHashCode across copied endpoints and colliding hashes', () => {
+  const pairs = [[0,1],[1,2],[2,0],[2,3]], g = equalGraph(pairs);
+  for (const [Type,count] of [[S.ConnectedComponentsAlgorithm,2],[S.WeaklyConnectedComponentsAlgorithm,2],[S.StronglyConnectedComponentsAlgorithm,3]]) {
+    const algorithm = new Type(g).Compute();
+    assert.equal(algorithm.ComponentCount,count); assert.equal(algorithm.Components.size,5);
+    assert.equal(algorithm.Components.get(equalVertex(0)),algorithm.Components.get(equalVertex(2)));
+    assert.notEqual(algorithm.Components.get(equalVertex(0)),algorithm.Components.get(equalVertex(4)));
+    assert.equal(algorithm.Graphs.reduce((n,part)=>n+part.EdgeCount,0),Type===S.StronglyConnectedComponentsAlgorithm?3:4);
+    const native = new globalThis.Map([['stale',99]]), supplied = new Type(g,native).Compute();
+    assert.equal(supplied.Components,native); assert.equal(native.size,5); assert.equal(native.has('stale'),false);
+    for (const canonical of g.Vertices) assert.equal(native.get(canonical),algorithm.Components.get(canonical));
+    assert.equal(native.has(equalVertex(0)),false,'Caller native Map retains native reference semantics');
+    assert.equal(supplied.Graphs.length,count); supplied.Compute(); assert.equal(native.size,5);
+  }
+  const incremental = new S.IncrementalConnectedComponentsAlgorithm(g).Compute();
+  assert.equal(incremental.ComponentCount,2);g.AddEdge(new Edge(equalVertex(3),equalVertex(4)));
+  assert.equal(incremental.ComponentCount,1);assert.equal(incremental.GetComponents().Value.get(equalVertex(4)),0);incremental.Dispose();
+  for (const stronglyConnected of [true,false]) {
+    const algorithm = new S.CondensationGraphAlgorithm(g);algorithm.StronglyConnected=stronglyConnected;algorithm.Compute();
+    assert.equal(algorithm.CondensedGraph.VertexCount,stronglyConnected?3:1);
+    assert.equal([...algorithm.CondensedGraph.Vertices].reduce((n,part)=>n+part.VertexCount,0),5);
+  }
+});
+
+test('Structural ordering, forests, transitive graphs and ranks use value-equal vertices without merging hash collisions', () => {
+  const pairs=[[0,1,4],[0,2,1],[2,1,2],[1,3,1],[2,3,5]],g=equalGraph(pairs),numeric=graph(pairs,BidirectionalGraph,[0,1,2,3,4]);
+  for (const [Type,backward] of [[S.TopologicalSortAlgorithm,false],[S.SourceFirstTopologicalSortAlgorithm,false],[S.SourceFirstBidirectionalTopologicalSortAlgorithm,false],[S.SourceFirstBidirectionalTopologicalSortAlgorithm,true]]) {
+    const algorithm=new Type(g,backward?S.TopologicalSortDirection.Backward:undefined).Compute(),positions=new globalThis.Map(algorithm.SortedVertices.map((v,i)=>[v.id,i]));
+    assert.equal(positions.size,5);for(const [s,t]of pairs)assert.ok(backward?positions.get(s)>positions.get(t):positions.get(s)<positions.get(t));
+  }
+  const forest=equalGraph([[0,1],[1,2],[1,3]],UndirectedGraph);
+  for (const Type of [S.UndirectedTopologicalSortAlgorithm,S.UndirectedFirstTopologicalSortAlgorithm]) assert.equal(new Type(forest).Compute().SortedVertices.length,5);
+  forest.AddEdge(new Edge(equalVertex(0),equalVertex(0)));
+  for (const Type of [S.UndirectedTopologicalSortAlgorithm,S.UndirectedFirstTopologicalSortAlgorithm]) assert.throws(()=>new Type(forest).Compute(),/acyclic/i);
+  for (const Type of [S.KruskalMinimumSpanningTreeAlgorithm,S.PrimMinimumSpanningTreeAlgorithm]) {
+    const algorithm=new Type(g,e=>e.Tag).Compute();assert.equal(algorithm.SpanningTree.length,3);assert.equal(algorithm.SpanningTree.reduce((n,e)=>n+e.Tag,0),4);
+  }
+  const closure=new S.TransitiveClosureAlgorithm(g,(s,t)=>new Edge(s,t)).Compute().TransitiveClosure,reduction=new S.TransitiveReductionAlgorithm(g).Compute().TransitiveReduction;
+  assert.equal(closure.EdgeCount,6);assert.ok(closure.ContainsEdge(equalVertex(0),equalVertex(3)));assert.equal(reduction.EdgeCount,3);assert.equal(reduction.ContainsEdge(equalVertex(0),equalVertex(1)),false);
+  const ranked=new S.PageRankAlgorithm(g).Compute(),expected=new S.PageRankAlgorithm(numeric).Compute();
+  for(const [id,rank]of expected.Ranks)assert.equal(ranked.Ranks.get(equalVertex(id)),rank);
+  const merged=new S.EdgeMergeCondensationGraphAlgorithm(equalGraph([[0,1],[1,2]]),new BidirectionalGraph(),v=>v.id!==1).Compute().CondensedGraph;
+  assert.ok(merged.ContainsEdge(equalVertex(0),equalVertex(2)));assert.equal(merged.ContainsVertex(equalVertex(1)),false);
+});
+
+test('Offline LCA and random generation recognize equal copies and keep distinct colliding values', () => {
+  const g=equalGraph([[0,1],[0,2],[1,3],[1,4]],BidirectionalGraph,[0,1,2,3,4,5]);
+  const pairs=[new SEquatableEdge(equalVertex(3),equalVertex(4)),new SEquatableEdge(equalVertex(2),equalVertex(3)),new SEquatableEdge(equalVertex(4),equalVertex(4)),new SEquatableEdge(equalVertex(3),equalVertex(5))];
+  const algorithm=new S.TarjanOfflineLeastCommonAncestorAlgorithm(g).Compute(equalVertex(0),pairs);
+  assert.equal(algorithm.Ancestors.get(new SEquatableEdge(equalVertex(3),equalVertex(4))).id,1);
+  assert.equal(algorithm.Ancestors.get(new SEquatableEdge(equalVertex(2),equalVertex(3))).id,0);
+  assert.equal(algorithm.Ancestors.get(new SEquatableEdge(equalVertex(4),equalVertex(4))).id,4);
+  assert.equal(algorithm.Ancestors.get(new SEquatableEdge(equalVertex(3),equalVertex(5))),undefined);
+  const duplicates=new BidirectionalGraph(false);assert.throws(()=>S.RandomGraphFactory.Create(duplicates,()=>equalVertex(0),(s,t)=>new Edge(s,t),()=>0,3,1,false),/distinct vertices/);
+  const generated=new BidirectionalGraph(false);let id=0;S.RandomGraphFactory.Create(generated,()=>equalVertex(id++%2),(s,t)=>new Edge(equalVertex(s.id),equalVertex(t.id)),()=>0,4,2,false);
+  assert.equal(generated.VertexCount,2);assert.equal(generated.EdgeCount,2);assert.ok(generated.ContainsEdge(equalVertex(0),equalVertex(1)));assert.ok(generated.ContainsEdge(equalVertex(1),equalVertex(0)));
 });

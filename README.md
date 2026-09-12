@@ -99,7 +99,7 @@ const tryPath = AlgorithmExtensions.ShortestPathsDijkstra(graph, edge => edge.Ta
 const path = tryPath('C'); // Edge array, or undefined when no path is available
 ```
 
-Native `Map` dictionaries replace .NET dictionary indexers. Extension methods are exported functions and members of `AlgorithmExtensions`, `GraphExtensions`, or `EdgeExtensions`. JavaScript cannot express CLR `out` arguments or generic overload resolution verbatim; the mapped conventions are documented in [compatibility](docs/compatibility.md).
+Map-compatible dictionaries replace .NET dictionary indexers. Internal `EqualityMap` and `EqualitySet` collections also support vertices that provide `Equals` and `GetHashCode`; ordinary objects retain reference identity. Extension methods are exported functions and members of `AlgorithmExtensions`, `GraphExtensions`, or `EdgeExtensions`. JavaScript cannot express CLR `out` arguments or generic overload resolution verbatim; the mapped conventions are documented in [compatibility](docs/compatibility.md).
 
 ## Develop and verify
 

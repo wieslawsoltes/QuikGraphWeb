@@ -1,3 +1,4 @@
+import { EqualityMap as Map, EqualitySet as Set } from './equality.js';
 /** Graphviz DOT bridge. Rendering engines are supplied through IDotEngine-compatible adapters. */
 import { EventHook } from './core.js';
 const required = (value, name = 'value') => { if (value == null) throw new TypeError(`${name} cannot be null`); return value; };
@@ -30,8 +31,8 @@ class RawDot { constructor(value) { this.value = value; } }
 const raw = value => new RawDot(value);
 const quote = value => `"${DotEscapers.Escape(value)}"`;
 const dotValue = value => value instanceof RawDot ? String(value.value) : value instanceof HtmlString ? `<${value.String}>` : value instanceof GraphvizRecord ? `"${value.ToDot()}"` : value instanceof GraphvizColor ? quote(value.ToDot()) : typeof value === 'string' ? quote(value) : String(value).toLowerCase();
-const put = (map,key,value) => map instanceof Map ? map.set(key,value) : (required(map)[key] = value);
-const dotParameters = (map, separator = ', ') => [...(map instanceof Map ? map : Object.entries(map))].map(([key,value]) => `${key}=${dotValue(value)}`).join(separator);
+const put = (map,key,value) => map instanceof globalThis.Map ? map.set(key,value) : (required(map)[key] = value);
+const dotParameters = (map, separator = ', ') => [...(map instanceof globalThis.Map ? map : Object.entries(map))].map(([key,value]) => `${key}=${dotValue(value)}`).join(separator);
 export class GraphvizColor {
   constructor(a=0,r=0,g=0,b=0) { for (const c of [a,r,g,b]) if (!Number.isInteger(c) || c<0 || c>255) throw new RangeError('Color channels must be bytes'); this.A=a;this.R=r;this.G=g;this.B=b; Object.freeze(this); }
   Equals(other) { return other instanceof GraphvizColor && this.A===other.A && this.R===other.R && this.G===other.G && this.B===other.B; }
@@ -269,7 +270,7 @@ export class GraphvizEdge extends DotFormat {
 export class GraphvizGraph extends DotFormat {
   constructor() { super(); this.Name='G';/** @type {string | null} */ this.Comment=null;/** @type {string | null} */ this.Url=null;this.BackgroundColor=GraphvizColor.White;this.ClusterRank=GraphvizClusterMode.Local;/** @type {GraphvizFont | null} */ this.Font=null;this.FontColor=GraphvizColor.Black;this.PenWidth=1;this.IsCentered=false;this.IsCompounded=false;this.IsConcentrated=false;this.IsLandscape=false;this.IsNormalized=false;this.IsReMinCross=false;this.IsHtmlLabel=false;/** @type {string | null} */ this.Label=null;this.LabelJustification=GraphvizLabelJustification.C;this.LabelLocation=GraphvizLabelLocation.B;this.Layers=new GraphvizLayerCollection();this.McLimit=1;this.NodeSeparation=0.25;this.RankDirection=GraphvizRankDirection.TB;this.RankSeparation=0.5;this.NsLimit=-1;this.NsLimit1=-1;this.OutputOrder=GraphvizOutputMode.BreadthFirst;this.PageDirection=GraphvizPageDirection.BL;this.PageSize=new GraphvizSizeF();this.Quantum=0;this.Ratio=GraphvizRatioMode.Auto;this.Resolution=0.96;this.Rotate=0;this.SamplePoints=8;this.SearchSize=30;this.Size=new GraphvizSizeF();this.Splines=GraphvizSplineType.Spline;/** @type {string | null} */ this.StyleSheet=null; }
   get Name(){return this._name;}set Name(v){this._name=required(v,'Name');}
-  GenerateDot(p) { const parts=[...(p instanceof Map?p:Object.entries(p))].map(([key,value])=>value instanceof GraphvizLayerCollection?value.ToDot():`${key}=${dotValue(value)}`); return parts.join('; ')+(parts.length>1?';':''); }
+  GenerateDot(p) { const parts=[...(p instanceof globalThis.Map?p:Object.entries(p))].map(([key,value])=>value instanceof GraphvizLayerCollection?value.ToDot():`${key}=${dotValue(value)}`); return parts.join('; ')+(parts.length>1?';':''); }
   ToDot() {
     const p=new Map();if(this.Url!=null)p.set('URL',this.Url);if(!equal(this.BackgroundColor,GraphvizColor.White))p.set('bgcolor',this.BackgroundColor);if(this.IsCentered)p.set('center',true);if(this.ClusterRank!==GraphvizClusterMode.Local)p.set('clusterrank',this.ClusterRank);if(this.Comment!=null)p.set('comment',this.Comment);if(this.IsCompounded)p.set('compound',true);if(this.IsConcentrated)p.set('concentrate',true);
     if(this.Font){p.set('fontname',this.Font.Name);p.set('fontsize',this.Font.SizeInPoints);}if(!equal(this.FontColor,GraphvizColor.Black))p.set('fontcolor',this.FontColor);if(this.PenWidth!==1)p.set('penwidth',this.PenWidth);if(this.Label!=null)p.set('label',this.IsHtmlLabel?new HtmlString(this.Label):this.Label);
@@ -299,7 +300,7 @@ export class GraphvizAlgorithm {
 export function ToGraphviz(graph,configure){if(arguments.length>1&&configure===null)throw new TypeError('initAlgorithm cannot be null');const algorithm=new GraphvizAlgorithm(graph);if(configure)configure(algorithm);return algorithm.Generate();}
 /** Historical upstream endpoint is no longer operational. ToSvg requires an actual rendering engine. */
 export const DotToSvgApiEndpoint='https://rise4fun.com/rest/ask/Agl/';
-export function ToSvg(graphOrDot,engine,configure){required(graphOrDot,'graphOrDot');required(engine,'SVG rendering engine');const dot=typeof graphOrDot==='string'?graphOrDot:ToGraphviz(graphOrDot,configure);if(typeof engine==='function')return engine(dot);if(typeof engine.renderString==='function')return engine.renderString(dot,{format:'svg'});if(typeof engine.Run==='function')return engine.Run(GraphvizImageType.Svg,dot,'graph.svg');throw new TypeError('SVG engine must expose renderString, Run or be a callback');}
+export function ToSvg(graphOrDot,engine,configure){required(graphOrDot,'graphOrDot');required(engine,'SVG rendering engine');const dot=typeof graphOrDot==='string'?graphOrDot:ToGraphviz(graphOrDot,configure);let result;if(typeof engine==='function')result=engine(dot);else if(typeof engine.renderString==='function')result=engine.renderString(dot,{format:'svg'});else if(typeof engine.Run==='function')result=engine.Run(GraphvizImageType.Svg,dot,'graph.svg');else throw new TypeError('SVG engine must expose renderString, Run or be a callback');return result?.then?result.then(value=>value??''):result??'';}
 export const GraphvizExtensions=Object.freeze({ToGraphviz,ToSvg,DotToSvgApiEndpoint});
 /** Portable file writer: pass (path, text) => result. A Promise result is supported. */
 export class FileDotEngine {

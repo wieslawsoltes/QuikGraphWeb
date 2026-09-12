@@ -1,4 +1,5 @@
 // Port of QuikGraph algorithm lifecycle, rooted algorithms and services (MS-PL).
+import { EqualityMap as Map, valueEquals } from './equality.js';
 import * as Core from './core.js';
 import { EventHook, requireValue } from './core.js';
 export { requireValue } from './core.js';
@@ -6,7 +7,7 @@ export { GraphColor } from './core.js';
 export const ComputationState = Object.freeze({ NotRunning: 0, Running: 1, PendingAbortion: 2, Finished: 3, Aborted: 4 });
 export class OperationCanceledException extends Error { constructor(message = 'Algorithm aborted.') { super(message); this.name = 'OperationCanceledException'; } }
 export function algorithmError(name, message) { if (typeof Core[name] === 'function') return new Core[name](message); const error = new Error(message); error.name = name; return error; }
-export const sameVertex = (a, b) => a === b || (a !== a && b !== b);
+export const sameVertex = valueEquals;
 export function events(owner, names) { for (const name of names.split(' ')) if (!owner[name]) owner[name] = new EventHook(); }
 export class CancelManager {
   constructor() { this.IsCancelling = false; this.CancelRequested = new EventHook(); this.CancelReset = new EventHook(); this.Cancelling = this.CancelRequested; }

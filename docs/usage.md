@@ -22,6 +22,26 @@ const reversed = new Q.ReversedBidirectionalGraph(graph);
 
 `AddEdge` requires existing vertices. `AddVerticesAndEdge` inserts endpoints as needed. Use `Edge` for reference equality, `EquatableEdge` or value-style variants for endpoint comparisons, and tagged forms for custom payloads. Arrays and compressed forms are snapshots; reversed/filter/delegate views have their documented source-backed behavior.
 
+## Custom vertex equality
+
+Primitive vertices use JavaScript SameValueZero semantics, including `NaN`. Ordinary objects use reference identity. To use value equality for objects, implement `Equals(other)` and optionally `GetHashCode()`:
+
+```js
+class Vertex {
+  constructor(id) { this.id = id; }
+  Equals(other) { return other instanceof Vertex && other.id === this.id; }
+  GetHashCode() { return this.id; }
+}
+const values = new Q.BidirectionalGraph();
+values.AddVertex(new Vertex(1));
+console.log(values.ContainsVertex(new Vertex(1))); // true
+const distances = new Q.EqualityMap();
+distances.set(new Vertex(1), 0);
+console.log(distances.get(new Vertex(1))); // 0
+```
+
+Equality and hash codes must remain stable while a vertex is stored. Equal objects must return equal hashes. Omitting `GetHashCode` is supported through a shared comparison bucket and can make lookups linear. Caller-supplied native Maps keep their native identity rules; use `EqualityMap` when providing algorithm dictionaries for value-equal objects.
+
 ## Traversal observers
 
 ```js

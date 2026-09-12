@@ -2,12 +2,13 @@
 import { Edge, BidirectionalGraph, EventHook, equals, VertexNotFoundException, NegativeCapacityException, ArgumentNullException, ArgumentException, InvalidOperationException } from './core.js';
 import { AlgorithmBase, RootedAlgorithmBase, ComputationState } from './algorithm-base.js';
 import { ShortestPathAlgorithmBase } from './shortest-paths.js';
+import { EqualityMap as Map, EqualitySet as Set, valueEquals } from './equality.js';
 
 const required = (v, name = 'argument') => { if (v == null) throw new ArgumentNullException(`${name} must not be null`); return v; };
 const events = (object, names) => { for (const name of names.split(' ')) object[name] = new EventHook(); };
 const vertices = graph => [...graph.Vertices];
 const edges = graph => [...graph.Edges];
-const same = (a,b) => a===b || (a!==a && b!==b);
+const same = valueEquals;
 const other = (edge, vertex) => same(edge.Source, vertex) ? edge.Target : edge.Source;
 const out = (graph, vertex) => [...(graph.IsDirected === false ? graph.AdjacentEdges(vertex) : graph.OutEdges(vertex))];
 const incoming = (graph, vertex) => graph.InEdges ? [...graph.InEdges(vertex)] : edges(graph).filter(e => same(e.Target, vertex));
@@ -91,7 +92,7 @@ export class EdmondsKarpMaximumFlowAlgorithm extends MaximumFlowAlgorithm {
     const adjacency = new Map(vertices(this.VisitedGraph).map(v => [v, []]));
     const arcs = new Map();
     for (const e of this.VisitedGraph.Edges) {
-      const capacity = this.Capacities instanceof Map ? this.Capacities.get(e) : this.Capacities(e);
+      const capacity = this.Capacities instanceof globalThis.Map ? this.Capacities.get(e) : this.Capacities(e);
       if (typeof capacity !== 'number' || Number.isNaN(capacity) || capacity < 0) throw new NegativeCapacityException('Negative or invalid capacity');
       const forward = { to: e.Target, from: e.Source, residual: capacity, edge: e, forward: true };
       const reverse = { to: e.Source, from: e.Target, residual: 0, edge: e, forward: false };
@@ -201,11 +202,13 @@ export class GraphBalancerAlgorithm {
   Balance() {
     if (this.Balanced) throw new InvalidOperationException('Graph already balanced');
     const indexes = new Map(vertices(this.VisitedGraph).map(v => [v, this.GetBalancingIndex(v)]));
-    this.BalancingSource = this.VertexFactory(); this.BalancingSink = this.VertexFactory();
-    if (same(this.BalancingSource, this.BalancingSink) || this.VisitedGraph.ContainsVertex(this.BalancingSource) || this.VisitedGraph.ContainsVertex(this.BalancingSink)) throw new InvalidOperationException('Vertex factory must produce fresh vertices');
-    this.VisitedGraph.AddVertex(this.BalancingSource); this.BalancingSourceAdded.emit(this.Source);
-    this.VisitedGraph.AddVertex(this.BalancingSink); this.BalancingSinkAdded.emit(this.Sink);
-    const add = (s,t,c) => { const e = this.EdgeFactory(s,t); this.VisitedGraph.AddEdge(e); this.Capacities.set(e,c); this._preFlow.set(e,0); this.EdgeAdded.emit(e); return e; };
+    this.BalancingSource = required(this.VertexFactory()); this.BalancingSink = required(this.VertexFactory());
+    // Upstream allows existing factory vertices. Track actual insertions so rollback
+    // remains safe even when a factory returns an original or repeated vertex.
+    this._balancingAddedVertices = []; this._balancingAddedEdges = new Set();
+    if(this.VisitedGraph.AddVertex(this.BalancingSource))this._balancingAddedVertices.push(this.BalancingSource); this.BalancingSourceAdded.emit(this.Source);
+    if(this.VisitedGraph.AddVertex(this.BalancingSink))this._balancingAddedVertices.push(this.BalancingSink); this.BalancingSinkAdded.emit(this.Sink);
+    const add = (s,t,c) => { const e = this.EdgeFactory(s,t); if(this.VisitedGraph.AddEdge(e))this._balancingAddedEdges.add(e); this.Capacities.set(e,c); this._preFlow.set(e,0); this.EdgeAdded.emit(e); return e; };
     this.BalancingSourceEdge = add(this.BalancingSource,this.Source,Number.MAX_VALUE);
     this.BalancingSinkEdge = add(this.Sink,this.BalancingSink,Number.MAX_VALUE);
     for (const [v,index] of indexes) if (!same(v, this.Source) && !same(v, this.Sink) && index !== 0) {
@@ -220,9 +223,10 @@ export class GraphBalancerAlgorithm {
   UnBalance() {
     if (!this.Balanced) throw new InvalidOperationException('Graph is not balanced');
     for (const e of [...this.SurplusEdges,...this.DeficientEdges,this.BalancingSourceEdge,this.BalancingSinkEdge]) {
-      this.VisitedGraph.RemoveEdge(e); this.Capacities.delete(e); this._preFlow.delete(e);
+      if(this._balancingAddedEdges.has(e))this.VisitedGraph.RemoveEdge(e); this.Capacities.delete(e); this._preFlow.delete(e);
     }
-    this.VisitedGraph.RemoveVertex(this.BalancingSource); this.VisitedGraph.RemoveVertex(this.BalancingSink);
+    for(const vertex of this._balancingAddedVertices)this.VisitedGraph.RemoveVertex(vertex);
+    this._balancingAddedEdges.clear(); this._balancingAddedVertices.length = 0;
     this.BalancingSource = this.BalancingSink = this.BalancingSourceEdge = this.BalancingSinkEdge = undefined;
     this.SurplusVertices.length = this.DeficientVertices.length = this.SurplusEdges.length = this.DeficientEdges.length = 0; this.Balanced = false;
   }
@@ -453,7 +457,7 @@ export class EulerianTrailAlgorithm extends RootedAlgorithmBase {
     if(graph.IsDirected!==false){
       const odd=vertices(graph).filter(v=>Math.abs(out(graph,v).length-incoming(graph,v).length)%2);
       let failures=0;
-      while(odd.length){const u=odd[0];let v,hasAdjacent=false;for(const e of out(graph,u))if(!same(e.Target,u)&&odd.includes(e.Target)){hasAdjacent=true;if(!out(graph,e.Target).some(r=>same(r.Target,u))){v=e.Target;break;}}
+      while(odd.length){const u=odd[0];let v,hasAdjacent=false;for(const e of out(graph,u))if(!same(e.Target,u)&&odd.some(v=>same(v,e.Target))){hasAdjacent=true;if(!out(graph,e.Target).some(r=>same(r.Target,u))){v=e.Target;break;}}
         if(v===undefined&&!hasAdjacent)v=odd[1];
         if(v===undefined){odd.push(odd.shift());if(++failures>=odd.length)throw new InvalidOperationException('No valid temporary edge can pair the odd vertices');continue;}
         failures=0;add(u,v);odd.splice(odd.findIndex(x=>same(x,v)),1);odd.splice(odd.findIndex(x=>same(x,u)),1);
@@ -508,7 +512,7 @@ export class WeightedMarkovEdgeChainBase extends MarkovEdgeChainBase {
   constructor(weights){super();this.Weights=required(weights);}
   GetWeights(es){let sum=0;for(const e of es){const w=this.Weights.get(e);if(!Number.isFinite(w)||w<0)throw new RangeError('Every edge needs a nonnegative finite weight');sum+=w;}return sum;}
   GetOutWeight(graph,vertex){return this.GetWeights(chainEdges(graph,vertex));}
-  _choose(es){const sum=this.GetWeights(es);if(!es.length)return undefined;if(sum===0)return es[0];let value=random(this.Rand)*sum;for(const e of es){value-=this.Weights.get(e);if(value<0)return e;}return es.at(-1);}
+  _choose(es){const sum=this.GetWeights(es);if(!es.length)return undefined;let value=random(this.Rand)*sum;for(const e of es){value-=this.Weights.get(e);if(value<=0)return e;}return es.at(-1);}
 }
 export class WeightedMarkovEdgeChain extends WeightedMarkovEdgeChainBase {
   TryGetSuccessor(graphOrEdges,vertex){return this._choose(chainEdges(graphOrEdges,vertex));}
@@ -529,21 +533,22 @@ export class CyclePoppingRandomTreeAlgorithm extends RootedAlgorithmBase {
   GetVertexColor(v){required(v);if(!this.VerticesColors.has(v))throw new VertexNotFoundException('Vertex color is not available');return this.VerticesColors.get(v);}
   Initialize(){this.Successors.clear();this.VerticesColors.clear();for(const v of this.VisitedGraph.Vertices){this.VerticesColors.set(v,0);this.InitializeVertex.emit(v);}}
   _makeTreeRoot(vertex){this.Successors.set(vertex,undefined);this.ClearTreeVertex.emit(vertex);this.VerticesColors.set(vertex,2);this.FinishVertex.emit(vertex);}
-  _seedClosedClasses(){
+  _closedClasses(){
     // A directed Markov chain can have several closed classes. Each class that cannot
     // reach an existing root needs one root; vertices outside these classes do not.
     const vs=vertices(this.VisitedGraph),adj=new Map(),reverse=new Map(vs.map(v=>[v,[]]));
     for(const v of vs){let es=out(this.VisitedGraph,v);if(this.EdgeChain.Weights){const sum=this.EdgeChain.GetWeights(es);es=sum>0?es.filter(e=>this.EdgeChain.Weights.get(e)>0):es.slice(0,1);}adj.set(v,es.map(e=>e.Target));for(const e of es)reverse.get(e.Target).push(v);}
     const reached=new Set(vs.filter(v=>this.VerticesColors.get(v)===2)),q=[...reached];
     for(let i=0;i<q.length;++i)for(const v of reverse.get(q[i]))if(!reached.has(v)){reached.add(v);q.push(v);}
-    const pending=vs.filter(v=>!reached.has(v));if(!pending.length)return;
+    const pending=vs.filter(v=>!reached.has(v));if(!pending.length)return [];
     const seen=new Set(),order=[];
     for(const v of pending)if(!seen.has(v)){seen.add(v);const stack=[[v,0]];while(stack.length){const frame=stack.at(-1),ns=adj.get(frame[0]);if(frame[1]===ns.length){order.push(frame[0]);stack.pop();continue;}const next=ns[frame[1]++];if(!reached.has(next)&&!seen.has(next)){seen.add(next);stack.push([next,0]);}}}
     const component=new Map(),groups=[];
     for(let i=order.length-1;i>=0;--i){const v=order[i];if(component.has(v))continue;const id=groups.length,group=[v];component.set(v,id);for(let j=0;j<group.length;++j)for(const next of reverse.get(group[j]))if(!reached.has(next)&&!component.has(next)){component.set(next,id);group.push(next);}groups.push(group);}
     const closed=groups.map(()=>true);for(const v of pending)for(const next of adj.get(v))if(component.get(v)!==component.get(next))closed[component.get(v)]=false;
-    for(let i=0;i<groups.length;++i)if(closed[i]){const group=groups[i];this._makeTreeRoot(group[Math.floor(random(this.Rand)*group.length)]);}
+    return groups.filter((_,i)=>closed[i]);
   }
+  _seedClosedClasses(){for(const group of this._closedClasses())this._makeTreeRoot(group[Math.floor(random(this.Rand)*group.length)]);}
   InternalCompute(){
     const vs=vertices(this.VisitedGraph);const root=this.GetAndAssertRootInGraph();this._makeTreeRoot(root);this._seedClosedClasses();
     // Wilson's loop-erased random walks draw from the complete transition distribution
@@ -563,7 +568,32 @@ export class CyclePoppingRandomTreeAlgorithm extends RootedAlgorithmBase {
     }
   }
   RandomTreeWithRoot(root){required(root);if(!this.VisitedGraph.ContainsVertex(root))throw new ArgumentException('Root vertex must be in the graph');return this.Compute(root);}
-  RandomTree(){const vs=vertices(this.VisitedGraph);if(!vs.length){this.Initialize();return;}return this.Compute(vs[Math.min(vs.length-1,Math.floor(random(this.Rand)*vs.length))]);}
+  RandomTree(){
+    const vs=vertices(this.VisitedGraph);let epsilon=1;
+    // Wilson with an added cemetery vertex samples killed-chain forests. Conditioning
+    // on the minimum possible number of roots makes every accepted forest have weight
+    // proportional to the product of its transition probabilities, independently of
+    // epsilon. One root per closed class also permits disconnected directed graphs.
+    for(;;){
+      this.ThrowIfCancellationRequested();this.Initialize();if(!vs.length)return this;
+      const minimumRoots=this._closedClasses().length;epsilon/=2;let roots=0,rejected=false;
+      for(const start of vs){
+        if(this.VerticesColors.get(start)===2)continue;
+        let current=start;const path=[],position=new Map();
+        while(this.VerticesColors.get(current)!==2){
+          this.ThrowIfCancellationRequested();
+          if(position.has(current)){const at=position.get(current);for(const v of path.splice(at)){position.delete(v);this.Successors.delete(v);this.ClearTreeVertex.emit(v);}}
+          position.set(current,path.length);path.push(current);
+          const killed=random(this.Rand)<=epsilon,e=killed?undefined:this.EdgeChain.TryGetSuccessor(this.VisitedGraph,current);
+          if(!e){this._makeTreeRoot(current);if(++roots>minimumRoots)rejected=true;break;}
+          this.Successors.set(current,e);this.TreeEdge.emit(e);current=e.Target;
+        }
+        if(rejected)break;
+        for(let i=path.length-1;i>=0;--i)if(this.VerticesColors.get(path[i])!==2){this.VerticesColors.set(path[i],2);this.FinishVertex.emit(path[i]);}
+      }
+      if(!rejected)return this;
+    }
+  }
 }
 
 export class TransitionFactoryImplicitGraph {

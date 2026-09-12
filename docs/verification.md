@@ -20,7 +20,7 @@ npm run benchmark
 
 ## How to interpret the audit
 
-`npm run audit` writes `test-results/conformance-audit.json` and `test-results/missing-members.json`. They are generated verification artifacts, available from the CI artifact for the checked commit. The JSON source inventories under `docs/` describe the pinned upstream source and retain their initial unverified/unported status; current source mappings are in the generated report.
+`npm run audit` writes `test-results/conformance-audit.json` and `test-results/missing-members.json`. It also saves the identical [full report](conformance-audit.json) and a compact [count summary](conformance-summary.json) under `docs/`, so the checked source and npm package include reviewable audit evidence. The summary includes the full report's SHA-256 digest. Outputs contain no timestamps and preserve the exact recorded execution evidence. The report records Node version, test-file SHA-256 hashes and the test-event stream digest; event ordering may differ between independent runs. Passing test-name mappings are ignored when the corresponding test file changed after the recorded run. CI also uploads the generated verification artifacts. The JSON source inventories under `docs/` describe the pinned upstream source and retain their initial unverified/unported status; current source mappings are in the report.
 
 | Evidence | What it establishes | What it does not establish |
 | --- | --- | --- |
@@ -31,7 +31,11 @@ npm run benchmark
 | JavaScript test passes | The executed assertions passed for the checked source and environment | All possible inputs, browser engines, host adapters, or deployment environments work |
 | Original graph fixture passes | The tested operations work on that preserved graph | Exhaustive coverage of graphs with the same size or every algorithm family |
 
+The 0.1.0 verification snapshot passes **8,379 executable JavaScript tests**. Its source audit maps **1,917 upstream methods** to JavaScript checks and gives the remaining **22 methods** explicit CLR host-runtime dispositions; no source methods lack a disposition. These mappings remain subject to the behavioral limits below.
+
 The inventory contains **1,939 original NUnit test methods**, before inherited fixtures and parameter expansion. Node's reported test total includes generated cases and fixture subtests, so it is not directly comparable with that source-method count. A single JavaScript test can check several source methods, and one source fixture can generate many executable cases. The audit conservatively leaves full assertion-for-assertion port verification at zero; it does not convert name or comment coverage into a conformance percentage.
+
+The [explicit platform-test dispositions](platform-test-boundaries.json) identify **22 original methods** that execute CLR-specific contracts: 21 use BinaryFormatter object reconstruction and one exercises Reflection.Emit IL generation. Each record includes its exact source identity, pinned source link, implementation evidence, and reason. The audit labels an unmapped method in this list `requires-host-runtime`; this is a disposition, not a passing test or completed port. These methods remain in the 1,939-method inventory. Binary serialization precondition validation is portable and is excluded from this list; JSON or browser-format roundtrips are not counted as BinaryFormatter compatibility.
 
 Primary graph and shortest-path declarations have explicit vertex/edge types, including installed-consumer negative type checks. Other declarations are inferred from JavaScript and may expose `any`, broad constructor arguments, or fewer type relationships than the C# API. Passing the TypeScript consumers establishes the exercised import and type contracts, not full compile-time parity.
 
@@ -61,11 +65,11 @@ The following is one local run of `node scripts/benchmark.mjs` using Node **v24.
 
 | Operation | Elapsed time | Correctness check |
 | --- | ---: | --- |
-| Build the graph | 127.679 ms | 50,000 vertices, 99,997 edges |
-| Breadth-first traversal | 40.402 ms | All 50,000 vertices discovered |
-| Dijkstra | 44.933 ms | Final shortest distance equals 49,999 |
-| Strongly connected components | 68.615 ms | Exactly 50,000 components |
-| Compressed sparse row conversion | 22.959 ms | All 99,997 edges retained |
+| Build the graph | 139.435 ms | 50,000 vertices, 99,997 edges |
+| Breadth-first traversal | 42.489 ms | All 50,000 vertices discovered |
+| Dijkstra | 51.641 ms | Final shortest distance equals 49,999 |
+| Strongly connected components | 80.148 ms | Exactly 50,000 components |
+| Compressed sparse row conversion | 19.636 ms | All 99,997 edges retained |
 
 These observations include allocation and JIT effects and can vary substantially with the machine, workload, engine, and concurrent activity. They are not browser measurements, percentile latency guarantees, or comparisons against .NET QuikGraph or another JavaScript library. CI produces a fresh observation for the checked release source.
 

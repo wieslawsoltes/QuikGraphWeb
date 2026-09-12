@@ -1,4 +1,5 @@
 // Detachable algorithm observers, adapted from QuikGraph (MS-PL).
+import { EqualityMap as Map, EqualitySet as Set, valueEquals } from './equality.js';
 import { sameVertex, DistanceRelaxers, GraphColor, requireValue, algorithmError } from './algorithm-base.js';
 import { predecessorPath } from './shortest-paths.js';
 function attach(algorithm, handlers) {
@@ -64,8 +65,8 @@ export class EdgePredecessorRecorderObserver {
   constructor(edgesPredecessors = new Map()) { this.EdgesPredecessors = requireValue(edgesPredecessors, 'edgesPredecessors'); this.EndPathEdges = []; }
   Attach(algorithm) {
     return attach(algorithm, {
-      DiscoverTreeEdge: (edge, targetEdge) => { if (edge !== targetEdge) this.EdgesPredecessors.set(targetEdge, edge); },
-      FinishEdge: edge => { for (const predecessor of this.EdgesPredecessors.values()) if (predecessor === edge) return; this.EndPathEdges.push(edge); }
+      DiscoverTreeEdge: (edge, targetEdge) => { if (!valueEquals(edge, targetEdge)) this.EdgesPredecessors.set(targetEdge, edge); },
+      FinishEdge: edge => { for (const predecessor of this.EdgesPredecessors.values()) if (valueEquals(predecessor, edge)) return; this.EndPathEdges.push(edge); }
     });
   }
   Path(startingEdge) {

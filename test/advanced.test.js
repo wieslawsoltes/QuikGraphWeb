@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { AdjacencyGraph, BidirectionalGraph, UndirectedGraph, Edge, TaggedEdge, TaggedUndirectedEdge, NegativeCapacityException } from '../src/core.js';
+import { AdjacencyGraph, BidirectionalGraph, UndirectedGraph, Edge, SEdge, TaggedEdge, TaggedUndirectedEdge, NegativeCapacityException } from '../src/core.js';
 import * as A from '../src/advanced.js';
 import { AlgorithmBase, ComputationState } from '../src/algorithm-base.js';
 import { readdirSync, readFileSync } from 'node:fs';
@@ -317,7 +317,7 @@ test('Advanced constructors preserve source contracts and reject every required-
   }
   assert.equal(new A.RandomWalkAlgorithm(g).EndPredicate,undefined);assert.ok(new A.RandomWalkAlgorithm(g).EdgeChain);assert.ok(new A.CyclePoppingRandomTreeAlgorithm(g).Rand);
   assert.equal(new A.TSP(g,weights).VerticesColors,null);assert.deepEqual([...new A.TSP(g,weights).GetDistances()],[]);
-  assert.deepEqual(new A.VertexColoringAlgorithm(ug).Colors,new Map());assert.equal(new A.MinimumVertexCoverApproximationAlgorithm(ug).CoverSet,null);
+  assert.equal(new A.VertexColoringAlgorithm(ug).Colors.size,0);assert.equal(new A.MinimumVertexCoverApproximationAlgorithm(ug).CoverSet,null);
   assert.equal(new A.GraphBalancerAlgorithm(g,0,1,factory,ef,capacities).Capacities,capacities);
   assert.throws(()=>new A.GraphBalancerAlgorithm(g,2,1,factory,ef));assert.throws(()=>new A.GraphBalancerAlgorithm(g,0,2,factory,ef));
   assert.throws(()=>new A.EdmondsKarpMaximumFlowAlgorithm(make([[0,1]]),weights,ef,reverse));
@@ -410,4 +410,187 @@ test('Eulerian original GraphML no-trail and unavailable rooted-trail fixtures',
   const load=name=>{const xml=readFileSync(new URL(`./fixtures/GraphML/${name}`,import.meta.url),'utf8'),vs=[...xml.matchAll(/<node\b[^>]*\bid="([^"]+)"/g)].map(m=>m[1]),pairs=[...xml.matchAll(/<edge\b[^>]*\bsource="([^"]+)"[^>]*\btarget="([^"]+)"/g)].map(m=>[m[1],m[2]]);return make(pairs,false,vs);};
   const g=load('g.42.34.graphml');if(A.EulerianTrailAlgorithm.ComputeEulerianPathCount(g)!==0){const a=new A.EulerianTrailAlgorithm(g);a.AddTemporaryEdges(ef);a.Compute();assert.deepEqual([...a.Trails()],[]);assert.deepEqual(a.Circuit,[]);}
   const rooted=load('g.10.0.graphml'),a=new A.EulerianTrailAlgorithm(rooted);a.AddTemporaryEdges(ef);a.Compute();assert.throws(()=>[...a.Trails(rooted.Vertices[0])]);
+});
+
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/CloneableVertexGraphExplorerAlgorithmTests.cs::AddTransitionFactory
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/CloneableVertexGraphExplorerAlgorithmTests.cs::AddTransitionFactory_Throws
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/CloneableVertexGraphExplorerAlgorithmTests.cs::AddTransitionFactories
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/CloneableVertexGraphExplorerAlgorithmTests.cs::AddTransitionFactories_Throws
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/CloneableVertexGraphExplorerAlgorithmTests.cs::RemoveTransitionFactories
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/CloneableVertexGraphExplorerAlgorithmTests.cs::ContainsTransitionFactories
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/CloneableVertexGraphExplorerAlgorithmTests.cs::ClearTransitionFactories
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::AddTransitionFactory
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::AddTransitionFactory_Throws
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::AddTransitionFactories
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::AddTransitionFactories_Throws
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::RemoveTransitionFactories
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::ContainsTransitionFactories
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::ClearTransitionFactories
+const transitions=(...entries)=>({IsValid:value=>entries.some(([v])=>v===value||v?.Equals?.(value)),Apply:value=>entries.find(([v])=>v===value||v?.Equals?.(value))?.[1]??[]});
+test('Both transition factory consumers: full source add/range/remove/contains/clear and null contracts',()=>{
+  for(const create of[()=>new A.TransitionFactoryImplicitGraph(),()=>new A.CloneableVertexGraphExplorerAlgorithm(make([]))]){
+    const a=create(),v1={},v2={},v3={},f1=transitions([v1,[]]),f2=transitions([v2,[]]),f3=transitions([v3,[]]);
+    assert.equal(a.ContainsTransitionFactory(null),false);assert.equal(a.ContainsTransitionFactory(f1),false);assert.equal(a.RemoveTransitionFactory(null),false);assert.equal(a.RemoveTransitionFactory(f1),false);
+    assert.throws(()=>a.AddTransitionFactory(null),TypeError);assert.throws(()=>a.AddTransitionFactories(null),TypeError);
+    a.AddTransitionFactory(f1);assert.equal(a.ContainsTransitionFactory(f1),true);a.AddTransitionFactory(f1);assert.equal(a.ContainsTransitionFactory(f1),true);assert.equal(a.RemoveTransitionFactory(f1),true);assert.equal(a.ContainsTransitionFactory(f1),true);a.ClearTransitionFactories();
+    a.AddTransitionFactories([f1,f2]);a.AddTransitionFactory(f3);for(const f of[f1,f2,f3])assert.equal(a.ContainsTransitionFactory(f),true);assert.equal(a.RemoveTransitionFactory(f1),true);assert.equal(a.RemoveTransitionFactory(f1),false);assert.equal(a.ContainsTransitionFactory(f1),false);assert.equal(a.RemoveTransitionFactory(f2),true);a.ClearTransitionFactories();assert.equal(a.ContainsTransitionFactory(f3),false);
+    const f4=transitions([v1,[ef(v1,v2),ef(v1,v3)]]);a.AddTransitionFactory(f4);if(a.OutEdges){a.OutEdges(v1);assert.equal(a.ContainsVertex(v2),true);}assert.equal(a.RemoveTransitionFactory(f4),true);assert.equal(a.ContainsTransitionFactory(f4),false);
+    a.AddTransitionFactories([transitions([v1,[ef(v1,v1),ef(v1,v2),ef(v1,v3)]],[v2,[ef(v2,v3)]]),transitions([v3,[ef(v3,v3)]])]);if(a.OutEdges)for(const v of[v1,v2,v3]){a.OutEdges(v);assert.equal(a.ContainsVertex(v),true);}a.ClearTransitionFactories();if(a.ContainsVertex)for(const v of[v1,v2,v3])assert.equal(a.ContainsVertex(v),false);
+  }
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::Construction
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::Constructor_Throws
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::ContainsVertex
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::ContainsVertex_Throws
+test('Implicit graph source construction and incremental discovery identity assertions',()=>{
+  const g=new A.TransitionFactoryImplicitGraph(),v1={name:'1'},v2={name:'2'},other1={name:'1'},v3={name:'3'},v4={name:'4'},vs=[v1,v2,other1,v3,v4];
+  assert.equal(g.IsDirected,true);assert.equal(g.AllowParallelEdges,true);assert.equal(typeof g.SuccessorVertexPredicate,'function');assert.equal(typeof g.SuccessorEdgePredicate,'function');assert.throws(()=>g.SuccessorVertexPredicate=null,TypeError);assert.throws(()=>g.SuccessorEdgePredicate=null,TypeError);assert.throws(()=>g.ContainsVertex(null),TypeError);
+  for(const v of vs)assert.equal(g.ContainsVertex(v),false);const explored=[];
+  for(const v of[v1,v2,other1]){g.AddTransitionFactory(transitions([v,[]]));assert.equal(g.ContainsVertex(v),false);for(const prior of explored)assert.equal(g.ContainsVertex(prior),true);g.OutEdges(v);explored.push(v);for(const prior of explored)assert.equal(g.ContainsVertex(prior),true);}
+  g.AddTransitionFactory(transitions([v3,[ef(v3,v4)]]));assert.equal(g.ContainsVertex(v3),false);assert.equal(g.ContainsVertex(v4),false);g.OutEdges(v3);for(const v of vs)assert.equal(g.ContainsVertex(v),true);
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::OutEdge
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::OutEdge_WithFilter
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::OutEdge_Throws
+test('Implicit indexed outgoing edges preserve original identity and invalidate filtered caches',()=>{
+  const v=Array.from({length:8},()=>({})),e11=ef(v[1],v[1]),e12=ef(v[1],v[2]),e13=ef(v[1],v[3]),e24=ef(v[2],v[4]),e33=ef(v[3],v[3]),e41=ef(v[4],v[1]),g=new A.TransitionFactoryImplicitGraph();
+  g.AddTransitionFactories([transitions([v[1],[e11,e12]],[v[2],[e24]],[v[3],[e33]]),transitions([v[1],[e13]]),transitions([v[4],[e41]])]);for(const[vertex,index,edge]of[[v[1],0,e11],[v[1],2,e13],[v[2],0,e24],[v[3],0,e33],[v[4],0,e41],[v[4],0,e41]])assert.equal(g.OutEdge(vertex,index),edge);
+  const f=new A.TransitionFactoryImplicitGraph(),e54=ef(v[5],v[4]),e61=ef(v[6],v[1]),e67=ef(v[6],v[7]);f.AddTransitionFactory(transitions([v[1],[e11,e12,e13]],[v[5],[e54]],[v[6],[e61,e67]]));f.SuccessorVertexPredicate=x=>x!==v[4];f.SuccessorEdgePredicate=e=>e!==e61;assert.equal(f.OutEdge(v[1],0),e11);assert.equal(f.OutEdge(v[1],2),e13);assert.throws(()=>f.OutEdge(v[5],0),RangeError);assert.equal(f.OutEdge(v[6],0),e67);assert.throws(()=>f.OutEdge(v[6],1),RangeError);f.SuccessorVertexPredicate=()=>true;f.SuccessorEdgePredicate=()=>true;assert.equal(f.OutEdge(v[5],0),e54);assert.equal(f.OutEdge(v[6],0),e61);assert.equal(f.OutEdge(v[6],1),e67);
+  assert.throws(()=>g.OutEdge(null,0),TypeError);assert.throws(()=>g.OutEdge(v[0],0));assert.throws(()=>g.OutEdge(v[1],5),RangeError);assert.throws(()=>g.OutEdge(v[1],-1),RangeError);const empty=new A.TransitionFactoryImplicitGraph();empty.AddTransitionFactory(transitions([v[0],[]]));assert.throws(()=>empty.OutEdge(v[0],0),RangeError);
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::OutEdges
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::OutEdges_WithFilter
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::OutEdges_Throws
+test('Implicit outgoing edge arrays, degrees, emptiness and filter restoration source fixtures',()=>{
+  const g=new A.TransitionFactoryImplicitGraph(),v=Array.from({length:5},()=>({})),e12=ef(v[1],v[2]),e13=ef(v[1],v[3]),e14=ef(v[1],v[4]),e24=ef(v[2],v[4]),e31=ef(v[3],v[1]),e33=ef(v[3],v[3]);g.AddTransitionFactory(transitions([v[1],[]]));assert.deepEqual(g.OutEdges(v[1]),[]);assert.equal(g.OutDegree(v[1]),0);assert.equal(g.IsOutEdgesEmpty(v[1]),true);g.ClearTransitionFactories();g.AddTransitionFactories([transitions([v[1],[e12,e13]],[v[2],[e24]],[v[3],[e31,e33]]),transitions([v[1],[e14]]),transitions([v[4],[]])]);
+  const check=expect=>{for(const[i,es]of expect){assert.deepEqual(g.OutEdges(v[i]),es);assert.equal(g.OutDegree(v[i]),es.length);assert.equal(g.IsOutEdgesEmpty(v[i]),es.length===0);}};check([[1,[e12,e13,e14]],[2,[e24]],[3,[e31,e33]],[4,[]]]);g.SuccessorVertexPredicate=x=>x!==v[2];g.SuccessorEdgePredicate=e=>e.Source!==e.Target;check([[1,[e13,e14]],[2,[e24]],[3,[e31]],[4,[]]]);g.SuccessorVertexPredicate=()=>true;g.SuccessorEdgePredicate=()=>true;check([[1,[e12,e13,e14]],[2,[e24]],[3,[e31,e33]],[4,[]]]);assert.throws(()=>g.OutEdges(null),TypeError);assert.throws(()=>g.OutEdges(v[0]));
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::TryGetOutEdges
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::TryGetOutEdges_WithFilter
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/TransitionFactoryImplicitGraphTests.cs::TryGetOutEdges_Throws
+test('Implicit TryGetOutEdges source fixtures distinguish undiscovered and known empty vertices',()=>{
+  const g=new A.TransitionFactoryImplicitGraph(),v=Array.from({length:6},()=>({})),es=[[1,2],[1,2],[1,3],[2,2],[2,4],[3,1],[4,5]].map(([s,t])=>ef(v[s],v[t]));g.AddTransitionFactory(transitions([v[1],[]]));assert.deepEqual(g.OutEdges(v[1]),[]);g.ClearTransitionFactories();g.AddTransitionFactories([transitions([v[1],es.slice(0,3)],[v[2],[es[3]]],[v[3],[es[5]]]),transitions([v[2],[es[4]]]),transitions([v[4],[es[6]]])]);assert.equal(g.TryGetOutEdges(v[0]),undefined);assert.equal(g.TryGetOutEdges(v[5]),undefined);assert.deepEqual(g.TryGetOutEdges(v[3]),[es[5]]);assert.deepEqual(g.TryGetOutEdges(v[1]),es.slice(0,3));g.OutEdges(v[4]);assert.deepEqual(g.TryGetOutEdges(v[5]),[]);g.SuccessorVertexPredicate=x=>x!==v[4];g.SuccessorEdgePredicate=e=>e.Source!==e.Target;assert.deepEqual(g.TryGetOutEdges(v[2]),[]);g.SuccessorVertexPredicate=()=>true;g.SuccessorEdgePredicate=()=>true;assert.deepEqual(g.TryGetOutEdges(v[2]),[es[3],es[4]]);assert.throws(()=>g.TryGetOutEdges(null),TypeError);
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/CloneableVertexGraphExplorerAlgorithmTests.cs::GraphExploration
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/CloneableVertexGraphExplorerAlgorithmTests.cs::GraphExplorationWithPredicates
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/CloneableVertexGraphExplorerAlgorithmTests.cs::GraphExplorationWithEarlyEndingVertex
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/CloneableVertexGraphExplorerAlgorithmTests.cs::GraphExplorationWithEarlyEndingEdge
+// Upstream: tests/QuikGraph.Tests/Algorithms/Exploration/CloneableVertexGraphExplorerAlgorithmTests.cs::GraphExploration_Throws
+test('Cloneable explorer complete eight-state source fixtures including discovery, skips and early queues',()=>{
+  class State{constructor(name){this.name=name;}Clone(){return new State(this.name);}Equals(value){return value?.name===this.name;}}
+  for(const mode of['plain','predicates','vertices','edges']){const vs=Array.from({length:8},(_,i)=>new State(String(i+1))),es=[[1,2],[1,3],[1,6],[3,2],[4,5],[5,4],[5,6],[5,7],[6,3],[6,4]].map(([s,t])=>ef(vs[s-1],vs[t-1])),a=new A.CloneableVertexGraphExplorerAlgorithm(make([]));a.AddTransitionFactories(vs.map(v=>transitions([v,es.filter(e=>e.Source===v)])));const discovered=[],skipped=[];a.DiscoverVertex.add(v=>{assert.ok(!discovered.includes(v));discovered.push(v);});a.TreeEdge.add(e=>assert.ok(e));a.BackEdge.add(e=>assert.ok(e));a.EdgeSkipped.add(e=>skipped.push(e));
+    if(mode==='predicates'){a.AddVertexPredicate=v=>!v.Equals(vs[1]);a.ExploreVertexPredicate=v=>!v.Equals(vs[4]);a.AddEdgePredicate=e=>e!==es[1];}else if(mode==='vertices'){const limit=new A.DefaultFinishedPredicate(2,Number.MAX_SAFE_INTEGER);a.FinishedPredicate=x=>limit.Test(x);}else if(mode==='edges'){const limit=new A.DefaultFinishedPredicate(Number.MAX_SAFE_INTEGER,3);a.FinishedPredicate=x=>limit.Test(x);}
+    a.Compute(vs[0]);const missing=vs.filter(v=>!discovered.includes(v)).map(v=>v.name),queue=a.UnExploredVertices.map(v=>v.name);if(mode==='plain'){assert.deepEqual(missing,['8']);assert.deepEqual(queue,[]);assert.deepEqual(skipped,[]);assert.equal(a.FinishedSuccessfully,true);}else if(mode==='predicates'){assert.deepEqual(missing,['2','7','8']);assert.deepEqual(new Set(skipped),new Set([es[0],es[1],es[3]]));assert.deepEqual(queue,[]);assert.equal(a.FinishedSuccessfully,true);}else{assert.deepEqual(missing,['4','5','7','8']);assert.deepEqual(queue,mode==='vertices'?['2','3','6']:['6']);assert.equal(a.FinishedSuccessfully,false);}
+  }
+  const root=new State('root'),a=new A.CloneableVertexGraphExplorerAlgorithm(make([]));a.AddVertexPredicate=v=>v!==root;assert.throws(()=>a.Compute(root));
+});
+
+// Upstream: tests/QuikGraph.Tests/Algorithms/Assigment/HungarianAlgorithmTests.cs::Constructor_Throws
+// Upstream: tests/QuikGraph.Tests/Algorithms/RandomWalks/EdgeChainsTests.cs::Constructor_WeightedMarkovEdgeChains
+// Upstream: tests/QuikGraph.Tests/Algorithms/RandomWalks/EdgeChainsTests.cs::Constructor_WeightedMarkovEdgeChains_Throws
+test('Hungarian null input and weighted-chain constructor reference/default contracts',()=>{
+  assert.throws(()=>new A.HungarianAlgorithm(null),TypeError);const weights=new Map();for(const Type of[A.WeightedMarkovEdgeChain,A.VanishingWeightedMarkovEdgeChain]){const a=new Type(weights);assert.equal(a.Weights,weights);assert.ok(a.Rand);assert.throws(()=>new Type(null),TypeError);}assert.equal(new A.VanishingWeightedMarkovEdgeChain(weights).Factor,.2);assert.equal(new A.VanishingWeightedMarkovEdgeChain(weights,2).Factor,2);assert.throws(()=>new A.VanishingWeightedMarkovEdgeChain(null,2),TypeError);
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/GraphPartition/KernighanLinAlgorithmTests.cs::GraphPartitioningSimpleGraph3
+test('Kernighan Lin twelve-vertex weighted source partition fixture',()=>{
+  const graph=make([[0,1,1],[1,2,50],[1,4,5],[3,4,1],[3,6,10],[4,5,1],[4,7,25],[4,8,100],[5,7,1],[5,8,3],[6,7,1],[6,9,2],[7,8,1],[7,10,5],[8,11,1]],true),a=new A.KernighanLinAlgorithm(graph,1);a.Compute();assert.ok(A.PartitionHelpers.AreEquivalent(a.Partition,new A.Partition([4,5,7,8,10,11],[0,1,2,3,6,9],3)));assert.equal(a.Partition.CutCost,graph.Edges.reduce((sum,e)=>sum+(a.Partition.VertexSetA.has(e.Source)!==a.Partition.VertexSetA.has(e.Target)?e.Tag:0),0));
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumBipartiteMatchingAlgorithmTests.cs::BipartiteMaxMatchTwoFullyConnectedSets
+test('Bipartite matching source fixture with two disjoint complete bipartite components',()=>{
+  const graph=make([]),left=[],right=[];for(const[first,last]of[[0,99],[101,110]]){const l=[],r=[];for(let i=first;i<=last;i++)(i%2===0?l:r).push(i);left.push(...l);right.push(...r);graph.AddVertexRange([...l,...r]);for(const u of l)for(const v of r)graph.AddEdge(ef(u,v));}const a=new A.MaximumBipartiteMatchingAlgorithm(graph,left,right);a.Compute();assert.equal(a.MatchedEdges.length,55);assert.equal(new Set(a.MatchedEdges.flatMap(e=>[e.Source,e.Target])).size,110);
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/AllVerticesGraphAugmentorAlgorithmTests.cs::CreateAndSetSuperSink
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/AllVerticesGraphAugmentorAlgorithmTests.cs::CreateAndSetSuperSource
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/AllVerticesGraphAugmentorAlgorithmTests.cs::RunAugmentation
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/AllVerticesGraphAugmentorAlgorithmTests.cs::RunAugmentation_Throws
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/MultiSourceSinkGraphAugmentorAlgorithmTests.cs::CreateAndSetSuperSink
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/MultiSourceSinkGraphAugmentorAlgorithmTests.cs::CreateAndSetSuperSource
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/MultiSourceSinkGraphAugmentorAlgorithmTests.cs::RunAugmentation
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/MultiSourceSinkGraphAugmentorAlgorithmTests.cs::RunAugmentation_Throws
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/BipartiteToMaximumFlowGraphAugmentorAlgorithmTests.cs::CreateAndSetSuperSink
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/BipartiteToMaximumFlowGraphAugmentorAlgorithmTests.cs::CreateAndSetSuperSource
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/BipartiteToMaximumFlowGraphAugmentorAlgorithmTests.cs::RunAugmentation_Throws
+test('Three augmentor source/sink events and full compute/rollback/dispose lifecycle fixtures',()=>{
+  for(const Type of[A.AllVerticesGraphAugmentorAlgorithm,A.MultiSourceSinkGraphAugmentorAlgorithm,A.BipartiteToMaximumFlowGraphAugmentorAlgorithm]){
+    const graph=make([],false,Type===A.BipartiteToMaximumFlowGraphAugmentorAlgorithm?[3,4,5]:[]),before=graph.Vertices;let id=0;const a=Type===A.BipartiteToMaximumFlowGraphAugmentorAlgorithm?new Type(graph,[3,4],[3,5],()=>++id,ef):new Type(graph,()=>++id,ef),sources=[],sinks=[],added=[];a.SuperSourceAdded.add(v=>sources.push(v));a.SuperSinkAdded.add(v=>sinks.push(v));a.EdgeAdded.add(e=>added.push(e));
+    a.Compute();assert.equal(a.Augmented,true);assert.equal(a.SuperSource,1);assert.equal(a.SuperSink,2);assert.deepEqual(sources,[1]);assert.deepEqual(sinks,[2]);assert.equal(graph.ContainsVertex(1),true);assert.equal(graph.ContainsVertex(2),true);assert.deepEqual(added,a.AugmentedEdges);assert.throws(()=>a.Compute());a.Rollback();assert.equal(a.Augmented,false);assert.equal(a.SuperSource,undefined);assert.equal(a.SuperSink,undefined);assert.deepEqual(a.AugmentedEdges,[]);assert.deepEqual(graph.Vertices,before);assert.equal(graph.EdgeCount,0);id=0;a.Compute();a.Dispose();a.Dispose();assert.deepEqual(graph.Vertices,before);assert.equal(graph.EdgeCount,0);
+  }
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/BipartiteToMaximumFlowGraphAugmentorAlgorithmTests.cs::CreateAndSetSuperSourceOrSink_Throws
+test('Bipartite augmentor missing original vertices rejects and restores graph',()=>{
+  for(const[left,right]of[[[3,4],[3,5]],[[3,4],[]],[[],[3,5]]]){const graph=make([]);let id=0;const a=new A.BipartiteToMaximumFlowGraphAugmentorAlgorithm(graph,left,right,()=>++id,ef);assert.throws(()=>a.Compute());assert.equal(graph.VertexCount,0);assert.equal(graph.EdgeCount,0);assert.equal(a.Augmented,false);}
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/MultiSourceSinkGraphAugmentorAlgorithmTests.cs::MultiSourceSinkGraphAugmentor
+test('Multi source/sink augmentation full 1277 original GraphML graph corpus',()=>{
+  const folder=new URL('./fixtures/GraphML/',import.meta.url);let count=0;for(const name of readdirSync(folder).filter(name=>/^g\.\d+\.\d+\.graphml$/.test(name))){const xml=readFileSync(new URL(name,folder),'utf8'),vs=[...xml.matchAll(/<node\b[^>]*\bid="([^"]+)"/g)].map(m=>m[1]),pairs=[...xml.matchAll(/<edge\b[^>]*\bsource="([^"]+)"[^>]*\btarget="([^"]+)"/g)].map(m=>[m[1],m[2]]),g=make(pairs,false,vs),source=Symbol(),sink=Symbol(),factory=[source,sink],a=new A.MultiSourceSinkGraphAugmentorAlgorithm(g,()=>factory.shift(),ef),sources=vs.filter(v=>g.InDegree(v)===0),sinks=vs.filter(v=>g.OutDegree(v)===0),oldEdges=g.Edges;a.Compute();for(const v of sources)assert.ok(g.OutEdges(source).some(e=>e.Target===v),name);for(const v of sinks)assert.ok(g.OutEdges(v).some(e=>e.Target===sink),name);a.Rollback();assert.deepEqual(g.Vertices,vs);assert.deepEqual(g.Edges,oldEdges);++count;}assert.equal(count,1277);
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/EdmondsKarpMaximumFlowAlgorithmTests.cs::EdmondsKarpMaxFlow_NegativeCapacity_Throws
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/EdmondsKarpMaximumFlowAlgorithmTests.cs::EdmondsKarpMaxFlow_NotAugmented_Throws
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/EdmondsKarpMaximumFlowAlgorithmTests.cs::EdmondsKarpMaxFlow_Throws
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/EdmondsKarpMaximumFlowAlgorithmTests.cs::EdmondsKarpMaxFlow_WrongVertices_Throws
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/EdmondsKarpMaximumFlowAlgorithmTests.cs::GetVertexColor
+test('Maximum flow complete error precedence/source/sink and final color source contracts',()=>{
+  const graph=make([[1,2,3],[1,4,4],[2,3,-1],[3,4,1]]),reverser=new A.ReversedEdgeAugmentorAlgorithm(graph,tf),a=new A.EdmondsKarpMaximumFlowAlgorithm(graph,e=>e.Tag,tf,reverser);assert.throws(()=>a.Compute(1,4),/AddReversedEdges/);reverser.AddReversedEdges();assert.throws(()=>a.Compute(1,4),NegativeCapacityException);for(const[source,sink]of[[null,null],[null,4],[1,null]])assert.throws(()=>a.Compute(source,sink),TypeError);
+  const g=make([]),reverse=new A.ReversedEdgeAugmentorAlgorithm(g),b=new A.EdmondsKarpMaximumFlowAlgorithm(g,()=>1,ef,reverse);reverse.AddReversedEdges();assert.throws(()=>b.Compute());b.Source=1;assert.throws(()=>b.Compute());b.Sink=2;assert.throws(()=>b.Compute());g.AddVertex(1);assert.throws(()=>b.Compute());g.AddVertex(2);assert.equal(b.Compute(),0);assert.throws(()=>b.Compute(1,1));assert.throws(()=>b.Compute(1,3));
+  const cgraph=make([[1,2]],false,[1,2,3]),cr=new A.ReversedEdgeAugmentorAlgorithm(cgraph),c=new A.EdmondsKarpMaximumFlowAlgorithm(cgraph,()=>1,ef,cr);assert.throws(()=>c.GetVertexColor(1));cr.AddReversedEdges();assert.equal(c.Compute(1,2),1);assert.deepEqual([1,2,3].map(v=>c.GetVertexColor(v)),[2,0,0]);assert.throws(()=>c.GetVertexColor(4));assert.throws(()=>c.GetVertexColor(null),TypeError);
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/GraphBalancerAlgorithmTests.cs::Balance_Throws
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/GraphBalancerAlgorithmTests.cs::GetBalancingIndex_Throws
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/GraphBalancerAlgorithmTests.cs::UnBalance
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/GraphBalancerAlgorithmTests.cs::UnBalance_Throws
+test('Balancer exact existing/repeated factory source fixtures and nondestructive restoration',()=>{
+  const graph=make([[1,2],[1,3],[2,3],[3,2],[3,4],[5,6]]),beforeV=graph.Vertices,beforeE=graph.Edges;let id=6;const a=new A.GraphBalancerAlgorithm(graph,1,3,()=>id++,ef);assert.throws(()=>a.UnBalance());assert.throws(()=>a.GetBalancingIndex(null),TypeError);a.Balance();assert.equal(a.Balanced,true);a.UnBalance();assert.equal(a.Balanced,false);assert.equal(a.Source,1);assert.equal(a.Sink,3);for(const key of['SurplusVertices','SurplusEdges','DeficientVertices','DeficientEdges'])assert.deepEqual(a[key],[]);for(const key of['BalancingSource','BalancingSourceEdge','BalancingSink','BalancingSinkEdge'])assert.equal(a[key],undefined);assert.deepEqual(graph.Vertices,beforeV);assert.deepEqual(graph.Edges,beforeE);
+  const repeated=make([],false,[1,2]),b=new A.GraphBalancerAlgorithm(repeated,1,2,()=>1,ef);b.Balance();assert.equal(b.Balanced,true);assert.throws(()=>b.Balance());b.UnBalance();assert.deepEqual(repeated.Vertices,[1,2]);assert.equal(repeated.EdgeCount,0);
+});
+
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/ReversedEdgeAugmentorAlgorithmTests.cs::AddReversedEdges
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/ReversedEdgeAugmentorAlgorithmTests.cs::AddReversedEdges_Throws
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/ReversedEdgeAugmentorAlgorithmTests.cs::Dispose
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/ReversedEdgeAugmentorAlgorithmTests.cs::RemoveReversedEdges
+// Upstream: tests/QuikGraph.Tests/Algorithms/MaximumFlow/ReversedEdgeAugmentorAlgorithmTests.cs::RemoveReversedEdges_Throws
+test('Reversed-edge augmentor exact Edge/SEdge source dictionary, ordering, and lifecycle fixtures',()=>{
+  for(const Type of[Edge,SEdge]){const factory=(s,t)=>new Type(s,t),original=[[1,2],[1,3],[2,3],[3,2]].map(([s,t])=>factory(s,t)),graph=new AdjacencyGraph();graph.AddVerticesAndEdgeRange(original);const a=new A.ReversedEdgeAugmentorAlgorithm(graph,factory),seen=[];a.ReversedEdgeAdded.add(e=>seen.push(e));a.Dispose();assert.equal(a.AugmentedEdges.length,0);assert.equal(a.ReversedEdges.size,0);assert.throws(()=>a.RemoveReversedEdges());a.AddReversedEdges();assert.equal(a.Augmented,true);const [r21,r31]=a.AugmentedEdges;assert.deepEqual(a.AugmentedEdges.map(e=>[e.Source,e.Target]),[[2,1],[3,1]]);assert.deepEqual(seen,a.AugmentedEdges);assert.equal(a.ReversedEdges.size,6);for(const[e,r]of[[original[0],r21],[original[1],r31],[original[2],original[3]]]){assert.equal(a.ReversedEdges.get(e),r);assert.equal(a.ReversedEdges.get(r),e);}assert.throws(()=>a.AddReversedEdges());a.RemoveReversedEdges();assert.equal(a.Augmented,false);assert.deepEqual(a.AugmentedEdges,[]);assert.equal(a.ReversedEdges.size,0);assert.deepEqual(graph.Edges,original);a.AddReversedEdges();a.Dispose();a.Dispose();assert.deepEqual(graph.Edges,original);assert.equal(a.ReversedEdges.size,0);}
+  const empty=new A.ReversedEdgeAugmentorAlgorithm(make([]));empty.AddReversedEdges();assert.throws(()=>empty.AddReversedEdges());empty.Dispose();
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/RandomWalks/CyclePoppingRandomTreeAlgorithmTests.cs::GetVertexColor
+// Upstream: tests/QuikGraph.Tests/Algorithms/RandomWalks/CyclePoppingRandomTreeAlgorithmTests.cs::GraphWithCycles
+// Upstream: tests/QuikGraph.Tests/Algorithms/RandomWalks/CyclePoppingRandomTreeAlgorithmTests.cs::IsolatedVertices
+// Upstream: tests/QuikGraph.Tests/Algorithms/RandomWalks/CyclePoppingRandomTreeAlgorithmTests.cs::IsolatedVerticesWithRoot
+// Upstream: tests/QuikGraph.Tests/Algorithms/RandomWalks/CyclePoppingRandomTreeAlgorithmTests.cs::Repro13160
+// Upstream: tests/QuikGraph.Tests/Algorithms/RandomWalks/CyclePoppingRandomTreeAlgorithmTests.cs::RootIsNotAccessible
+// Upstream: tests/QuikGraph.Tests/Algorithms/RandomWalks/CyclePoppingRandomTreeAlgorithmTests.cs::SmallGraphWithCycles
+test('Cycle popping all original closed-component, isolated, inaccessible-root, and issue 13160 fixtures',()=>{
+  const verify=(g,root)=>{const chain=new A.NormalizedMarkovEdgeChain();chain.Rand=seeded(123456);const a=new A.CyclePoppingRandomTreeAlgorithm(g,chain);a.Rand=seeded(123456);if(root===undefined)a.RandomTree();else a.Compute(root);for(const start of g.Vertices){assert.equal(a.GetVertexColor(start),2);const seen=new Set();let v=start;while(a.Successors.get(v)){assert.ok(!seen.has(v),'successor cycle');seen.add(v);const e=a.Successors.get(v);assert.equal(e.Source,v);v=e.Target;}}if(root!==undefined)assert.equal(a.Successors.get(root),undefined);return a;};
+  for(const root of[0,1,2])verify(make([[0,1],[1,0],[1,2],[2,1]]),root);const cycle=make([['1','2'],['1','3'],['1','4'],['2','1'],['2','3'],['2','4'],['3','1'],['3','2'],['3','5'],['5','2']],false,[...'12345']);for(const root of cycle.Vertices)verify(cycle,root);verify(make([],false,[0,1]));verify(make([],false,[0,1]),0);const unreachable=verify(make([[0,1]]),0);assert.equal(unreachable.Successors.get(1),undefined);verify(make([[1,2]]),1);
+  const grid=make([],false,[0,1,2,3,4,5,6,7,8]);for(let i=0;i<3;i++)for(let j=0;j<2;j++)grid.AddEdge(ef(i*3+j,i*3+j+1));for(let i=0;i<2;i++)for(let j=0;j<3;j++)grid.AddEdge(ef(i*3+j,(i+1)*3+j));for(const e of grid.Edges)grid.AddEdge(ef(e.Target,e.Source));for(const v of[3,4,5])grid.RemoveVertex(v);verify(grid,2);
+  const fresh=new A.CyclePoppingRandomTreeAlgorithm(make([[1,2]]));assert.throws(()=>fresh.GetVertexColor(1));assert.throws(()=>fresh.GetVertexColor(null),TypeError);fresh.Compute(1);assert.throws(()=>fresh.GetVertexColor(3));
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/RandomWalks/RandomWalkAlgorithmTests.cs::RandomWalk_Throws
+test('Random-walk empty graph rejects missing root for both Generate overloads',()=>{const a=new A.RandomWalkAlgorithm(make([]));assert.throws(()=>a.Generate(1));assert.throws(()=>a.Generate(1,12));});
+// Upstream: tests/QuikGraph.Tests/Algorithms/VertexColoring/VertexColoringAlgorithmTests.cs::VertexColoringBipartiteGraph
+// Upstream: tests/QuikGraph.Tests/Algorithms/VertexColoring/VertexColoringAlgorithmTests.cs::VertexColoringCompleteGraph
+// Upstream: tests/QuikGraph.Tests/Algorithms/VertexColoring/VertexColoringAlgorithmTests.cs::VertexColoringEmptyGraph
+// Upstream: tests/QuikGraph.Tests/Algorithms/VertexColoring/VertexColoringAlgorithmTests.cs::VertexColoringGraph
+// Upstream: tests/QuikGraph.Tests/Algorithms/VertexColoring/VertexColoringAlgorithmTests.cs::VertexColoringNoEdge
+// Upstream: tests/QuikGraph.Tests/Algorithms/VertexColoring/VertexColoringAlgorithmTests.cs::VertexColoringSimpleGraph
+test('Vertex coloring every original deterministic complete/bipartite/empty/edgeless/arbitrary fixture',()=>{
+  for(const[n,pairs,expected]of[[0,[],[]],[5,[],[0,0,0,0,0]],[5,[[0,1],[0,2],[1,2],[1,3],[2,3],[3,4]],[0,1,2,0,1]],[8,[[0,4],[1,2],[1,3],[2,4],[3,4],[5,7],[7,0]],[0,0,1,1,2,0,0,1]],[6,Array.from({length:6},(_,i)=>Array.from({length:5-i},(_,j)=>[i,i+j+1])).flat(),[0,1,2,3,4,5]],[7,[[0,4],[0,5],[1,3],[1,4],[1,5],[1,6],[2,5],[2,6],[2,4]],[0,0,0,1,1,1,1]]]){const graph=make(pairs,true,[...Array(n).keys()]),a=new A.VertexColoringAlgorithm(graph);a.Compute();assert.equal(a.Colors.size,n);assert.deepEqual([...a.Colors.values()],expected);for(const e of graph.Edges)assert.notEqual(a.Colors.get(e.Source),a.Colors.get(e.Target));}
+});
+test('Advanced dictionaries and endpoints honor explicit Equals/GetHashCode vertices and native Map capacities',()=>{
+  class Value{constructor(id){this.id=id;}Equals(other){return other instanceof Value&&other.id===this.id;}GetHashCode(){return this.id;}}const v=id=>new Value(id),g=make([[v(0),v(1),2],[v(1),v(2),2],[v(0),v(2),1]]);assert.equal(g.VertexCount,3);const capacities=new Map(g.Edges.map(e=>[e,e.Tag])),flow=new A.EdmondsKarpMaximumFlowAlgorithm(g,capacities);assert.equal(flow.Compute(v(0),v(2)),3);assert.equal(flow.GetVertexColor(v(0)),2);assert.throws(()=>flow.Compute(v(0),v(0)));
+  const cycle=make([[v(0),v(1)],[v(1),v(0)],[v(1),v(2)],[v(2),v(1)]]),chain=new A.NormalizedMarkovEdgeChain();chain.Rand=seeded(42);const tree=new A.CyclePoppingRandomTreeAlgorithm(cycle,chain);tree.Compute(v(0));assert.equal(tree.Successors.size,3);assert.equal(tree.Successors.get(v(0)),undefined);assert.equal(tree.Successors.get(v(2)).Target.id,1);const round=new A.RoundRobinEdgeChain();assert.equal(round.TryGetSuccessor(cycle,v(1)).Target.id,0);assert.equal(round.TryGetSuccessor(cycle,v(1)).Target.id,2);
+  const euler=new A.EulerianTrailAlgorithm(cycle);euler.Compute(v(0));assert.equal(euler.Circuit.length,4);const undirected=make([[v(0),v(1)],[v(1),v(2)],[v(2),v(0)]],true),color=new A.VertexColoringAlgorithm(undirected);color.Compute();assert.deepEqual([0,1,2].map(id=>color.Colors.get(v(id))),[0,1,2]);assert.equal(A.IsEulerianGraphAlgorithm.IsEulerian(undirected),true);assert.equal(A.IsHamiltonianGraphAlgorithm.IsHamiltonian(undirected),true);const cover=new A.MinimumVertexCoverApproximationAlgorithm(undirected,()=>0);cover.Compute();assert.equal(cover.CoverSet.length,2);const match=new A.MaximumBipartiteMatchingAlgorithm(g,[v(0)],[v(1),v(2)]);match.Compute();assert.equal(match.MatchedEdges.length,1);
+  const tspGraph=make([[v(0),v(1),1],[v(1),v(2),2],[v(2),v(0),3]]),tsp=new A.TSP(tspGraph,e=>e.Tag);tsp.Compute(v(1));assert.equal(tsp.BestCost,6);assert.equal(tsp.ResultPath.EdgeCount,3);
+});
+
+test('Rootless Wilson samples the exact weighted forest measure, including disconnected closed classes',()=>{
+  const graph=make([[0,1,1],[1,0,1],[1,1,3]]),chain=new A.WeightedMarkovEdgeChain(new Map(graph.Edges.map(e=>[e,e.Tag])));chain.Rand=seeded(953);const a=new A.CyclePoppingRandomTreeAlgorithm(graph,chain);a.Rand=seeded(474);let root0=0;for(let i=0;i<12000;i++){a.RandomTree();const roots=[...a.Successors].filter(([,e])=>!e).map(([v])=>v);assert.equal(roots.length,1);if(roots[0]===0)++root0;assert.equal(a.TryGetRootVertex(),undefined);}assert.ok(Math.abs(root0/12000-.2)<.02,`root 0 frequency ${root0/12000}`);
+  const disconnected=make([[0,1],[1,0],[2,3],[3,2],[4,0],[4,2]],false,[0,1,2,3,4,5]),b=new A.CyclePoppingRandomTreeAlgorithm(disconnected);b.EdgeChain.Rand=seeded(125);b.Rand=seeded(166);for(let i=0;i<100;i++){b.RandomTree();const roots=[...b.Successors].filter(([,e])=>!e).map(([v])=>v);assert.equal(roots.length,3);assert.equal(roots.filter(v=>v===0||v===1).length,1);assert.equal(roots.filter(v=>v===2||v===3).length,1);assert.ok(roots.includes(5));assert.ok(!roots.includes(4));for(const start of disconnected.Vertices){let v=start;const seen=new Set();while(b.Successors.get(v)){assert.ok(!seen.has(v));seen.add(v);v=b.Successors.get(v).Target;}}}
+});
+test('Weighted Markov exact cumulative boundaries retain source inclusive interval semantics',()=>{const es=[ef(0,1),ef(0,2),ef(0,3)],a=new A.WeightedMarkovEdgeChain(new Map([[es[0],0],[es[1],1],[es[2],3]]));a.Rand=()=>0;assert.equal(a.TryGetSuccessor(es,0),es[0]);a.Rand=()=>.25;assert.equal(a.TryGetSuccessor(es,0),es[1]);a.Rand=()=>.25001;assert.equal(a.TryGetSuccessor(es,0),es[2]);});
+
+// Upstream: tests/QuikGraph.Tests/Algorithms/Cliques/MaximumCliqueAlgorithmTests.cs::Constructor
+// Upstream: tests/QuikGraph.Tests/Algorithms/Cliques/MaximumCliqueAlgorithmTests.cs::Constructor_Throws
+test('Maximum clique abstract base both source constructor and null contracts',()=>{
+  class TestClique extends A.MaximumCliqueAlgorithmBase{InternalCompute(){throw new Error('Not implemented by test subclass');}}const graph=make([],true);for(const args of[[graph],[null,graph]]){const a=new TestClique(...args);assert.equal(a.VisitedGraph,graph);assert.equal(a.State,ComputationState.NotRunning);assert.equal(a.Services.Host,a);assert.equal(a.Services.CancelManager.IsCancelling,false);}for(const args of[[null],[null,null]])assert.throws(()=>new TestClique(...args),TypeError);
 });

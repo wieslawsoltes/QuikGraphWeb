@@ -1,3 +1,4 @@
+import { EqualityMap as Map, EqualitySet as Set } from './equality.js';
 /** MSAGL drawing bridge. The drawing data model is portable; layout requires an injected engine. */
 import { EventHook } from './core.js';
 import { AlgorithmBase } from './algorithm-base.js';
@@ -33,9 +34,10 @@ export class MsaglIdentifiableGraphPopulator extends MsaglGraphPopulator {
   AddNode(vertex){return this.MsaglGraph.AddNode(this.VertexIdentity(vertex));}AddEdge(edge){return this.MsaglGraph.AddEdge(this.VertexIdentity(edge.Source),this.VertexIdentity(edge.Target));}
 }
 export class MsaglToStringGraphPopulator extends MsaglDefaultGraphPopulator {
-  constructor(graph,format=null,formatProvider=null,graphFactory){super(graph,graphFactory);this.Format=format||'{0}';this.FormatProvider=formatProvider;}
-  GetVertexId(vertex){return this.Format.replace(/\{0(?::([^}]+))?\}/g,(_,specifier)=>this.FormatProvider?this.FormatProvider(vertex,specifier):String(vertex));}
+  constructor(graph,format=null,formatProvider=null,graphFactory){super(graph,graphFactory);this.Format=format??'{0}';this.FormatProvider=formatProvider;}
+  FormatValue(vertex,specifier){const provider=this.FormatProvider;if(typeof provider==='function')return provider(vertex,specifier);const formatter=provider?.GetFormat?.('ICustomFormatter');return formatter?.Format?formatter.Format(specifier,vertex,provider):String(vertex);}
+  GetVertexId(vertex){return this.Format.replace(/\{0(?::([^}]+))?\}/g,(_,specifier)=>this.FormatValue(vertex,specifier));}
 }
-export function CreateMsaglPopulator(graph,formatOrIdentity,formatProvider){return typeof formatOrIdentity==='function'?new MsaglIdentifiableGraphPopulator(graph,formatOrIdentity):arguments.length>1?new MsaglToStringGraphPopulator(graph,formatOrIdentity,formatProvider):new MsaglDefaultGraphPopulator(graph);}
+export function CreateMsaglPopulator(graph,formatOrIdentity,formatProvider){if(arguments.length>1)required(formatOrIdentity,'formatOrIdentity');return typeof formatOrIdentity==='function'?new MsaglIdentifiableGraphPopulator(graph,formatOrIdentity):arguments.length>1?new MsaglToStringGraphPopulator(graph,formatOrIdentity,formatProvider):new MsaglDefaultGraphPopulator(graph);}
 export function ToMsaglGraph(graph,nodeAdded=null,edgeAdded=null,options={}){const p=options.vertexIdentity?new MsaglIdentifiableGraphPopulator(graph,options.vertexIdentity,options.graphFactory):new MsaglDefaultGraphPopulator(graph,options.graphFactory);if(nodeAdded)p.NodeAdded.add(nodeAdded);if(edgeAdded)p.EdgeAdded.add(edgeAdded);p.Compute();return p.MsaglGraph;}
 export const MsaglGraphExtensions=Object.freeze({CreateMsaglPopulator,ToMsaglGraph});

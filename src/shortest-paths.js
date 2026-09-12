@@ -1,9 +1,10 @@
 // Shortest and ranked path algorithms adapted from QuikGraph (MS-PL).
+import { EqualityMap as Map, EqualitySet as Set, valueEquals } from './equality.js';
 import { sameVertex, AlgorithmBase, RootedAlgorithmBase, RootedSearchAlgorithmBase, AlgorithmHeap, GraphColor, DistanceRelaxers, events, algorithmError, requireValue } from './algorithm-base.js';
 import { UndirectedEdgeEventArgs } from './core.js';
 const { White, Gray, Black } = GraphColor;
-function parse(input) { const args = [...input]; let host = null; if (args[0] == null || (args[0]?.Services && args[1]?.ContainsVertex)) host = args.shift(); const graph = requireValue(args.shift(), 'visitedGraph'); if (typeof graph.ContainsVertex !== 'function') throw new TypeError('visitedGraph must implement ContainsVertex.'); return { host, graph, args }; }
-function checkedWeight(weights, edge, nonnegative = false) { const weight = weights(edge); if (typeof weight !== 'number' || !Number.isFinite(weight)) throw new TypeError('Edge weights must be finite numbers.'); if (nonnegative && weight < 0) throw algorithmError('NegativeWeightException', 'Algorithm requires non-negative edge weights.'); return weight; }
+function parse(input) { const args = [...input]; let host = null; if (args[0] == null || (args[0]?.Services && args[1]?.ContainsVertex)) host = args.shift(); const graph = requireValue(args.shift(), 'visitedGraph'); if (typeof graph.ContainsVertex !== 'function') throw algorithmError('ArgumentException', 'visitedGraph must implement ContainsVertex.'); return { host, graph, args }; }
+function checkedWeight(weights, edge, nonnegative = false) { const weight = weights(edge); if (typeof weight !== 'number' || !Number.isFinite(weight)) throw algorithmError('ArgumentException', 'Edge weights must be finite numbers.'); if (nonnegative && weight < 0) throw algorithmError('NegativeWeightException', 'Algorithm requires non-negative edge weights.'); return weight; }
 export function predecessorPath(predecessors, vertex, undirected = false) {
   requireValue(vertex, 'vertex'); const path = [], seen = new Set();
   while (predecessors.has(vertex)) {
@@ -151,7 +152,7 @@ export class SortedPath {
   GetVertex(i) { return this.Edges[i].Source; }
   GetEdge(i) { return this.Edges[i]; }
   GetEdges(count) { return this.Edges.slice(0, count); }
-  Equals(other) { return other instanceof SortedPath && this.Count === other.Count && this.Edges.every((edge, i) => edge === other.Edges[i] || edge.Equals?.(other.Edges[i])); }
+  Equals(other) { return other instanceof SortedPath && this.Count === other.Count && this.Edges.every((edge, i) => valueEquals(edge, other.Edges[i])); }
   GetHashCode() { return sortedPathHashes.get(this); }
   [Symbol.iterator]() { return this.Edges[Symbol.iterator](); }
 }
@@ -170,7 +171,7 @@ export class YenShortestPathsAlgorithm {
   constructor(graph, source, target, k, edgeWeights = null, filter = null) {
     this.VisitedGraph = requireValue(graph, 'graph').Clone(); requireValue(source, 'source'); requireValue(target, 'target');
     if (!graph.ContainsVertex(source) || !graph.ContainsVertex(target)) throw algorithmError('ArgumentException', 'Both endpoints must be in the graph.');
-    if (!Number.isInteger(k) || k < 1) throw new RangeError('k must be a positive integer.');
+    if (!Number.isInteger(k) || k < 1) throw algorithmError('ArgumentOutOfRangeException', 'k must be a positive integer.');
     this.Source = source; this.Target = target; this.K = k; this.Weights = edgeWeights ?? (edge => edge.Tag); this.Filter = filter ?? (paths => paths);
   }
   Execute() {
@@ -181,7 +182,7 @@ export class YenShortestPathsAlgorithm {
       const previous = accepted[rank - 1];
       for (let i = 0; i < previous.length; i++) {
         const prefix = previous.slice(0, i), spur = previous[i].Source, bannedEdges = new Set(), bannedVertices = new Set(prefix.map(edge => edge.Source));
-        for (const path of accepted) if (path.length > i && prefix.every((edge, j) => edge === path[j])) bannedEdges.add(path[i]);
+        for (const path of accepted) if (path.length > i && prefix.every((edge, j) => valueEquals(edge, path[j]))) bannedEdges.add(path[i]);
         const tail = shortestAvoiding(graph, spur, this.Target, this.Weights, bannedVertices, bannedEdges);
         if (tail === undefined) continue; const candidate = [...prefix, ...tail], id = key(candidate);
         if (!seen.has(id)) { seen.add(id); heap.Enqueue({ path: candidate, priority: candidate.reduce((sum, edge) => sum + this.Weights(edge), 0) }); }
@@ -194,7 +195,7 @@ export class YenShortestPathsAlgorithm {
 export class RankedShortestPathAlgorithmBase extends RootedSearchAlgorithmBase {
   constructor(...input) { const { host, graph, args } = parse(input); super(host, graph); this.DistanceRelaxer = args[0] ?? DistanceRelaxers.ShortestDistance; this._shortestPathCount = 3; this.ComputedShortestPaths = []; }
   get ShortestPathCount() { return this._shortestPathCount; }
-  set ShortestPathCount(value) { if (!Number.isInteger(value) || value <= 1) throw new RangeError('ShortestPathCount must be more than 1.'); this._shortestPathCount = value; }
+  set ShortestPathCount(value) { if (!Number.isInteger(value) || value <= 1) throw algorithmError('ArgumentOutOfRangeException', 'ShortestPathCount must be more than 1.'); this._shortestPathCount = value; }
   get ComputedShortestPathCount() { return this.ComputedShortestPaths.length; }
   AddComputedShortestPath(path) { this.ComputedShortestPaths.push([...path]); }
   Initialize() { this.ComputedShortestPaths = []; }
@@ -218,7 +219,7 @@ export class HoffmanPavleyRankedShortestPathAlgorithm extends RankedShortestPath
       let previousWeight = 0; const vertices = new Set([root]);
       for (let i = 0; i < path.length; i++) {
         const edge = path[i]; if (i >= startEdge) for (const deviation of graph.OutEdges(edge.Source)) {
-          if (deviation === edge || vertices.has(deviation.Target) || !distances.has(deviation.Target)) continue;
+          if (valueEquals(deviation, edge) || vertices.has(deviation.Target) || !distances.has(deviation.Target)) continue;
           const priority = this.DistanceRelaxer.Combine(previousWeight, this.DistanceRelaxer.Combine(this.Weights(deviation), distances.get(deviation.Target)));
           queue.Enqueue({ parent: path, index: i, edge: deviation, priority });
         }
