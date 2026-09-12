@@ -29,6 +29,13 @@ test('Tree wrappers validate graph/root combinations',()=>{for(const fn of [Q.Tr
 // Upstream: tests/QuikGraph.Tests/Extensions/AlgorithmExtensionsTests.cs::TreeCyclePoppingRandom
 // Upstream: tests/QuikGraph.Tests/Extensions/AlgorithmExtensionsTests.cs::TreeCyclePoppingRandom_Throws
 test('Cycle-popping wrapper invokes optional chain and handles isolated vertex',()=>{const g=make([[1,2],[1,3],[2,1],[2,3],[2,4],[3,2],[3,5],[3,6],[4,1],[4,2],[4,5],[4,6],[5,6],[6,2],[6,3]],Q.AdjacencyGraph,[7]);assert.equal(Q.TreeCyclePoppingRandom(g,2)(7),undefined);const chain=new Q.NormalizedMarkovEdgeChain();assert.equal(Q.TreeCyclePoppingRandom(g,2,chain)(7),undefined);nullVariants(Q.TreeCyclePoppingRandom,[g,2,chain]);});
+test('Cycle-popping wrapper reconstructs final successors after erased cycles',()=>{
+  const g=make([[1,2],[2,1],[2,0],[3,1],[4,5],[5,4]],Q.AdjacencyGraph,[0,6]);let count=0;
+  const chain={TryGetSuccessor(graph,vertex){const list=[...graph.OutEdges(vertex)];if(list.some(e=>e.Source===2)&&++count>1)return list.find(e=>e.Target===0);return list[0];}};
+  const path=Q.TreeCyclePoppingRandom(g,0,chain);
+  assert.deepEqual(endpoints(path(1)),[[1,2],[2,0]]);assert.deepEqual(endpoints(path(3)),[[3,1],[1,2],[2,0]]);assert.equal(path(0),undefined);assert.equal(path(4),undefined);assert.equal(path(6),undefined);assert.equal(path(99),undefined);
+  const nan=make([[1,NaN]],Q.AdjacencyGraph),lookup=Q.TreeCyclePoppingRandom(nan,NaN,{TryGetSuccessor:(graph,vertex)=>[...graph.OutEdges(vertex)][0]});assert.equal(lookup(1)[0].Target!==lookup(1)[0].Target,true);
+});
 
 // Upstream: tests/QuikGraph.Tests/Extensions/AlgorithmExtensionsTests.cs::ShortestPaths_Dijkstra_AStar_BellmanFord_Dag
 test('Four shortest-path wrappers reproduce upstream directed paths',()=>{const g=make([[1,2],[1,3],[1,8],[2,4],[2,5],[2,6],[3,4],[4,5],[4,6],[5,6],[6,7],[8,10],[9,5],[10,9]],Q.AdjacencyGraph);for(const result of [Q.ShortestPathsDijkstra(g,()=>1,2),Q.ShortestPathsAStar(g,()=>1,()=>1,2),Q.ShortestPathsBellmanFord(g,()=>1,2),Q.ShortestPathsDag(g,()=>1,2)]){assert.equal(result(1),undefined);assert.deepEqual(endpoints(result(7)),[[2,6],[6,7]]);assert.deepEqual(endpoints(result(4)),[[2,4]]);}});

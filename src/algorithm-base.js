@@ -6,6 +6,7 @@ export { GraphColor } from './core.js';
 export const ComputationState = Object.freeze({ NotRunning: 0, Running: 1, PendingAbortion: 2, Finished: 3, Aborted: 4 });
 export class OperationCanceledException extends Error { constructor(message = 'Algorithm aborted.') { super(message); this.name = 'OperationCanceledException'; } }
 export function algorithmError(name, message) { if (typeof Core[name] === 'function') return new Core[name](message); const error = new Error(message); error.name = name; return error; }
+export const sameVertex = (a, b) => a === b || (a !== a && b !== b);
 export function events(owner, names) { for (const name of names.split(' ')) if (!owner[name]) owner[name] = new EventHook(); }
 export class CancelManager {
   constructor() { this.IsCancelling = false; this.CancelRequested = new EventHook(); this.CancelReset = new EventHook(); this.Cancelling = this.CancelRequested; }
@@ -60,7 +61,7 @@ export class AlgorithmBase {
 export class RootedAlgorithmBase extends AlgorithmBase {
   constructor(...args) { super(...args); this._hasRoot = false; events(this, 'RootVertexChanged'); }
   TryGetRootVertex() { return this._hasRoot ? this._root : undefined; }
-  SetRootVertex(root) { requireValue(root, 'root'); const changed = !this._hasRoot || !Object.is(root, this._root); this._root = root; this._hasRoot = true; if (changed) this.OnRootVertexChanged({}); }
+  SetRootVertex(root) { requireValue(root, 'root'); const changed = !this._hasRoot || !sameVertex(root, this._root); this._root = root; this._hasRoot = true; if (changed) this.OnRootVertexChanged({}); }
   ClearRootVertex() { const changed = this._hasRoot; this._hasRoot = false; this._root = undefined; if (changed) this.OnRootVertexChanged({}); }
   OnRootVertexChanged(args = {}) { this.RootVertexChanged.emit(this, args); }
   AssertRootInGraph(root) { if (!this.VisitedGraph.ContainsVertex(root)) throw algorithmError('VertexNotFoundException', 'Root vertex is not part of the graph.'); }
@@ -70,7 +71,7 @@ export class RootedAlgorithmBase extends AlgorithmBase {
 export class RootedSearchAlgorithmBase extends RootedAlgorithmBase {
   constructor(...args) { super(...args); this._hasTarget = false; events(this, 'TargetVertexChanged TargetReached'); }
   TryGetTargetVertex() { return this._hasTarget ? this._target : undefined; }
-  SetTargetVertex(target) { requireValue(target, 'target'); const changed = !this._hasTarget || !Object.is(target, this._target); this._target = target; this._hasTarget = true; if (changed) this.OnTargetVertexChanged({}); }
+  SetTargetVertex(target) { requireValue(target, 'target'); const changed = !this._hasTarget || !sameVertex(target, this._target); this._target = target; this._hasTarget = true; if (changed) this.OnTargetVertexChanged({}); }
   ClearTargetVertex() { const changed = this._hasTarget; this._hasTarget = false; this._target = undefined; if (changed) this.OnTargetVertexChanged({}); }
   Compute(root, target) { if (arguments.length > 1) { requireValue(root, 'root'); this.SetTargetVertex(target); if (!this.VisitedGraph.ContainsVertex(target)) throw algorithmError('ArgumentException', 'Graph does not contain the provided target vertex.'); } return arguments.length ? super.Compute(root) : super.Compute(); }
   OnTargetVertexChanged(args = {}) { this.TargetVertexChanged.emit(this, args); }

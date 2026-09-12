@@ -214,3 +214,607 @@ test('GraphExtensionsTests.ToBidirectionalGraph_FromDirectedGraph',()=>{const g=
 test('UndirectedGraphTests.ContainsEdge_Undirected',()=>{const g=new Q.UndirectedGraph(false,Q.SortedVertexEquality);g.AddVerticesAndEdge(new Q.UndirectedEdge(1,2));assert(g.ContainsEdge(1,2));assert(g.ContainsEdge(2,1));assert(!g.ContainsEdge(1,3));});
 // Upstream UndirectedGraph self-loop degree contract differs from adjacency entry count.
 test('UndirectedGraph loop degree contract',()=>{const g=new Q.UndirectedGraph();g.AddVerticesAndEdge(new Q.Edge(1,1));assert.equal(g.AdjacentEdges(1).length,1);assert.equal(g.AdjacentDegree(1),2);const a=new Q.ArrayUndirectedGraph(g);assert.equal(a.AdjacentDegree(1),2);const f=new Q.FilteredUndirectedGraph(g,()=>true,()=>true);assert.equal(f.AdjacentDegree(1),2);});
+
+// Viewer regressions from graph lifecycle review; no DOM required for graph/event/export behavior.
+test('Viewer reconnect reattaches graph mutation subscriptions',async()=>{const {QuikGraphViewer}=await import('../src/web-component.js');const viewer=new QuikGraphViewer(),g=new Q.BidirectionalGraph();viewer.Graph=g;assert.equal(g.EdgeAdded.Count,1);viewer.disconnectedCallback();assert.equal(g.EdgeAdded.Count,0);viewer.connectedCallback();assert.equal(g.EdgeAdded.Count,1);viewer.connectedCallback();assert.equal(g.EdgeAdded.Count,1);viewer.disconnectedCallback();});
+test('Viewer SVG synchronizes graph mutations and preserves parallel paths',async()=>{const {QuikGraphViewer}=await import('../src/web-component.js');const viewer=new QuikGraphViewer(),g=new Q.BidirectionalGraph();g.AddVerticesAndEdgeRange([new Q.TaggedEdge('a','b','one'),new Q.TaggedEdge('a','b','two'),new Q.TaggedEdge('a','a','loop')]);viewer.Graph=g;const svg=viewer.ToSvg();assert(svg.includes('loop'));const curves=[...svg.matchAll(/d="(M[^\"]+Q[^\"]+)"/g)].map(m=>m[1]);assert.equal(curves.length,2);assert.notEqual(curves[0],curves[1]);g.RemoveVertex('b');const after=viewer.ToSvg();assert(!after.includes('>b</text>'));assert.equal(viewer.Positions.has('b'),false);g.AddVertex('c');assert(viewer.ToSvg().includes('>c</text>'));});
+test('Viewer camera rejects invalid zoom without changing state',async()=>{const {QuikGraphViewer}=await import('../src/web-component.js');const viewer=new QuikGraphViewer();for(const factor of [NaN,Infinity,0,-1])assert.throws(()=>viewer.Zoom(factor),RangeError);assert.equal(viewer._scale,1);viewer.Zoom(2);assert.equal(viewer._scale,2);assert(Number.isFinite(viewer._pan.x));});
+
+// Upstream graph argument-validation test methods, using the shared NUnit fixture contract.
+const graphArgumentCases = {
+  "BidirectionalMatrixGraphTests": [
+    "Construction_Throws",
+    "AddEdge_Throws",
+    "AddEdgeRange_Throws",
+    "ContainsEdge_Throws",
+    "InEdge_Throws",
+    "InEdges_Throws",
+    "Degree_Throws",
+    "RemoveEdge_Throws",
+    "RemoveEdgeIf_Throws",
+    "RemoveOutEdgeIf_Throws",
+    "RemoveInEdgeIf_Throws"
+  ],
+  "DelegateBidirectionalIncidenceGraphTests": [
+    "Construction_Throws",
+    "ContainsVertex_Throws",
+    "InEdge_Throws",
+    "InEdges_Throws",
+    "Degree_Throws",
+    "TryGetOutEdges_Throws",
+    "TryGetInEdges_Throws"
+  ],
+  "CompressedSparseRowGraphTests": [
+    "Construction_Throws",
+    "ContainsVertex_Throws",
+    "ContainsEdge_Throws",
+    "TryGetEdge_Throws",
+    "TryGetEdges_Throws",
+    "TryGetOutEdges_Throws"
+  ],
+  "UndirectedBidirectionalGraphTests": [
+    "Construction_Throws",
+    "ContainsVertex_Throws",
+    "ContainsEdge_Throws",
+    "AdjacentEdge_Throws",
+    "AdjacentEdges_Throws",
+    "TryGetEdge_Throws"
+  ],
+  "BidirectionalGraphTests": [
+    "AddVertex_Throws",
+    "AddEdgeRange_Throws",
+    "AddVerticesAndEdge_Throws",
+    "AddVerticesAndEdgeRange_Throws",
+    "ContainsVertex_Throws",
+    "ContainsEdge_Throws",
+    "InEdge_Throws",
+    "InEdges_Throws",
+    "Degree_Throws",
+    "TryGetEdge_Throws",
+    "TryGetEdges_Throws",
+    "TryGetOutEdges_Throws",
+    "TryGetInEdges_Throws",
+    "Merge_Throws",
+    "MergeIf_Throws",
+    "RemoveVertex_Throws",
+    "RemoveVertexIf_Throws",
+    "RemoveEdge_Throws",
+    "RemoveEdgeIf_Throws",
+    "RemoveOutEdgeIf_Throws",
+    "RemoveInEdgeIf_Throws",
+    "ClearOutEdges_Throws",
+    "ClearInEdges_Throws",
+    "ClearEdges_Throws",
+    "Clone_Throws"
+  ],
+  "ArrayAdjacencyGraphTests": [
+    "ContainsVertex_Throws",
+    "ContainsEdge_Throws",
+    "TryGetEdge_Throws",
+    "TryGetEdges_Throws",
+    "TryGetOutEdges_Throws"
+  ],
+  "UndirectedGraphTests": [
+    "Construction_Throws",
+    "AddVertex_Throws",
+    "AddEdgeRange_Throws",
+    "AddVerticesAndEdge_Throws",
+    "AddVerticesAndEdgeRange_Throws",
+    "ContainsVertex_Throws",
+    "ContainsEdge_Throws",
+    "AdjacentVertices_Throws",
+    "TryGetEdge_Throws",
+    "RemoveVertex_Throws",
+    "RemoveVertexIf_Throws",
+    "RemoveEdge_Throws",
+    "RemoveEdgeIf_Throws",
+    "RemoveEdges_Throws",
+    "RemoveAdjacentEdgeIf_Throws"
+  ],
+  "DelegateImplicitUndirectedGraphTests": [
+    "Construction_Throws",
+    "ContainsVertex_Throws",
+    "ContainsEdge_Throws",
+    "TryGetEdge_Throws",
+    "TryGetAdjacentEdges_Throws"
+  ],
+  "DelegateIncidenceGraphTests": [
+    "Construction_Throws",
+    "ContainsVertex_Throws",
+    "ContainsEdge_Throws",
+    "TryGetEdge_Throws",
+    "TryGetEdges_Throws",
+    "TryGetOutEdges_Throws"
+  ],
+  "ArrayUndirectedGraphTests": [
+    "ContainsVertex_Throws",
+    "ContainsEdge_Throws",
+    "TryGetEdge_Throws"
+  ],
+  "AdjacencyGraphTests": [
+    "AddVertex_Throws",
+    "AddEdgeRange_Throws",
+    "AddVerticesAndEdge_Throws",
+    "AddVerticesAndEdgeRange_Throws",
+    "ContainsVertex_Throws",
+    "ContainsEdge_Throws",
+    "TryGetEdge_Throws",
+    "TryGetEdges_Throws",
+    "TryGetOutEdges_Throws",
+    "RemoveVertex_Throws",
+    "RemoveVertexIf_Throws",
+    "RemoveEdge_Throws",
+    "RemoveEdgeIf_Throws",
+    "RemoveOutEdgeIf_Throws",
+    "ClearEdges_Throws"
+  ],
+  "DelegateImplicitGraphTests": [
+    "Construction_Throws",
+    "ContainsVertex_Throws",
+    "TryGetOutEdges_Throws"
+  ],
+  "ArrayBidirectionalGraphTests": [
+    "ContainsVertex_Throws",
+    "ContainsEdge_Throws",
+    "InEdge_Throws",
+    "InEdges_Throws",
+    "Degree_Throws",
+    "TryGetEdge_Throws",
+    "TryGetEdges_Throws",
+    "TryGetOutEdges_Throws",
+    "TryGetInEdges_Throws"
+  ],
+  "BidirectionalAdapterGraphTests": [
+    "Construction_Throws",
+    "ContainsVertex_Throws",
+    "ContainsEdge_Throws",
+    "OutEdge_Throws",
+    "OutEdges_Throws",
+    "InEdge_Throws",
+    "InEdges_Throws",
+    "Degree_Throws",
+    "TryGetEdge_Throws",
+    "TryGetEdges_Throws",
+    "TryGetOutEdges_Throws",
+    "TryGetInEdges_Throws"
+  ],
+  "ClusteredAdjacencyGraphTests": [
+    "Construction_Throws",
+    "AddVertex_Throws",
+    "AddVertexRange_Throws",
+    "AddEdge_Throws",
+    "AddEdgeRange_Throws",
+    "AddVerticesAndEdge_Throws",
+    "AddVerticesAndEdgeRange_Throws",
+    "ContainsVertex_Throws",
+    "ContainsEdge_Throws",
+    "TryGetEdge_Throws",
+    "TryGetEdges_Throws",
+    "TryGetOutEdges_Throws",
+    "RemoveVertex_Throws",
+    "RemoveVertexIf_Throws",
+    "RemoveEdge_Throws",
+    "RemoveEdgeIf_Throws",
+    "RemoveOutEdgeIf_Throws",
+    "ClearOutEdges_Throws",
+    "RemoveCluster_Throws"
+  ],
+  "DelegateUndirectedGraphTests": [
+    "Construction_Throws",
+    "ContainsVertex_Throws",
+    "ContainsEdge_Throws",
+    "ContainsEdge_SourceTarget_Throws",
+    "TryGetEdge_Throws",
+    "TryGetAdjacentEdges_Throws"
+  ],
+  "EdgeListGraphTests": [
+    "AddEdge_Throws",
+    "AddEdgeRange_Throws",
+    "AddVerticesAndEdge_Throws",
+    "AddVerticesAndEdgeRange_Throws",
+    "ContainsVertex_Throws",
+    "ContainsEdge_Throws",
+    "RemoveEdge_Throws",
+    "RemoveEdgeIf_Throws"
+  ],
+  "ReversedBidirectionalGraphTests": [
+    "Construction_Throws",
+    "ContainsVertex_Throws",
+    "ContainsEdge_Throws",
+    "OutEdge_Throws",
+    "OutEdges_Throws",
+    "InEdge_Throws",
+    "InEdges_Throws",
+    "Degree_Throws",
+    "TryGetEdge_Throws",
+    "TryGetEdges_Throws",
+    "TryGetOutEdges_Throws",
+    "TryGetInEdges_Throws"
+  ],
+  "DelegateVertexAndEdgeListGraphTests": [
+    "Construction_Throws",
+    "ContainsVertex_Throws",
+    "ContainsEdge_Throws",
+    "ContainsEdge_SourceTarget_Throws",
+    "TryGetEdge_Throws",
+    "TryGetEdges_Throws",
+    "TryGetOutEdges_Throws"
+  ],
+  "FilteredUndirectedGraphTests": [
+    "ContainsEdge_Throws",
+    "AdjacentEdge_Throws",
+    "AdjacentEdges_Throws",
+    "TryGetEdge_Throws"
+  ],
+  "FilteredImplicitGraphTests": [
+    "OutEdge_Throws",
+    "TryGetOutEdges_Throws"
+  ],
+  "FilteredVertexAndEdgeListGraphTests": [
+    "ContainsEdge_Throws",
+    "OutEdge_Throws",
+    "TryGetEdge_Throws",
+    "TryGetEdges_Throws",
+    "TryGetOutEdges_Throws"
+  ],
+  "FilteredImplicitVertexSetGraphTests": [
+    "Construction_Throws",
+    "ContainsVertex_Throws"
+  ],
+  "FilteredVertexListGraphTests": [
+    "ContainsEdge_Throws",
+    "OutEdge_Throws",
+    "TryGetEdge_Throws",
+    "TryGetEdges_Throws",
+    "TryGetOutEdges_Throws"
+  ],
+  "FilteredBidirectionalGraphTests": [
+    "ContainsEdge_Throws",
+    "OutEdge_Throws",
+    "InEdge_Throws",
+    "InEdges_Throws",
+    "Degree_Throws",
+    "TryGetEdge_Throws",
+    "TryGetEdges_Throws",
+    "TryGetOutEdges_Throws",
+    "TryGetInEdges_Throws"
+  ],
+  "FilteredIncidenceGraphTests": [
+    "ContainsEdge_Throws",
+    "OutEdge_Throws",
+    "TryGetEdge_Throws",
+    "TryGetEdges_Throws",
+    "TryGetOutEdges_Throws"
+  ]
+};
+function validationGraph(name) {
+ const type=name.replace(/Tests$/,''),g=new (type.includes('Undirected')?Q.UndirectedGraph:Q.BidirectionalGraph)();g.AddVertexRange([1,2]);
+ if(type.startsWith('Filtered'))return new Q[type==='FilteredImplicitVertexSetGraph'?'FilteredImplicitVertexSet':type](g,()=>true,()=>true);
+ if(type==='BidirectionalMatrixGraph')return new Q.BidirectionalMatrixGraph(3);
+ if(type==='DelegateBidirectionalIncidenceGraph')return new Q[type](v=>g.TryGetOutEdges(v),v=>g.TryGetInEdges(v));
+ if(type==='DelegateVertexAndEdgeListGraph'||type==='DelegateUndirectedGraph')return new Q[type](g.Vertices,v=>g.TryGetOutEdges(v));
+ if(type.startsWith('Delegate'))return new Q[type](v=>g.TryGetOutEdges(v));
+ if(type.startsWith('Array')||['CompressedSparseRowGraph','UndirectedBidirectionalGraph','ReversedBidirectionalGraph','BidirectionalAdapterGraph','ClusteredAdjacencyGraph'].includes(type))return new Q[type](g);
+ const result=new Q[type]();if(result.AddVertexRange)result.AddVertexRange([1,2]);return result;
+}
+for(const [className,methods]of Object.entries(graphArgumentCases))for(const method of methods)test(`${className}.${method}`,()=>{
+ const g=validationGraph(className),name=method.replace(/_Throws$/,'');
+ if(name==='Construction'){
+  const type=className.replace(/Tests$/,'');
+  if(type==='BidirectionalMatrixGraph')assert.throws(()=>new Q[type](-1));
+  else if(type==='UndirectedGraph')assert.throws(()=>new Q[type](true,null));
+  else if(type.startsWith('Filtered')){const C=Q[type==='FilteredImplicitVertexSetGraph'?'FilteredImplicitVertexSet':type];assert.throws(()=>new C(null,()=>true,()=>true));assert.throws(()=>new C(new Q.BidirectionalGraph(),null,()=>true));assert.throws(()=>new C(new Q.BidirectionalGraph(),()=>true,null));}
+  else if(type==='DelegateVertexAndEdgeListGraph'||type==='DelegateUndirectedGraph'){assert.throws(()=>new Q[type](null,()=>[]));assert.throws(()=>new Q[type]([],null));}
+  else if(type==='DelegateBidirectionalIncidenceGraph'){assert.throws(()=>new Q[type](null,()=>[]));assert.throws(()=>new Q[type](()=>[],null));}
+  else assert.throws(()=>new Q[type](null));
+ }else if(name==='Clone')assert.throws(()=>new Q.BidirectionalGraph(null));
+ else if(name==='Merge'){assert.throws(()=>g.MergeVertex(null,(s,t)=>new Q.Edge(s,t)));assert.throws(()=>g.MergeVertex(1,null));assert.throws(()=>g.MergeVertex(99,(s,t)=>new Q.Edge(s,t)));}
+ else if(name==='MergeIf'){assert.throws(()=>g.MergeVerticesIf(null,(s,t)=>new Q.Edge(s,t)));assert.throws(()=>g.MergeVerticesIf(()=>true,null));}
+ else if(['OutEdge','InEdge','AdjacentEdge'].includes(name)){assert.throws(()=>g[name](null,0));assert.throws(()=>g[name](99,0));assert.throws(()=>g[name](1,-1));assert.throws(()=>g[name](1,1));}
+ else if(['TryGetEdge','TryGetEdges','ContainsEdge_SourceTarget'].includes(name)){const fn=name==='ContainsEdge_SourceTarget'?'ContainsEdge':name;assert.throws(()=>g[fn](null,1));assert.throws(()=>g[fn](1,null));assert.throws(()=>g[fn](null,null));}
+ else if(['AddVertexRange','AddEdgeRange','AddVerticesAndEdgeRange','RemoveEdges'].includes(name)){assert.throws(()=>g[name](null));assert.throws(()=>g[name]([null]));}
+ else if(['RemoveOutEdgeIf','RemoveInEdgeIf','RemoveAdjacentEdgeIf'].includes(name)){assert.throws(()=>g[name](null,()=>true));assert.throws(()=>g[name](1,null));}
+ else {assert.equal(typeof g[name],'function');assert.throws(()=>g[name](null));if(['OutEdges','InEdges','AdjacentEdges','AdjacentVertices','Degree'].includes(name))assert.throws(()=>g[name](99));}
+});
+
+// Additional upstream GraphTestsBase mutation/query fixtures by concrete graph class.
+const graphBehaviorCases = {
+  "BidirectionalMatrixGraphTests": [
+    "AddEdge",
+    "AddEdge_EquatableEdge",
+    "AddEdgeRange",
+    "ContainsEdge",
+    "ContainsEdge_EquatableEdge",
+    "ContainsEdge_SourceTarget",
+    "TryGetEdge",
+    "TryGetEdges",
+    "RemoveEdge",
+    "RemoveEdge_EquatableEdge",
+    "RemoveOutEdgeIf",
+    "RemoveInEdgeIf",
+    "ClearOutEdges",
+    "ClearInEdges",
+    "ClearEdges",
+    "Clone"
+  ],
+  "CompressedSparseRowGraphTests": [
+    "ContainsEdge",
+    "ContainsEdge_SourceTarget",
+    "Clone"
+  ],
+  "UndirectedBidirectionalGraphTests": [
+    "AddVertex",
+    "AddEdge",
+    "ContainsVertex",
+    "ContainsEdge",
+    "ContainsEdge_EquatableEdge",
+    "ContainsEdge_SourceTarget",
+    "TryGetEdge"
+  ],
+  "BidirectionalGraphTests": [
+    "AddVertex",
+    "AddVertexRange",
+    "AddEdge_ParallelEdges_EquatableEdge",
+    "AddEdge_NoParallelEdges_EquatableEdge",
+    "AddEdgeRange",
+    "AddVerticesAndEdge",
+    "AddVerticesAndEdgeRange",
+    "ContainsEdge",
+    "ContainsEdge_EquatableEdge",
+    "ContainsEdge_SourceTarget",
+    "RemoveInEdgeIf",
+    "ClearInEdges",
+    "TrimEdgeExcess"
+  ],
+  "ArrayAdjacencyGraphTests": [
+    "ContainsEdge",
+    "ContainsEdge_EquatableEdge",
+    "ContainsEdge_SourceTarget"
+  ],
+  "UndirectedGraphTests": [
+    "AddVertex",
+    "AddVertexRange",
+    "AddEdge_ParallelEdges_EquatableEdge",
+    "AddEdge_NoParallelEdges_EquatableEdge",
+    "AddEdgeRange",
+    "AddVerticesAndEdge",
+    "AddVerticesAndEdgeRange",
+    "ContainsVertex",
+    "ContainsEdge",
+    "ContainsEdge_EquatableEdge",
+    "TryGetEdge",
+    "RemoveEdges",
+    "RemoveAdjacentEdgeIf",
+    "ClearAdjacentEdges",
+    "TrimEdgeExcess"
+  ],
+  "DelegateImplicitUndirectedGraphTests": [
+    "ContainsVertex",
+    "ContainsEdge",
+    "TryGetEdge",
+    "TryGetAdjacentEdges"
+  ],
+  "DelegateIncidenceGraphTests": [
+    "ContainsEdge",
+    "TryGetEdge",
+    "TryGetEdges"
+  ],
+  "ArrayUndirectedGraphTests": [
+    "ContainsVertex",
+    "ContainsEdge",
+    "ContainsEdge_EquatableEdge",
+    "TryGetEdge"
+  ],
+  "AdjacencyGraphTests": [
+    "AddVertex",
+    "AddVertexRange",
+    "AddEdge_ParallelEdges_EquatableEdge",
+    "AddEdge_NoParallelEdges_EquatableEdge",
+    "AddEdgeRange",
+    "AddVerticesAndEdge",
+    "AddVerticesAndEdgeRange",
+    "ContainsEdge",
+    "ContainsEdge_EquatableEdge",
+    "ContainsEdge_SourceTarget",
+    "TrimEdgeExcess"
+  ],
+  "ArrayBidirectionalGraphTests": [
+    "ContainsEdge",
+    "ContainsEdge_EquatableEdge",
+    "ContainsEdge_SourceTarget"
+  ],
+  "BidirectionalAdapterGraphTests": [
+    "AddVertex",
+    "AddEdge",
+    "ContainsVertex",
+    "ContainsEdge",
+    "ContainsEdge_EquatableEdge",
+    "ContainsEdge_SourceTarget",
+    "OutEdge",
+    "OutEdges",
+    "InEdge",
+    "InEdges",
+    "Degree",
+    "TryGetOutEdges",
+    "TryGetInEdges"
+  ],
+  "ClusteredAdjacencyGraphTests": [
+    "AddVertexRange",
+    "AddEdge_ParallelEdges",
+    "AddEdge_ParallelEdges_EquatableEdge",
+    "AddEdge_NoParallelEdges",
+    "AddEdge_NoParallelEdges_EquatableEdge",
+    "AddEdgeRange",
+    "AddVerticesAndEdge",
+    "AddVerticesAndEdgeRange",
+    "ContainsEdge",
+    "ContainsEdge_EquatableEdge",
+    "ContainsEdge_SourceTarget",
+    "TryGetEdge",
+    "TryGetEdges",
+    "RemoveVertexIf",
+    "RemoveEdge",
+    "RemoveEdge_EquatableEdge",
+    "RemoveEdgeIf",
+    "RemoveOutEdgeIf",
+    "Clear",
+    "ClearOutEdges"
+  ],
+  "DelegateUndirectedGraphTests": [
+    "Vertices",
+    "Edges",
+    "ContainsVertex",
+    "ContainsEdge",
+    "TryGetEdge",
+    "TryGetAdjacentEdges"
+  ],
+  "EdgeListGraphTests": [
+    "AddEdge_ParallelEdges_EquatableEdge",
+    "AddEdge_NoParallelEdges_EquatableEdge",
+    "AddEdgeRange",
+    "AddVerticesAndEdge_ParallelEdges",
+    "AddVerticesAndEdge_ParallelEdges_EquatableEdge",
+    "AddVerticesAndEdge_NoParallelEdges",
+    "AddVerticesAndEdge_NoParallelEdges_EquatableEdge",
+    "AddVerticesAndEdgeRange",
+    "ContainsVertex",
+    "ContainsEdge",
+    "ContainsEdge_EquatableEdge",
+    "RemoveEdge",
+    "RemoveEdge_EquatableEdge",
+    "RemoveEdgeIf",
+    "Clear",
+    "Clone"
+  ],
+  "ReversedBidirectionalGraphTests": [
+    "AddVertex",
+    "AddEdge",
+    "ContainsVertex",
+    "ContainsEdge",
+    "ContainsEdge_EquatableEdge",
+    "ContainsEdge_SourceTarget",
+    "OutEdge",
+    "InEdge",
+    "Degree",
+    "TryGetEdge",
+    "TryGetEdges",
+    "TryGetOutEdges",
+    "TryGetInEdges"
+  ],
+  "DelegateVertexAndEdgeListGraphTests": [
+    "Vertices",
+    "Edges",
+    "ContainsEdge",
+    "ContainsEdge_SourceTarget",
+    "TryGetEdge",
+    "TryGetEdges"
+  ],
+  "FilteredUndirectedGraphTests": [
+    "ContainsEdge_SourceTarget",
+    "AdjacentEdge",
+    "AdjacentEdges",
+    "TryGetEdge"
+  ],
+  "FilteredVertexAndEdgeListGraphTests": [
+    "ContainsEdge_SourceTarget"
+  ],
+  "FilteredImplicitVertexSetGraphTests": [
+    "ContainsVertex"
+  ],
+  "FilteredVertexListGraphTests": [
+    "ContainsEdge"
+  ],
+  "FilteredBidirectionalGraphTests": [
+    "ContainsEdge_SourceTarget",
+    "InEdge",
+    "InEdges",
+    "Degree",
+    "TryGetInEdges"
+  ],
+  "FilteredIncidenceGraphTests": [
+    "ContainsEdge"
+  ]
+};
+function behaviorGraph(className,{parallel=true,equatable=false}={}){
+ const type=className.replace(/Tests$/,''),undirected=type.includes('Undirected'),base=new (undirected?Q.UndirectedGraph:Q.BidirectionalGraph)(parallel),E=equatable?Q.EquatableEdge:Q.Edge;
+ base.AddVertexRange([1,2,3,4,5]);const es=[[1,2],[1,3],[2,2],[3,1],[4,1]].map(([s,t])=>new E(s,t));base.AddEdgeRange(es);
+ let g;
+ if(type==='BidirectionalMatrixGraph'){g=new Q.BidirectionalMatrixGraph(6);g.AddEdgeRange(es);}
+ else if(type.startsWith('Filtered'))g=new Q[type==='FilteredImplicitVertexSetGraph'?'FilteredImplicitVertexSet':type](base,()=>true,()=>true);
+ else if(type==='DelegateBidirectionalIncidenceGraph')g=new Q[type](v=>base.TryGetOutEdges(v),v=>base.TryGetInEdges(v));
+ else if(type==='DelegateVertexAndEdgeListGraph'||type==='DelegateUndirectedGraph')g=new Q[type](()=>base.Vertices,v=>base.TryGetOutEdges(v));
+ else if(type.startsWith('Delegate'))g=new Q[type](v=>base.TryGetOutEdges(v));
+ else if(type.startsWith('Array')||['CompressedSparseRowGraph','UndirectedBidirectionalGraph','ReversedBidirectionalGraph','BidirectionalAdapterGraph','ClusteredAdjacencyGraph'].includes(type))g=new Q[type](base);
+ else {g=new Q[type](...(type==='EdgeListGraph'?[true,parallel]:[parallel]));if(g.AddVertexRange)g.AddVertexRange([1,2,3,4,5]);g.AddEdgeRange(es);}
+ return {g,base,es,E,type,snapshot:type.startsWith('Array')||type==='CompressedSparseRowGraph'};
+}
+for(const [className,methods]of Object.entries(graphBehaviorCases))for(const method of methods)test(`${className}.${method}`,()=>{
+ const {g,base,es,E,type,snapshot}=behaviorGraph(className,{parallel:!method.includes('NoParallel'),equatable:method.includes('EquatableEdge')});
+ if(method==='AddVertex'){
+  if(typeof g.AddVertex==='function'){const n=g.VertexCount;assert(g.AddVertex(99));assert(!g.AddVertex(99));assert.equal(g.VertexCount,n+1);}
+  else {const n=g.VertexCount;base.AddVertex(99);assert.equal(g.VertexCount,n+(snapshot?0:1));assert.equal(g.ContainsVertex(99),!snapshot);}
+ }else if(method==='AddVertexRange'){const n=g.VertexCount;assert.equal(g.AddVertexRange([6,7,6,1]),2);assert.equal(g.VertexCount,n+2);}
+ else if(method==='AddEdge'&&!g.AddEdge){const n=g.EdgeCount;base.AddEdge(new E(2,3));assert.equal(g.EdgeCount,n+(snapshot?0:1));}
+ else if(method==='AddEdgeRange'){const n=g.EdgeCount;assert.equal(g.AddEdgeRange([new E(2,3),new E(3,4)]),2);assert.equal(g.EdgeCount,n+2);}
+ else if(method==='AddVerticesAndEdgeRange'){const n=g.EdgeCount;assert.equal(g.AddVerticesAndEdgeRange([new E(6,7),new E(7,8)]),2);assert.equal(g.EdgeCount,n+2);assert(g.ContainsVertex(8));}
+ else if(method.startsWith('AddEdge')||method.startsWith('AddVerticesAndEdge')){
+  const fn=method.startsWith('AddVerticesAndEdge')?'AddVerticesAndEdge':'AddEdge',e=new E(2,3),n=g.EdgeCount;assert(g[fn](e));const duplicate=g[fn](new E(2,3));assert.equal(duplicate,g.AllowParallelEdges&&!(type==='EdgeListGraph'&&equatableEdge(e)));assert.equal(g.EdgeCount,n+1+Number(duplicate));
+ }else if(method==='ContainsVertex'){assert(g.ContainsVertex(1));assert(g.ContainsVertex(2));assert(!g.ContainsVertex(99));}
+ else if(method==='Vertices'){assert.deepEqual(new Set(g.Vertices),new Set([1,2,3,4,5]));assert.equal(g.VertexCount,5);}
+ else if(method==='Edges'){assert.equal(g.EdgeCount,5);assert.equal(g.Edges.length,5);assert(g.Edges.some(e=>e.Source===2&&e.Target===2));}
+ else if(method==='ContainsEdge'||method==='ContainsEdge_EquatableEdge'){
+  if(type==='DelegateIncidenceGraph'||type==='DelegateImplicitUndirectedGraph'){assert(g.ContainsEdge(1,2));assert(!g.ContainsEdge(98,99));return;}
+  const e=g.Edges[0];assert(g.ContainsEdge(e));const same=method.includes('EquatableEdge')?(e instanceof Q.SReversedEdge?new Q.SReversedEdge(new E(e.Target,e.Source)):new E(e.Source,e.Target)):new Q.Edge(e.Source,e.Target);assert.equal(g.ContainsEdge(same),method.includes('EquatableEdge'));assert(!g.ContainsEdge(new E(98,99)));
+ }else if(method==='ContainsEdge_SourceTarget'||method==='TryGetEdge'){
+  const source=type==='ReversedBidirectionalGraph'?2:1,target=type==='ReversedBidirectionalGraph'?1:2;assert(g.ContainsEdge(source,target));const e=g.TryGetEdge(source,target);assert(e);assert.equal(e.Source,source);assert.equal(e.Target,target);assert.equal(g.TryGetEdge(99,1),undefined);
+ }else if(method==='TryGetEdges'){assert.equal(g.TryGetEdges(99,1),undefined);assert.equal(g.TryGetEdges(1,1).length,0);assert.equal(g.TryGetEdges(2,2).length,1);}
+ else if(method==='TryGetAdjacentEdges'){assert.equal(g.TryGetAdjacentEdges(99),undefined);assert.deepEqual(g.TryGetAdjacentEdges(5),[]);assert.equal(g.TryGetAdjacentEdges(1).length,4);}
+ else if(method==='TryGetOutEdges'){assert.equal(g.TryGetOutEdges(99),undefined);assert.deepEqual(g.TryGetOutEdges(5),[]);assert.equal(g.TryGetOutEdges(1).length,2);}
+ else if(method==='TryGetInEdges'){assert.equal(g.TryGetInEdges(99),undefined);assert.deepEqual(g.TryGetInEdges(5),[]);assert.equal(g.TryGetInEdges(1).length,2);}
+ else if(['OutEdges','InEdges','AdjacentEdges'].includes(method)){const actual=g[method](1);assert.equal(actual.length,method==='AdjacentEdges'?4:2);assert.deepEqual(g[method](5),[]);}
+ else if(['OutEdge','InEdge','AdjacentEdge'].includes(method)){const es=g[method.replace('Edge','Edges')](1);assert.equal(g[method](1,0).Source,es[0].Source);assert.equal(g[method](1,0).Target,es[0].Target);}
+ else if(method==='Degree'){assert.equal(g.Degree(1),4);assert.equal(g.Degree(2),3);assert.equal(g.Degree(5),0);}
+ else if(method==='RemoveVertex'){assert(g.RemoveVertex(1));assert(!g.ContainsVertex(1));assert.equal(g.EdgeCount,1);assert(!g.RemoveVertex(99));}
+ else if(method==='RemoveVertexIf'){assert.equal(g.RemoveVertexIf(v=>v>=3),3);assert.equal(g.VertexCount,2);assert.equal(g.EdgeCount,2);}
+ else if(method==='RemoveEdge'||method==='RemoveEdge_EquatableEdge'){const before=g.EdgeCount,e=method.includes('EquatableEdge')?new E(1,2):g.Edges.find(e=>e.Source===1&&e.Target===2);assert(g.RemoveEdge(e));assert.equal(g.EdgeCount,before-1);assert(!g.RemoveEdge(e));}
+ else if(method==='RemoveEdgeIf'){assert.equal(g.RemoveEdgeIf(e=>e.Source===1),2);assert.equal(g.EdgeCount,3);}
+ else if(method==='RemoveOutEdgeIf'){assert.equal(g.RemoveOutEdgeIf(1,e=>e.Target===2),1);assert.equal(g.EdgeCount,4);assert.equal(g.OutDegree(1),1);}
+ else if(method==='RemoveInEdgeIf'){assert.equal(g.RemoveInEdgeIf(1,e=>e.Source===4),1);assert.equal(g.EdgeCount,4);assert.equal(g.InDegree(1),1);}
+ else if(method==='RemoveAdjacentEdgeIf'){assert.equal(g.RemoveAdjacentEdgeIf(1,e=>e.Source===1),2);assert.equal(g.EdgeCount,3);assert.equal(g.AdjacentEdges(1).length,2);}
+ else if(method==='RemoveEdges'){assert.equal(g.RemoveEdges([es[0],es[1]]),2);assert.equal(g.EdgeCount,3);}
+ else if(method==='Clear'){g.Clear();assert.equal(g.EdgeCount,0);assert.equal(g.VertexCount,type==='BidirectionalMatrixGraph'?6:0);}
+ else if(method==='ClearOutEdges'){g.ClearOutEdges(1);assert.equal(g.OutDegree(1),0);assert.equal(g.EdgeCount,3);}
+ else if(method==='ClearInEdges'){g.ClearInEdges(1);assert.equal(g.InDegree(1),0);assert.equal(g.EdgeCount,3);}
+ else if(method==='ClearEdges'||method==='ClearAdjacentEdges'){g[method](1);assert.equal(g.EdgeCount,1);assert.equal(g.Edges[0].Source,2);}
+ else if(method==='TrimEdgeExcess'){const vs=g.Vertices,edges=g.Edges;g.TrimEdgeExcess();assert.deepEqual(g.Vertices,vs);assert.deepEqual(g.Edges,edges);}
+ else if(method==='Clone'){const c=g.Clone();assert.notEqual(c,g);assert.equal(c.VertexCount,g.VertexCount);assert.equal(c.EdgeCount,g.EdgeCount);assert.deepEqual(c.Edges.map(e=>[e.Source,e.Target]),g.Edges.map(e=>[e.Source,e.Target]));}
+ else throw new Error(`Missing actual fixture for ${method}`);
+});
+function equatableEdge(e){return e instanceof Q.EquatableEdge;}
+
+// Upstream tagged and undirected edge constructor/equality/tag-event/string fixtures.
+for(const C of [Q.TaggedEdge,Q.TaggedUndirectedEdge,Q.EquatableTaggedEdge,Q.STaggedEdge,Q.STaggedUndirectedEdge,Q.SEquatableTaggedEdge]){
+ test(`${C.name}Tests.Construction`,()=>{const tag={value:42},e=new C(1,2,tag);assert.equal(e.Source,1);assert.equal(e.Target,2);assert.equal(e.Tag,tag);});
+ test(`${C.name}Tests.Construction_Throws`,()=>{assert.throws(()=>new C(null,1,null));assert.throws(()=>new C(1,null,null));assert.throws(()=>new C(null,null,null));if(C===Q.TaggedUndirectedEdge||C===Q.STaggedUndirectedEdge)assert.throws(()=>new C(2,1,null));});
+ test(`${C.name}Tests.TagChanged`,()=>{const e=new C(1,2,'a'),events=[];const sub=e.TagChanged.subscribe((sender,args)=>events.push([sender,args]));e.Tag='a';assert.equal(events.length,0);e.Tag='b';assert.equal(events.length,1);assert.equal(events[0][0],e);sub.Dispose();e.Tag='c';assert.equal(events.length,1);});
+ test(`${C.name}Tests.ObjectToString`,()=>assert.equal(new C(1,2,'tag').ToString(),`1 ${C===Q.TaggedUndirectedEdge||C===Q.STaggedUndirectedEdge?'<->':'->'} 2 (tag)`));
+ test(`${C.name}Tests.Equals`,()=>{const a=new C(1,2,'a'),b=new C(1,2,'a'),differentTag=new C(1,2,'b');assert(a.Equals(a));assert(!a.Equals(null));const reference=C===Q.TaggedEdge||C===Q.TaggedUndirectedEdge;assert.equal(a.Equals(b),!reference);assert.equal(a.Equals(differentTag),C===Q.EquatableTaggedEdge||C===Q.SEquatableTaggedEdge);});
+}
+for(const C of [Q.EquatableTaggedEdge,Q.SEquatableTaggedEdge])test(`${C.name}Tests.Hashcode`,()=>{const a=new C(1,2,'a'),b=new C(1,2,'b');assert.equal(a.GetHashCode(),b.GetHashCode());assert.notEqual(a.GetHashCode(),new C(2,1,'a').GetHashCode());});
+for(const C of [Q.UndirectedEdge,Q.SUndirectedEdge,Q.EquatableUndirectedEdge])test(`${C.name}Tests.Construction`,()=>{const e=new C(1,2),loop=new C(1,1);assert.equal(e.Source,1);assert.equal(e.Target,2);assert.equal(loop.Target,1);});
+for(const C of [Q.SEdge,Q.SUndirectedEdge,Q.UndirectedEdge])test(`${C.name}Tests.Equals`,()=>{const a=new C(1,2),b=new C(1,2);assert(a.Equals(a));assert(!a.Equals(null));assert.equal(a.Equals(b),C!==Q.UndirectedEdge);});
+for(const C of [Q.TermEdge,Q.EquatableTermEdge]){
+ test(`${C.name}Tests.Construction`,()=>{const a=new C(1,2),b=new C(1,2,3,4);assert.equal(a.SourceTerminal,0);assert.equal(a.TargetTerminal,0);assert.equal(b.SourceTerminal,3);assert.equal(b.TargetTerminal,4);});
+ test(`${C.name}Tests.Construction_Throws`,()=>{for(const args of [[null,1],[1,null],[1,2,-1,0],[1,2,0,-1]])assert.throws(()=>new C(...args));});
+}
+test('TermEdgeTests.Equals',()=>{const a=new Q.TermEdge(1,2);assert(a.Equals(a));assert(!a.Equals(new Q.TermEdge(1,2)));});
+test('TermEdgeTests.ObjectToString',()=>assert.equal(new Q.TermEdge(1,2,1,5).ToString(),'1 (1) -> 2 (5)'));
+test('EquatableTermEdgeTests.Hashcode',()=>{assert.equal(new Q.EquatableTermEdge(1,2).GetHashCode(),new Q.EquatableTermEdge(1,2).GetHashCode());assert.notEqual(new Q.EquatableTermEdge(1,2).GetHashCode(),new Q.EquatableTermEdge(2,1).GetHashCode());});
+// JS no-argument struct constructors represent reference-type default endpoints (null).
+// Numeric generic defaults cannot be inferred from erased JS types; construct (0, 0) explicitly.
+for(const C of [Q.SEdge,Q.SEquatableEdge,Q.SUndirectedEdge,Q.STaggedEdge,Q.STaggedUndirectedEdge,Q.SEquatableTaggedEdge,Q.SReversedEdge])test(`${C.name}Tests.EqualsDefaultEdge_ReferenceTypeExtremities`,()=>{const a=new C(),b=new C();assert(a.Equals(b));assert(b.Equals(a));assert.equal(a.Source,null);assert.equal(a.Target,null);});
+for(const C of [Q.SEquatableEdge,Q.SEquatableTaggedEdge,Q.SReversedEdge])test(`${C.name}Tests.HashcodeDefaultEdge_ReferenceTypeExtremities`,()=>assert.equal(new C().GetHashCode(),new C().GetHashCode()));
+test('SReversedEdgeTests.Construction_Throws',()=>assert.throws(()=>new Q.SReversedEdge(null)));
+test('SReversedEdgeTests.Equals2',()=>{const a=new Q.SReversedEdge(new Q.EquatableEdge(1,2)),b=new Q.SReversedEdge(new Q.EquatableEdge(1,2));assert(a.Equals(b));assert(!a.Equals(new Q.SReversedEdge(new Q.EquatableEdge(2,1))));});
+test('SReversedEdgeTests.Hashcode',()=>{const e=new Q.Edge(1,2),a=new Q.SReversedEdge(e),b=new Q.SReversedEdge(e);assert.equal(a.GetHashCode(),b.GetHashCode());assert.notEqual(a.GetHashCode(),new Q.SReversedEdge(new Q.Edge(1,2)).GetHashCode());});
+test('SReversedEdgeTests.ObjectToString',()=>{assert.equal(new Q.SReversedEdge(new Q.Edge(1,2)).ToString(),'R(1 -> 2)');assert.equal(new Q.SReversedEdge(new Q.UndirectedEdge(1,2)).ToString(),'R(1 <-> 2)');});

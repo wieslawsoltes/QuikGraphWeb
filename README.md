@@ -8,7 +8,7 @@
 
 Graph data structures, algorithms, and a reusable HTML viewer for JavaScript. QuikGraphWeb adapts [QuikGraph](https://github.com/KeRNeLith/QuikGraph) to browsers, workers, and Node, retaining its PascalCase class and member names and event-driven algorithm model.
 
-**[Open the graph laboratory](https://wieslawsoltes.github.io/QuikGraphWeb/)** · [API and usage](docs/usage.md) · [Compatibility](docs/compatibility.md) · [Source/test inventories](docs/api-inventory.json) · [Releases](https://github.com/wieslawsoltes/QuikGraphWeb/releases)
+**[Open the graph laboratory](https://wieslawsoltes.github.io/QuikGraphWeb/)** · [API and usage](docs/usage.md) · [Compatibility](docs/compatibility.md) · [Verification](docs/verification.md) · [Source/test inventories](docs/api-inventory.json) · [Releases](https://github.com/wieslawsoltes/QuikGraphWeb/releases)
 
 The library has no runtime dependencies. The package includes native ES modules, CommonJS, standalone browser bundles, TypeScript declarations, source, documentation, and 38 executable examples. See the compatibility document and generated audit for the exact distinction between available APIs, source-linked tests, and full .NET conformance.
 

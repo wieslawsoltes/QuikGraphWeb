@@ -29,26 +29,38 @@ function runTree(algorithm,root,undirected=false){
 }
 export function TreeBreadthFirstSearch(graph,root){return runTree(new Search.BreadthFirstSearchAlgorithm(graph),root);}
 export function TreeDepthFirstSearch(graph,root){return runTree(new Search.DepthFirstSearchAlgorithm(graph),root);}
-export function TreeCyclePoppingRandom(graph,root,edgeChain=new Advanced.NormalizedMarkovEdgeChain()){return runTree(new Advanced.CyclePoppingRandomTreeAlgorithm(graph,edgeChain),root);}
+/** Return the final loop-erased directed path from a vertex toward the requested root. */
+export function TreeCyclePoppingRandom(graph,root,edgeChain=new Advanced.NormalizedMarkovEdgeChain()){
+  const algorithm=new Advanced.CyclePoppingRandomTreeAlgorithm(graph,edgeChain);algorithm.Compute(required(root,'root'));
+  const lookup=vertex=>{
+    required(vertex,'vertex');const path=[],seen=new Set();let current=vertex;
+    while(!same(current,root)){
+      if(seen.has(current))throw new Error('The final successor tree contains a cycle.');seen.add(current);
+      const edge=algorithm.Successors.get(current);if(!edge)return undefined;path.push(edge);current=edge.Target;
+    }
+    return path.length?path:undefined;
+  };
+  lookup.algorithm=algorithm;lookup.successors=algorithm.Successors;return lookup;
+}
 export function ShortestPathsDijkstra(graph,weights,root){required(graph,'graph');return runTree(graph.IsDirected?new Paths.DijkstraShortestPathAlgorithm(graph,weights):new Paths.UndirectedDijkstraShortestPathAlgorithm(graph,weights),root,!graph.IsDirected);}
 export function ShortestPathsAStar(graph,weights,heuristic,root){return runTree(new Paths.AStarShortestPathAlgorithm(graph,weights,heuristic),root);}
-export function ShortestPathsBellmanFord(graph,weights,root){const result=runTree(new Paths.BellmanFordShortestPathAlgorithm(graph,weights),root);result.hasNegativeCycle=result.algorithm.FoundNegativeCycle;return result;}
+export function ShortestPathsBellmanFord(graph,weights,root){const result=runTree(new Paths.BellmanFordShortestPathAlgorithm(graph,weights),root);return Object.assign(result,{hasNegativeCycle:result.algorithm.FoundNegativeCycle});}
 export function ShortestPathsDag(graph,weights,root){return runTree(new Paths.DagShortestPathAlgorithm(graph,weights),root);}
 export function RankedShortestPathHoffmanPavley(graph,weights,root,target,pathCount=3){const algorithm=new Paths.HoffmanPavleyRankedShortestPathAlgorithm(graph,weights);algorithm.ShortestPathCount=pathCount;algorithm.Compute(root,target);return algorithm.ComputedShortestPaths;}
 export function Sinks(graph){required(graph,'graph');return [...graph.Vertices].filter(v=>graph.OutDegree(v)===0);}
 export function Roots(graph){required(graph,'graph');const targets=new Set([...graph.Edges].map(e=>e.Target));return [...graph.Vertices].filter(v=>!targets.has(v));}
 export function IsolatedVertices(graph){required(graph,'graph');const touched=new Set();for(const e of graph.Edges){touched.add(e.Source);touched.add(e.Target);}return [...graph.Vertices].filter(v=>!touched.has(v));}
 function sort(graph,Type,output){const algorithm=new Type(graph);algorithm.Compute();const values=[...algorithm.SortedVertices];if(output){output.push(...values);return output;}return values;}
-export function TopologicalSort(graph,output){required(graph,'graph');return sort(graph,graph.IsDirected?Structural.TopologicalSortAlgorithm:Structural.UndirectedTopologicalSortAlgorithm,output);}
-export function SourceFirstTopologicalSort(graph,output){required(graph,'graph');return sort(graph,graph.IsDirected?Structural.SourceFirstTopologicalSortAlgorithm:Structural.UndirectedFirstTopologicalSortAlgorithm,output);}
-export function SourceFirstBidirectionalTopologicalSort(graph,direction=0,output){if(Array.isArray(direction)){output=direction;direction=0;}const algorithm=new Structural.SourceFirstBidirectionalTopologicalSortAlgorithm(graph,direction);algorithm.Compute();const values=[...algorithm.SortedVertices];if(output){output.push(...values);return output;}return values;}
+export function TopologicalSort(graph,output=undefined){required(graph,'graph');return sort(graph,graph.IsDirected?Structural.TopologicalSortAlgorithm:Structural.UndirectedTopologicalSortAlgorithm,output);}
+export function SourceFirstTopologicalSort(graph,output=undefined){required(graph,'graph');return sort(graph,graph.IsDirected?Structural.SourceFirstTopologicalSortAlgorithm:Structural.UndirectedFirstTopologicalSortAlgorithm,output);}
+export function SourceFirstBidirectionalTopologicalSort(graph,direction=0,output=undefined){if(Array.isArray(direction)){output=direction;direction=0;}const algorithm=new Structural.SourceFirstBidirectionalTopologicalSortAlgorithm(graph,direction);algorithm.Compute();const values=[...algorithm.SortedVertices];if(output){output.push(...values);return output;}return values;}
 function components(graph,Type,output=new Map()){const algorithm=new Type(graph,output);algorithm.Compute();if(algorithm.Components!==output){output.clear();for(const pair of algorithm.Components)output.set(...pair);}return algorithm.ComponentCount;}
 export function ConnectedComponents(graph,output=new Map()){return components(graph,Structural.ConnectedComponentsAlgorithm,output);}
 export function StronglyConnectedComponents(graph,output=new Map()){return components(graph,Structural.StronglyConnectedComponentsAlgorithm,output);}
 export function WeaklyConnectedComponents(graph,output=new Map()){return components(graph,Structural.WeaklyConnectedComponentsAlgorithm,output);}
 export function IncrementalConnectedComponents(graph){const algorithm=new Structural.IncrementalConnectedComponentsAlgorithm(graph);algorithm.Compute();return algorithm;}
-export function CondensateStronglyConnected(graph,graphFactory){const algorithm=graphFactory===undefined?new Structural.CondensationGraphAlgorithm(graph):new Structural.CondensationGraphAlgorithm(graph,graphFactory);algorithm.StronglyConnected=true;algorithm.Compute();return algorithm.CondensedGraph;}
-export function CondensateWeaklyConnected(graph,graphFactory){const algorithm=graphFactory===undefined?new Structural.CondensationGraphAlgorithm(graph):new Structural.CondensationGraphAlgorithm(graph,graphFactory);algorithm.StronglyConnected=false;algorithm.Compute();return algorithm.CondensedGraph;}
+export function CondensateStronglyConnected(graph,graphFactory=undefined){const algorithm=graphFactory===undefined?new Structural.CondensationGraphAlgorithm(graph):new Structural.CondensationGraphAlgorithm(graph,graphFactory);algorithm.StronglyConnected=true;algorithm.Compute();return algorithm.CondensedGraph;}
+export function CondensateWeaklyConnected(graph,graphFactory=undefined){const algorithm=graphFactory===undefined?new Structural.CondensationGraphAlgorithm(graph):new Structural.CondensationGraphAlgorithm(graph,graphFactory);algorithm.StronglyConnected=false;algorithm.Compute();return algorithm.CondensedGraph;}
 export function CondensateEdges(graph,vertexPredicate=()=>true){const algorithm=new Structural.EdgeMergeCondensationGraphAlgorithm(graph,new Core.BidirectionalGraph(),vertexPredicate);algorithm.Compute();return algorithm.CondensedGraph;}
 export function OddVertices(graph){required(graph,'graph');const counts=new Map([...graph.Vertices].map(v=>[v,0]));for(const e of graph.Edges){counts.set(e.Source,counts.get(e.Source)+1);counts.set(e.Target,counts.get(e.Target)-1);}return [...counts].filter(([,count])=>count%2!==0).map(([v])=>v);}
 function graphOrEdges(value,Type){required(value,'graph or edges');if(value.Vertices!==undefined&&value.Edges!==undefined)return value;const graph=new Type();graph.AddVerticesAndEdgeRange(value);return graph;}

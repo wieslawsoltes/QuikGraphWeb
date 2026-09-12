@@ -1,5 +1,5 @@
 // Shortest and ranked path algorithms adapted from QuikGraph (MS-PL).
-import { AlgorithmBase, RootedAlgorithmBase, RootedSearchAlgorithmBase, AlgorithmHeap, GraphColor, DistanceRelaxers, events, algorithmError, requireValue } from './algorithm-base.js';
+import { sameVertex, AlgorithmBase, RootedAlgorithmBase, RootedSearchAlgorithmBase, AlgorithmHeap, GraphColor, DistanceRelaxers, events, algorithmError, requireValue } from './algorithm-base.js';
 import { UndirectedEdgeEventArgs } from './core.js';
 const { White, Gray, Black } = GraphColor;
 function parse(input) { const args = [...input]; let host = null; if (args[0] == null || (args[0]?.Services && args[1]?.ContainsVertex)) host = args.shift(); const graph = requireValue(args.shift(), 'visitedGraph'); if (typeof graph.ContainsVertex !== 'function') throw new TypeError('visitedGraph must implement ContainsVertex.'); return { host, graph, args }; }
@@ -8,7 +8,7 @@ export function predecessorPath(predecessors, vertex, undirected = false) {
   requireValue(vertex, 'vertex'); const path = [], seen = new Set();
   while (predecessors.has(vertex)) {
     if (seen.has(vertex)) throw algorithmError('InvalidOperationException', 'The predecessor map contains a cycle.'); seen.add(vertex);
-    const edge = predecessors.get(vertex); path.push(edge); vertex = undirected && Object.is(edge.Source, vertex) ? edge.Target : edge.Source;
+    const edge = predecessors.get(vertex); path.push(edge); vertex = undirected && sameVertex(edge.Source, vertex) ? edge.Target : edge.Source;
   }
   return path.length ? path.reverse() : undefined;
 }
@@ -29,7 +29,7 @@ export class ShortestPathAlgorithmBase extends RootedAlgorithmBase {
   GetVertexColor(v) { if (!this.VerticesColors.has(v)) throw algorithmError('VertexNotFoundException', 'Vertex color not available.'); return this.VerticesColors.get(v); }
   TryGetPath(v) { return predecessorPath(this.Predecessors, v, this._undirected); }
   Initialize() { this.Distances ??= new Map(); this.VerticesColors ??= new Map(); this.Distances.clear(); this.VerticesColors.clear(); this.Predecessors.clear(); for (const v of this.VisitedGraph.Vertices) { this.Distances.set(v, this.DistanceRelaxer.InitialDistance); this.VerticesColors.set(v, White); this.InitializeVertex.emit(v); } }
-  _emitEdge(name, edge, source) { if (this._undirected && name !== 'ExamineEdge') this[name].emit(this, new UndirectedEdgeEventArgs(edge, Object.is(edge.Target, source))); else this[name].emit(edge); }
+  _emitEdge(name, edge, source) { if (this._undirected && name !== 'ExamineEdge') this[name].emit(this, new UndirectedEdgeEventArgs(edge, sameVertex(edge.Target, source))); else this[name].emit(edge); }
   Relax(edge, source = edge.Source, target = edge.Target) {
     const distance = this.Distances.get(source);
     if (distance === this.DistanceRelaxer.InitialDistance || distance === Infinity) return false;
@@ -54,7 +54,7 @@ export class DijkstraShortestPathAlgorithm extends ShortestPathAlgorithmBase {
       this.ExamineVertex.emit(u);
       const edges = this._undirected ? this.VisitedGraph.AdjacentEdges(u) : this.VisitedGraph.OutEdges(u);
       for (const edge of edges) {
-        this.ThrowIfCancellationRequested(); const v = this._undirected && Object.is(edge.Target, u) ? edge.Source : edge.Target;
+        this.ThrowIfCancellationRequested(); const v = this._undirected && sameVertex(edge.Target, u) ? edge.Source : edge.Target;
         this.ExamineEdge.emit(edge); checkedWeight(this.Weights, edge, true); const oldColor = this.GetVertexColor(v);
         if (oldColor === Black && !this.CostHeuristic) continue;
         if (this.Relax(edge, u, v)) {
@@ -135,9 +135,9 @@ export class FloydWarshallAllShortestPathAlgorithm extends AlgorithmBase {
   }
   TryGetDistance(source, target) { requireValue(source, 'source'); requireValue(target, 'target'); return this.Distances.get(source)?.get(target); }
   TryGetPath(source, target) {
-    requireValue(source, 'source'); requireValue(target, 'target'); if (Object.is(source, target) || !this._next.get(source)?.has(target)) return undefined;
+    requireValue(source, 'source'); requireValue(target, 'target'); if (sameVertex(source, target) || !this._next.get(source)?.has(target)) return undefined;
     const path = [], seen = new Set();
-    while (!Object.is(source, target)) { if (seen.has(source)) throw algorithmError('InvalidOperationException', 'Cycle in shortest path.'); seen.add(source); const edge = this._next.get(source)?.get(target); if (!edge) return undefined; path.push(edge); source = !this.VisitedGraph.IsDirected && Object.is(edge.Target, source) ? edge.Source : edge.Target; }
+    while (!sameVertex(source, target)) { if (seen.has(source)) throw algorithmError('InvalidOperationException', 'Cycle in shortest path.'); seen.add(source); const edge = this._next.get(source)?.get(target); if (!edge) return undefined; path.push(edge); source = !this.VisitedGraph.IsDirected && sameVertex(edge.Target, source) ? edge.Source : edge.Target; }
     return path;
   }
   Dump(writer) { requireValue(writer, 'writer'); const lines = ['data:']; for (const [source, row] of this.Distances) for (const [target, distance] of row) lines.push(`${source}->${target}: ${distance}`); const result = lines.join('\n'); if (typeof writer === 'function') writer(result); else if (writer.WriteLine) for (const line of lines) writer.WriteLine(line); else writer.write(result); return result; }
@@ -159,7 +159,7 @@ function shortestAvoiding(graph, source, target, weights, bannedVertices = new S
   const distances = new Map([[source, 0]]), predecessors = new Map(), heap = new AlgorithmHeap(); heap.Enqueue({ vertex: source, priority: 0 });
   while (heap.Count) {
     const { vertex, priority } = heap.Dequeue(); if (distances.get(vertex) !== priority) continue;
-    if (Object.is(vertex, target)) return predecessorPath(predecessors, vertex) ?? [];
+    if (sameVertex(vertex, target)) return predecessorPath(predecessors, vertex) ?? [];
     for (const edge of graph.OutEdges(vertex)) { if (bannedEdges.has(edge) || bannedVertices.has(edge.Target)) continue; const d = priority + checkedWeight(weights, edge, true); if (d < (distances.get(edge.Target) ?? Infinity)) { distances.set(edge.Target, d); predecessors.set(edge.Target, edge); heap.Enqueue({ vertex: edge.Target, priority: d }); } }
   }
   return undefined;
@@ -204,14 +204,14 @@ export class HoffmanPavleyRankedShortestPathAlgorithm extends RankedShortestPath
   constructor(...input) { const { host, graph, args } = parse(input); super(host, graph, args.length > 1 ? requireValue(args[1], 'distanceRelaxer') : DistanceRelaxers.ShortestDistance); this.Weights = requireValue(args[0], 'edgeWeights'); }
   InternalCompute() {
     const root = this.GetAndAssertRootInGraph(), target = this.TryGetTargetVertex(); if (target === undefined) throw algorithmError('InvalidOperationException', 'Target vertex not set.'); this.AssertRootInGraph(target);
-    if (Object.is(root, target)) return;
+    if (sameVertex(root, target)) return;
     const graph = this.VisitedGraph, incoming = new Map([...graph.Vertices].map(v => [v, []])); for (const edge of graph.Edges) incoming.get(edge.Target).push(edge);
     const distances = new Map([[target, 0]]), successors = new Map(), treeQueue = new AlgorithmHeap((a, b) => this.DistanceRelaxer.Compare(a.priority, b.priority)); treeQueue.Enqueue({ vertex: target, priority: 0 });
     while (treeQueue.Count) {
       this.ThrowIfCancellationRequested(); const { vertex, priority } = treeQueue.Dequeue(); if (distances.get(vertex) !== priority) continue;
       for (const edge of incoming.get(vertex)) { const d = this.DistanceRelaxer.Combine(priority, checkedWeight(this.Weights, edge, true)); if (!distances.has(edge.Source) || this.DistanceRelaxer.Compare(d, distances.get(edge.Source)) < 0) { distances.set(edge.Source, d); successors.set(edge.Source, edge); treeQueue.Enqueue({ vertex: edge.Source, priority: d }); } }
     }
-    const append = (path, vertex) => { const seen = new Set(); while (successors.has(vertex)) { if (seen.has(vertex)) return false; seen.add(vertex); const edge = successors.get(vertex); path.push(edge); vertex = edge.Target; } return Object.is(vertex, target); };
+    const append = (path, vertex) => { const seen = new Set(); while (successors.has(vertex)) { if (seen.has(vertex)) return false; seen.add(vertex); const edge = successors.get(vertex); path.push(edge); vertex = edge.Target; } return sameVertex(vertex, target); };
     const first = []; if (!append(first, root) || !first.length) return; this.AddComputedShortestPath(first);
     const queue = new AlgorithmHeap((a, b) => this.DistanceRelaxer.Compare(a.priority, b.priority)), edgeIds = new Map([...graph.Edges].map((e, i) => [e, i])), seenPaths = new Set([first.map(e => edgeIds.get(e)).join(',')]);
     const deviations = (path, startEdge) => {

@@ -371,3 +371,43 @@ test('Five advanced rooted algorithm families: all inherited root state/event an
     const object={};a.SetRootVertex(object);assert.equal(a.TryGetRootVertex(),object);
   }
 });
+test('Advanced algorithms preserve SameValueZero identity for NaN and signed-zero vertices',()=>{
+  const graph=make([[NaN,0,2],[-0,1,2],[NaN,1,1]]),flow=new A.EdmondsKarpMaximumFlowAlgorithm(graph,e=>e.Tag);assert.equal(graph.VertexCount,3);assert.equal(flow.Compute(NaN,1),3);assert.throws(()=>flow.Compute(NaN,NaN));assert.throws(()=>flow.Compute(-0,+0));
+  const reversed=new A.ReversedEdgeAugmentorAlgorithm(make([[NaN,0],[NaN,NaN]]));reversed.AddReversedEdges();for(const[e,r]of reversed.ReversedEdges){assert.ok(Object.is(e.Source,r.Target)||e.Source===r.Target);assert.ok(Object.is(e.Target,r.Source)||e.Target===r.Source);}reversed.Dispose();
+  const g=make([[NaN,0],[0,NaN],[0,1],[1,NaN]]),chain=new A.NormalizedMarkovEdgeChain();chain.Rand=seeded(32);const tree=new A.CyclePoppingRandomTreeAlgorithm(g,chain);tree.Compute(NaN);assert.equal(tree.Successors.get(NaN),undefined);for(const start of[0,1]){let v=start;const seen=new Set();while(!Number.isNaN(v)){assert.ok(!seen.has(v));seen.add(v);v=tree.Successors.get(v).Target;}}
+  const euler=new A.EulerianTrailAlgorithm(make([[NaN,0],[0,NaN],[0,1]]));euler.Compute(NaN);assert.equal(euler.Circuit.length,2);assert.equal([...euler.Trails(NaN)][0].length,2);
+  const temporary=new A.EulerianTrailAlgorithm(make([[NaN,0]]));assert.equal(temporary.AddTemporaryEdges(ef).length,1);temporary.RemoveTemporaryEdges();
+  const u=make([[NaN,0],[0,1],[1,NaN],[NaN,NaN]],true),cover=new A.MinimumVertexCoverApproximationAlgorithm(u,()=>0);cover.Compute();const covered=new Set(cover.CoverSet);for(const e of u.Edges)assert.ok(covered.has(e.Source)||covered.has(e.Target));
+  assert.equal(A.IsEulerianGraphAlgorithm.IsEulerian(u),true);assert.equal(A.IsHamiltonianGraphAlgorithm.IsHamiltonian(u),true);const color=new A.VertexColoringAlgorithm(u);color.Compute();assert.equal(color.Colors.size,3);
+  const matching=new A.MaximumBipartiteMatchingAlgorithm(make([[NaN,1],[0,2]]),[NaN,0],[1,2]);matching.Compute();assert.equal(matching.MatchedEdges.length,2);
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/EulerianTrailAlgorithmTests.cs::ComputeEulerianPathCount
+// Upstream: tests/QuikGraph.Tests/Algorithms/EulerianTrailAlgorithmTests.cs::ComputeEulerianPathCount_Throws
+// Upstream: tests/QuikGraph.Tests/Algorithms/EulerianTrailAlgorithmTests.cs::AddTemporaryEdges_Throws
+// Upstream: tests/QuikGraph.Tests/Algorithms/EulerianTrailAlgorithmTests.cs::RemoveTemporaryEdges
+// Upstream: tests/QuikGraph.Tests/Algorithms/EulerianTrailAlgorithmTests.cs::RootedEulerianTrails_Throws
+test('Eulerian count complete parameterized fixtures and temporary/root argument contracts',()=>{
+  for(const[pairs,expected]of [[[],1],[[[1,2]],0],[[[1,2],[2,1]],1],[[[1,2],[2,1],[1,3]],1],[[[1,2],[2,1],[1,3],[1,4],[3,4],[3,4],[1,5]],2]]){const g=make(pairs),a=new A.EulerianTrailAlgorithm(g);assert.equal(A.EulerianTrailAlgorithm.ComputeEulerianPathCount(g),expected);const before=g.Edges;a.AddTemporaryEdges(ef);a.RemoveTemporaryEdges();assert.deepEqual(g.Edges,before);}
+  assert.throws(()=>A.EulerianTrailAlgorithm.ComputeEulerianPathCount(null),TypeError);const a=new A.EulerianTrailAlgorithm(make([]));assert.throws(()=>a.AddTemporaryEdges(null),TypeError);assert.throws(()=>a.Trails(null),TypeError);
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/EulerianTrailAlgorithmTests.cs::MultipleEulerianTrailsGraph
+// Upstream: tests/QuikGraph.Tests/Algorithms/EulerianTrailAlgorithmTests.cs::MultipleRootedEulerianTrailsGraph
+test('Eulerian multi-trail source fixtures preserve exact path partitions and rooted prefixes',()=>{
+  const pairs=[[1,2],[2,1],[1,3],[3,1],[4,2],[3,4],[4,3],[4,4]],g=make(pairs),a=new A.EulerianTrailAlgorithm(g);a.AddTemporaryEdges(ef);a.Compute();const summarize=ts=>ts.map(t=>t.map(e=>[e.Source,e.Target]));
+  assert.deepEqual(summarize([...a.Trails()]),[[[1,3],[3,4],[4,4],[4,2]],[[4,3],[3,1],[1,2],[2,1]]]);
+  assert.deepEqual(summarize([...a.Trails(2)]),[[[2,1],[1,3],[3,4],[4,4],[4,2]],[[2,4],[4,3],[3,1],[1,2]]]);
+  assert.deepEqual(summarize([...a.Trails(3)]),[[[3,4],[4,4],[4,2]],[[3,4],[4,3],[3,1],[1,2],[2,1],[1,3]]]);
+  assert.equal(a.Circuit.length,9);assert.ok(pathValid(a.Circuit));a.RemoveTemporaryEdges();assert.equal(g.EdgeCount,8);
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/EulerianTrailAlgorithmTests.cs::SingleRootedEulerianTrailGraph
+// Upstream: tests/QuikGraph.Tests/Algorithms/EulerianTrailAlgorithmTests.cs::SingleRootedEulerianTrailGraph2
+test('Eulerian single rooted source fixtures return every expected original edge',()=>{
+  for(const[pairs,root,expected]of [[[['b','c'],['f','a'],['a','b'],['c','d'],['e','c'],['d','e'],['c','f'],['b','e']],'c',7],[[[1,2],[2,1],[1,3],[3,1],[2,4],[4,2],[3,4],[4,3],[4,4]],4,9]]){const g=make(pairs),a=new A.EulerianTrailAlgorithm(g);a.AddTemporaryEdges(ef);a.Compute();const trails=[...a.Trails(root)];assert.equal(trails.length,1);assert.equal(trails[0][0].Source,root);assert.equal(trails[0].length,expected);assert.ok(pathValid(trails[0]));assert.equal(new Set(trails[0]).size,expected);a.RemoveTemporaryEdges();}
+});
+// Upstream: tests/QuikGraph.Tests/Algorithms/EulerianTrailAlgorithmTests.cs::NotEulerianTrailGraph
+// Upstream: tests/QuikGraph.Tests/Algorithms/EulerianTrailAlgorithmTests.cs::RootedNotEulerianTrailGraph_Throws
+test('Eulerian original GraphML no-trail and unavailable rooted-trail fixtures',()=>{
+  const load=name=>{const xml=readFileSync(new URL(`./fixtures/GraphML/${name}`,import.meta.url),'utf8'),vs=[...xml.matchAll(/<node\b[^>]*\bid="([^"]+)"/g)].map(m=>m[1]),pairs=[...xml.matchAll(/<edge\b[^>]*\bsource="([^"]+)"[^>]*\btarget="([^"]+)"/g)].map(m=>[m[1],m[2]]);return make(pairs,false,vs);};
+  const g=load('g.42.34.graphml');if(A.EulerianTrailAlgorithm.ComputeEulerianPathCount(g)!==0){const a=new A.EulerianTrailAlgorithm(g);a.AddTemporaryEdges(ef);a.Compute();assert.deepEqual([...a.Trails()],[]);assert.deepEqual(a.Circuit,[]);}
+  const rooted=load('g.10.0.graphml'),a=new A.EulerianTrailAlgorithm(rooted);a.AddTemporaryEdges(ef);a.Compute();assert.throws(()=>[...a.Trails(rooted.Vertices[0])]);
+});

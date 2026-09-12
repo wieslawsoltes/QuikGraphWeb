@@ -1,5 +1,5 @@
 // QuikGraph searches: iterative traversal avoids the JavaScript recursion limit.
-import { RootedAlgorithmBase, RootedSearchAlgorithmBase, GraphColor, DistanceRelaxers, AlgorithmHeap, events, algorithmError, requireValue } from './algorithm-base.js';
+import { sameVertex, RootedAlgorithmBase, RootedSearchAlgorithmBase, GraphColor, DistanceRelaxers, AlgorithmHeap, events, algorithmError, requireValue } from './algorithm-base.js';
 import { UndirectedEdgeEventArgs } from './core.js';
 const { White, Gray, Black } = GraphColor;
 function parseSearch(args) {
@@ -10,7 +10,7 @@ function parseSearch(args) {
 }
 function color(map, vertex) { if (!map.has(vertex)) throw algorithmError('VertexNotFoundException', 'Vertex color not available.'); return map.get(vertex); }
 function emitEdge(algorithm, name, edge, vertex) {
-  if (algorithm._undirected && !(name === 'ExamineEdge' && algorithm instanceof BreadthFirstSearchAlgorithm)) algorithm[name].emit(algorithm, new UndirectedEdgeEventArgs(edge, Object.is(edge.Target, vertex)));
+  if (algorithm._undirected && !(name === 'ExamineEdge' && algorithm instanceof BreadthFirstSearchAlgorithm)) algorithm[name].emit(algorithm, new UndirectedEdgeEventArgs(edge, sameVertex(edge.Target, vertex)));
   else algorithm[name].emit(edge);
 }
 export class BreadthFirstSearchAlgorithm extends RootedAlgorithmBase {
@@ -42,7 +42,7 @@ export class BreadthFirstSearchAlgorithm extends RootedAlgorithmBase {
     while (count()) {
       this.ThrowIfCancellationRequested(); const u = pop(); this.ExamineVertex.emit(u);
       for (const edge of this._edges(u)) {
-        const v = this._undirected && Object.is(edge.Target, u) ? edge.Source : edge.Target;
+        const v = this._undirected && sameVertex(edge.Target, u) ? edge.Source : edge.Target;
         emitEdge(this, 'ExamineEdge', edge, u); const c = this.GetVertexColor(v);
         if (c === White) { emitEdge(this, 'TreeEdge', edge, u); this.VerticesColors.set(v, Gray); this.DiscoverVertex.emit(v); push(v); }
         else { emitEdge(this, 'NonTreeEdge', edge, u); emitEdge(this, c === Gray ? 'GrayTarget' : 'BlackTarget', edge, u); }
@@ -86,7 +86,7 @@ export class DepthFirstSearchAlgorithm extends RootedAlgorithmBase {
       if (next.done) { stack.pop(); this.VerticesColors.set(frame.v, Black); this.FinishVertex.emit(frame.v); continue; }
       const edge = next.value;
       if (this._undirected) { if (visitedEdges.has(edge)) continue; visitedEdges.add(edge); }
-      const v = (this._undirected || this._bidirectional) && Object.is(edge.Target, frame.v) ? edge.Source : edge.Target;
+      const v = (this._undirected || this._bidirectional) && sameVertex(edge.Target, frame.v) ? edge.Source : edge.Target;
       emitEdge(this, 'ExamineEdge', edge, frame.v); const c = this.GetVertexColor(v);
       if (c === White) { emitEdge(this, 'TreeEdge', edge, frame.v); enter(v, frame.depth + 1); }
       else emitEdge(this, c === Gray ? 'BackEdge' : 'ForwardOrCrossEdge', edge, frame.v);
@@ -98,7 +98,7 @@ export class BidirectionalDepthFirstSearchAlgorithm extends DepthFirstSearchAlgo
 export class ImplicitDepthFirstSearchAlgorithm extends DepthFirstSearchAlgorithm { constructor(...args) { super(...args); this._implicit = true; } }
 export class EdgeDepthFirstSearchAlgorithm extends RootedAlgorithmBase {
   constructor(...input) {
-    const { host, graph, args } = parseSearch(input); super(host, graph); this.EdgesColors = args[0] ?? new Map();
+    const { host, graph, args } = parseSearch(input); super(host, graph); this.EdgesColors = args.length ? requireValue(args[0], 'edgesColors') : new Map();
     this.ProcessAllComponents = false; this._maxDepth = 2147483647;
     events(this, 'InitializeEdge StartVertex StartEdge DiscoverTreeEdge TreeEdge BackEdge ForwardOrCrossEdge FinishEdge');
   }
@@ -137,15 +137,15 @@ export class BestFirstFrontierSearchAlgorithm extends RootedSearchAlgorithmBase 
   InternalCompute() {
     const root = this.GetAndAssertRootInGraph(), target = this.TryGetTargetVertex();
     if (target === undefined) throw algorithmError('InvalidOperationException', 'Target vertex not set.');
-    this.AssertRootInGraph(target); if (Object.is(root, target)) { this.OnTargetReached(); return; }
+    this.AssertRootInGraph(target); if (sameVertex(root, target)) { this.OnTargetReached(); return; }
     const heap = new AlgorithmHeap((a, b) => this.DistanceRelaxer.Compare(a.priority, b.priority)), open = new Map([[root, 0]]), operators = new Map();
     const settled = new Set();
     heap.Enqueue({ vertex: root, priority: 0 }); for (const edge of this.VisitedGraph.OutEdges(root)) operators.set(edge, White);
     while (heap.Count) {
       this.ThrowIfCancellationRequested(); const { vertex, priority } = heap.Dequeue(); if (open.get(vertex) !== priority || settled.has(vertex)) continue; open.delete(vertex); settled.add(vertex);
-      if (Object.is(vertex, target)) { this.OnTargetReached(); return; }
+      if (sameVertex(vertex, target)) { this.OnTargetReached(); return; }
       for (const edge of this.VisitedGraph.OutEdges(vertex)) {
-        if (Object.is(edge.Source, edge.Target) || settled.has(edge.Target)) continue;
+        if (sameVertex(edge.Source, edge.Target) || settled.has(edge.Target)) continue;
         if (operators.get(edge) === Gray) { operators.delete(edge); continue; }
         const weight = this.Weights(edge); if (weight < 0) throw algorithmError('NegativeWeightException', 'Best-first search requires non-negative weights.');
         const cost = this.DistanceRelaxer.Combine(priority, weight); operators.set(edge, Gray);

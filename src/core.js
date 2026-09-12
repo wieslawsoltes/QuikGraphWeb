@@ -43,24 +43,25 @@ const objectHashes = new WeakMap(); let nextHash = 1;
 function hash(v) { if (v == null) return 0; if (typeof v === 'object' || typeof v === 'function') { if (!objectHashes.has(v)) objectHashes.set(v, nextHash++); return objectHashes.get(v); } let h = 0; for (const c of String(v)) h = ((h * 31) ^ c.charCodeAt(0)) | 0; return h; }
 function edgeHash(e) { return (Math.imul(hash(e.Source), 397) ^ hash(e.Target)) | 0; }
 function endpoints(e, source, target) { Object.defineProperties(e, { Source: { value: requireValue(source, 'source'), enumerable: true }, Target: { value: requireValue(target, 'target'), enumerable: true } }); }
+const structDefault = Symbol('struct default');
 export class Edge {
-  constructor(source, target) { endpoints(this, source, target); }
+  constructor(source, target, mode) { if (mode === structDefault) Object.defineProperties(this, { Source: { value: null, enumerable: true }, Target: { value: null, enumerable: true } }); else endpoints(this, source, target); }
   Equals(other) { return this === other; }
   GetHashCode() { return hash(this); }
-  ToString() { return `${this.Source} -> ${this.Target}`; }
+  ToString() { return `${this.Source ?? ''} -> ${this.Target ?? ''}`; }
   toString() { return this.ToString(); }
 }
 export class EquatableEdge extends Edge { Equals(other) { return other instanceof EquatableEdge && equals(this.Source, other.Source) && equals(this.Target, other.Target); } GetHashCode() { return edgeHash(this); } }
-export class SEdge extends Edge { Equals(other) { return other?.constructor === this.constructor && equals(this.Source, other.Source) && equals(this.Target, other.Target); } GetHashCode() { return edgeHash(this); } }
+export class SEdge extends Edge { constructor(source, target) { if (arguments.length === 0) super(null, null, structDefault); else super(source, target); } Equals(other) { return other?.constructor === this.constructor && equals(this.Source, other.Source) && equals(this.Target, other.Target); } GetHashCode() { return edgeHash(this); } }
 export class SEquatableEdge extends SEdge {}
 export class UndirectedEdge extends Edge {
-  constructor(source, target) { super(source, target); if (defaultCompare(source, target) > 0) throw new RangeError('source must be lower than or equal to target.'); }
-  ToString() { return `${this.Source} <-> ${this.Target}`; }
+  constructor(source, target, mode) { super(source, target, mode); if (mode !== structDefault && defaultCompare(source, target) > 0) throw new RangeError('source must be lower than or equal to target.'); }
+  ToString() { return `${this.Source ?? ''} <-> ${this.Target ?? ''}`; }
 }
 export class EquatableUndirectedEdge extends UndirectedEdge { Equals(other) { return other instanceof EquatableUndirectedEdge && equals(this.Source, other.Source) && equals(this.Target, other.Target); } GetHashCode() { return edgeHash(this); } }
-export class SUndirectedEdge extends UndirectedEdge { Equals(other) { return other?.constructor === this.constructor && equals(this.Source, other.Source) && equals(this.Target, other.Target); } GetHashCode() { return edgeHash(this); } }
+export class SUndirectedEdge extends UndirectedEdge { constructor(source, target) { if (arguments.length === 0) super(null, null, structDefault); else super(source, target); } Equals(other) { return other?.constructor === this.constructor && equals(this.Source, other.Source) && equals(this.Target, other.Target); } GetHashCode() { return edgeHash(this); } }
 const tagged = Base => class extends Base {
-  constructor(source, target, tag) { super(source, target); this._tag = tag; this.TagChanged = new EventHook(); }
+  constructor(...args) { if (args.length === 0 && (Base === SEdge || Base === SEquatableEdge || Base === SUndirectedEdge)) super(); else super(args[0], args[1]); this._tag = args.length === 0 ? null : args[2]; this.TagChanged = new EventHook(); }
   get Tag() { return this._tag; }
   set Tag(value) { if (!equals(value, this._tag)) { this._tag = value; this.TagChanged.emit(this, {}); } }
   ToString() { return `${super.ToString()} (${this.Tag == null ? '' : this.Tag})`; }
@@ -77,9 +78,10 @@ export class TermEdge extends Edge {
 }
 export class EquatableTermEdge extends TermEdge { Equals(other) { return other instanceof EquatableTermEdge && equals(this.Source, other.Source) && equals(this.Target, other.Target) && this.SourceTerminal === other.SourceTerminal && this.TargetTerminal === other.TargetTerminal; } GetHashCode() { return edgeHash(this) ^ this.SourceTerminal ^ Math.imul(this.TargetTerminal, 397); } }
 export class SReversedEdge extends Edge {
-  constructor(originalEdge) { requireValue(originalEdge, 'originalEdge'); super(originalEdge.Target, originalEdge.Source); Object.defineProperty(this, 'OriginalEdge', { value: originalEdge, enumerable: true }); }
+  constructor(originalEdge) { if (arguments.length === 0) { super(null, null, structDefault); originalEdge = null; } else { requireValue(originalEdge, 'originalEdge'); super(originalEdge.Target, originalEdge.Source); } Object.defineProperty(this, 'OriginalEdge', { value: originalEdge, enumerable: true }); }
   Equals(other) { return other instanceof SReversedEdge && equals(this.OriginalEdge, other.OriginalEdge); }
-  GetHashCode() { return typeof this.OriginalEdge.GetHashCode === 'function' ? this.OriginalEdge.GetHashCode() : hash(this.OriginalEdge); }
+  GetHashCode() { return (typeof this.OriginalEdge?.GetHashCode === 'function' ? this.OriginalEdge.GetHashCode() : hash(this.OriginalEdge)) ^ 16777619; }
+  ToString() { return `R(${this.OriginalEdge ?? ''})`; }
 }
 
 class GraphQueries {

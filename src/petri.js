@@ -1,11 +1,11 @@
 /** High-level Petri net semantics ported from QuikGraph.Petri. */
-import { BidirectionalGraph, Edge } from './core.js';
+import { BidirectionalGraph, Edge, equals } from './core.js';
 const required=(v,name='value')=>{if(v==null)throw new TypeError(`${name} cannot be null`);return v;};
 /** Array with the upstream IList vocabulary; ordinary push/splice iteration also works. */
 export class TokenList extends Array {
   static get [Symbol.species](){return Array;}
   get Count(){return this.length;} Add(v){this.push(v);} AddRange(values){for(const value of values)this.push(value);} Clear(){this.length=0;}
-  Remove(value){const i=this.indexOf(value);if(i<0)return false;this.splice(i,1);return true;} Contains(v){return this.includes(v);}
+  Remove(value){const i=this.IndexOf(value);if(i<0)return false;this.splice(i,1);return true;} Contains(v){return this.IndexOf(v)>=0;}IndexOf(v){return this.findIndex(item=>equals(item,v));}get IsReadOnly(){return false;}Insert(index,value){if(!Number.isInteger(index)||index<0||index>this.length)throw new RangeError('Index out of range');this.splice(index,0,value);}RemoveAt(index){if(!Number.isInteger(index)||index<0||index>=this.length)throw new RangeError('Index out of range');this.splice(index,1);}CopyTo(array,index=0){if(index<0||array.length-index<this.length)throw new RangeError('Destination array is too small');for(let i=0;i<this.length;i++)array[index+i]=this[i];}
 }
 export class IdentityExpression { Evaluate(markings){return required(markings,'markings');} }
 export class AlwaysTrueConditionExpression { IsEnabled(){return true;} }
@@ -48,7 +48,7 @@ export class PetriNetSimulator {
     for(const t of transitions)if(!this._buffers.has(t))throw new Error('Initialize simulator after changing transitions');
     for(const arc of arcs)if(arc.IsInputArc)this._buffers.get(arc.Transition).Tokens.AddRange(evaluate(arc.Annotation,arc.Place.Marking));
     for(const t of transitions){const b=this._buffers.get(t);b.Enabled=!!enabled(t.Condition,b.Tokens);}
-    for(const arc of arcs){const b=this._buffers.get(arc.Transition);if(!b.Enabled)continue;if(arc.IsInputArc){const selected=[...evaluate(arc.Annotation,arc.Place.Marking)];for(const token of selected){const i=arc.Place.Marking.indexOf(token);if(i>=0)arc.Place.Marking.splice(i,1);}}else for(const token of evaluate(arc.Annotation,b.Tokens))arc.Place.Marking.push(token);}
+    for(const arc of arcs){const b=this._buffers.get(arc.Transition);if(!b.Enabled)continue;if(arc.IsInputArc){const annotated=evaluate(arc.Annotation,arc.Place.Marking);if(annotated===arc.Place.Marking)arc.Place.Marking.length=0;else{const selected=[...annotated];for(const token of selected){const i=arc.Place.Marking.findIndex(value=>equals(value,token));if(i>=0)arc.Place.Marking.splice(i,1);}}}else for(const token of evaluate(arc.Annotation,b.Tokens))arc.Place.Marking.push(token);}
     for(const b of this._buffers.values()){b.Tokens.length=0;b.Enabled=false;}
   }
 }

@@ -33,7 +33,7 @@ const dotValue = value => value instanceof RawDot ? String(value.value) : value 
 const put = (map,key,value) => map instanceof Map ? map.set(key,value) : (required(map)[key] = value);
 const dotParameters = (map, separator = ', ') => [...(map instanceof Map ? map : Object.entries(map))].map(([key,value]) => `${key}=${dotValue(value)}`).join(separator);
 export class GraphvizColor {
-  constructor(a,r,g,b) { for (const c of [a,r,g,b]) if (!Number.isInteger(c) || c<0 || c>255) throw new RangeError('Color channels must be bytes'); this.A=a;this.R=r;this.G=g;this.B=b; Object.freeze(this); }
+  constructor(a=0,r=0,g=0,b=0) { for (const c of [a,r,g,b]) if (!Number.isInteger(c) || c<0 || c>255) throw new RangeError('Color channels must be bytes'); this.A=a;this.R=r;this.G=g;this.B=b; Object.freeze(this); }
   Equals(other) { return other instanceof GraphvizColor && this.A===other.A && this.R===other.R && this.G===other.G && this.B===other.B; }
   GetHashCode() { return (this.A<<24)|(this.R<<16)|(this.G<<8)|this.B; }
   ToDot() { return '#' + [this.R,this.G,this.B,this.A].map(c=>c.toString(16).padStart(2,'0').toUpperCase()).join(''); }
@@ -296,7 +296,7 @@ export class GraphvizAlgorithm {
     clusters(this.VisitedGraph);for(const v of remainingVertices)vertex(v);for(const e of remainingEdges)edge(e);lines.push('}');this.Output=lines.join('\n');return engine?engine.Run(this.ImageType,this.Output,outputFilePath):this.Output;
   }
 }
-export function ToGraphviz(graph,configure){const algorithm=new GraphvizAlgorithm(graph);if(configure)configure(algorithm);return algorithm.Generate();}
+export function ToGraphviz(graph,configure){if(arguments.length>1&&configure===null)throw new TypeError('initAlgorithm cannot be null');const algorithm=new GraphvizAlgorithm(graph);if(configure)configure(algorithm);return algorithm.Generate();}
 /** Historical upstream endpoint is no longer operational. ToSvg requires an actual rendering engine. */
 export const DotToSvgApiEndpoint='https://rise4fun.com/rest/ask/Agl/';
 export function ToSvg(graphOrDot,engine,configure){required(graphOrDot,'graphOrDot');required(engine,'SVG rendering engine');const dot=typeof graphOrDot==='string'?graphOrDot:ToGraphviz(graphOrDot,configure);if(typeof engine==='function')return engine(dot);if(typeof engine.renderString==='function')return engine.renderString(dot,{format:'svg'});if(typeof engine.Run==='function')return engine.Run(GraphvizImageType.Svg,dot,'graph.svg');throw new TypeError('SVG engine must expose renderString, Run or be a callback');}

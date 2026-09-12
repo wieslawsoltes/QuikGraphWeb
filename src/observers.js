@@ -1,5 +1,5 @@
 // Detachable algorithm observers, adapted from QuikGraph (MS-PL).
-import { DistanceRelaxers, GraphColor, requireValue, algorithmError } from './algorithm-base.js';
+import { sameVertex, DistanceRelaxers, GraphColor, requireValue, algorithmError } from './algorithm-base.js';
 import { predecessorPath } from './shortest-paths.js';
 function attach(algorithm, handlers) {
   requireValue(algorithm, 'algorithm');
@@ -55,7 +55,7 @@ export class VertexPredecessorPathRecorderObserver extends VertexPredecessorReco
   Attach(algorithm) {
     return attach(algorithm, {
       TreeEdge: edge => this.VerticesPredecessors.set(edge.Target, edge),
-      FinishVertex: vertex => { for (const edge of this.VerticesPredecessors.values()) if (Object.is(edge.Source, vertex)) return; this.EndPathVertices.push(vertex); }
+      FinishVertex: vertex => { for (const edge of this.VerticesPredecessors.values()) if (sameVertex(edge.Source, vertex)) return; this.EndPathVertices.push(vertex); }
     });
   }
   *AllPaths() { for (const vertex of this.EndPathVertices) { const path = this.TryGetPath(vertex); if (path) yield path; } }

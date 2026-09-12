@@ -7,16 +7,17 @@ const required = (v, name = 'argument') => { if (v == null) throw new ArgumentNu
 const events = (object, names) => { for (const name of names.split(' ')) object[name] = new EventHook(); };
 const vertices = graph => [...graph.Vertices];
 const edges = graph => [...graph.Edges];
-const other = (edge, vertex) => Object.is(edge.Source, vertex) || edge.Source === vertex ? edge.Target : edge.Source;
+const same = (a,b) => a===b || (a!==a && b!==b);
+const other = (edge, vertex) => same(edge.Source, vertex) ? edge.Target : edge.Source;
 const out = (graph, vertex) => [...(graph.IsDirected === false ? graph.AdjacentEdges(vertex) : graph.OutEdges(vertex))];
-const incoming = (graph, vertex) => graph.InEdges ? [...graph.InEdges(vertex)] : edges(graph).filter(e => e.Target === vertex);
+const incoming = (graph, vertex) => graph.InEdges ? [...graph.InEdges(vertex)] : edges(graph).filter(e => same(e.Target, vertex));
 const random = rng => typeof rng === 'function' ? rng() : rng.NextDouble();
 const edgeFactory = (source, target) => new Edge(source, target);
 const assertVertex = (graph, vertex) => { required(vertex, 'vertex'); if (!graph.ContainsVertex(vertex)) throw new VertexNotFoundException('Vertex is not part of the graph'); };
 const parseHost = args => args.length > 1 && args[1]?.Vertices !== undefined && args[0]?.Vertices === undefined ? [args[0], ...args.slice(1)] : [null, ...args];
 const simpleAdjacency = graph => {
   const a = new Map(vertices(graph).map(v => [v, new Set()]));
-  for (const e of graph.Edges) if (e.Source !== e.Target) { a.get(e.Source).add(e.Target); a.get(e.Target).add(e.Source); }
+  for (const e of graph.Edges) if (!same(e.Source, e.Target)) { a.get(e.Source).add(e.Target); a.get(e.Target).add(e.Source); }
   return a;
 };
 
@@ -32,12 +33,12 @@ export class ReversedEdgeAugmentorAlgorithm {
     const originals = edges(this.VisitedGraph);
     for (const e of originals) {
       if (this.ReversedEdges.has(e)) continue;
-      let reverse = out(this.VisitedGraph, e.Target).find(r => r.Target === e.Source && !this.ReversedEdges.has(r));
+      let reverse = out(this.VisitedGraph, e.Target).find(r => same(r.Target, e.Source) && !this.ReversedEdges.has(r));
       if (!reverse) {
         reverse = this.EdgeFactory(e.Target, e.Source);
         if (!this.VisitedGraph.AddEdge(reverse)) {
           // Nonparallel graphs may share a reverse residual arc; callers retain individual flows.
-          reverse = out(this.VisitedGraph, e.Target).find(r => r.Target === e.Source);
+          reverse = out(this.VisitedGraph, e.Target).find(r => same(r.Target, e.Source));
           if (!reverse) throw new InvalidOperationException('Cannot add reversed edge');
         } else { this._augmented.push(reverse); this.ReversedEdgeAdded.emit(reverse); }
       }
@@ -82,7 +83,7 @@ export class EdmondsKarpMaximumFlowAlgorithm extends MaximumFlowAlgorithm {
     if (this._reverser && !this._reverser.Augmented) throw new InvalidOperationException('Call AddReversedEdges before computing maximum flow');
     if(this.Source==null||this.Sink==null)throw new InvalidOperationException('Source and sink must be specified');
     assertVertex(this.VisitedGraph, this.Source); assertVertex(this.VisitedGraph, this.Sink);
-    if (this.Source === this.Sink) throw new InvalidOperationException('Source and sink must differ');
+    if (same(this.Source, this.Sink)) throw new InvalidOperationException('Source and sink must differ');
     this.Predecessors.clear(); this.ResidualCapacities.clear(); this.VerticesColors.clear(); this.Flows.clear(); this.MaxFlow = 0;
   }
   InternalCompute() {
@@ -109,9 +110,9 @@ export class EdmondsKarpMaximumFlowAlgorithm extends MaximumFlowAlgorithm {
       for (const v of adjacency.keys()) this.VerticesColors.set(v, seen.has(v) ? 2 : 0);
       if (!seen.has(this.Sink)) break;
       let delta = Infinity;
-      for (let v = this.Sink; v !== this.Source;) { const arc = pred.get(v); delta = Math.min(delta, arc.residual); v = arc.from; }
+      for (let v = this.Sink; !same(v, this.Source);) { const arc = pred.get(v); delta = Math.min(delta, arc.residual); v = arc.from; }
       if (!Number.isFinite(delta)) throw new RangeError('Maximum flow is unbounded');
-      for (let v = this.Sink; v !== this.Source;) {
+      for (let v = this.Sink; !same(v, this.Source);) {
         const arc = pred.get(v); arc.residual -= delta; arc.reverse.residual += delta;
         this.Flows.set(arc.edge, this.Flows.get(arc.edge) + (arc.forward ? delta : -delta)); v = arc.from;
       }
@@ -136,7 +137,7 @@ export class GraphAugmentorAlgorithmBase extends AlgorithmBase {
     if (this.Augmented) throw new InvalidOperationException('Graph already augmented');
     this._originalVertices = vertices(this.VisitedGraph);
     this.SuperSource = required(this.VertexFactory()); this.SuperSink = required(this.VertexFactory());
-    if (this.SuperSource === this.SuperSink || this.VisitedGraph.ContainsVertex(this.SuperSource) || this.VisitedGraph.ContainsVertex(this.SuperSink)) throw new InvalidOperationException('Vertex factory must produce fresh vertices');
+    if (same(this.SuperSource, this.SuperSink) || this.VisitedGraph.ContainsVertex(this.SuperSource) || this.VisitedGraph.ContainsVertex(this.SuperSink)) throw new InvalidOperationException('Vertex factory must produce fresh vertices');
     this.VisitedGraph.AddVertex(this.SuperSource); this.SuperSourceAdded.emit(this.SuperSource);
     this.VisitedGraph.AddVertex(this.SuperSink); this.SuperSinkAdded.emit(this.SuperSink); this.Augmented = true;
     try { this.AugmentGraph(); } catch (error) { this.Rollback(); throw error; }
@@ -201,13 +202,13 @@ export class GraphBalancerAlgorithm {
     if (this.Balanced) throw new InvalidOperationException('Graph already balanced');
     const indexes = new Map(vertices(this.VisitedGraph).map(v => [v, this.GetBalancingIndex(v)]));
     this.BalancingSource = this.VertexFactory(); this.BalancingSink = this.VertexFactory();
-    if (this.BalancingSource === this.BalancingSink || this.VisitedGraph.ContainsVertex(this.BalancingSource) || this.VisitedGraph.ContainsVertex(this.BalancingSink)) throw new InvalidOperationException('Vertex factory must produce fresh vertices');
+    if (same(this.BalancingSource, this.BalancingSink) || this.VisitedGraph.ContainsVertex(this.BalancingSource) || this.VisitedGraph.ContainsVertex(this.BalancingSink)) throw new InvalidOperationException('Vertex factory must produce fresh vertices');
     this.VisitedGraph.AddVertex(this.BalancingSource); this.BalancingSourceAdded.emit(this.Source);
     this.VisitedGraph.AddVertex(this.BalancingSink); this.BalancingSinkAdded.emit(this.Sink);
     const add = (s,t,c) => { const e = this.EdgeFactory(s,t); this.VisitedGraph.AddEdge(e); this.Capacities.set(e,c); this._preFlow.set(e,0); this.EdgeAdded.emit(e); return e; };
     this.BalancingSourceEdge = add(this.BalancingSource,this.Source,Number.MAX_VALUE);
     this.BalancingSinkEdge = add(this.Sink,this.BalancingSink,Number.MAX_VALUE);
-    for (const [v,index] of indexes) if (v !== this.Source && v !== this.Sink && index !== 0) {
+    for (const [v,index] of indexes) if (!same(v, this.Source) && !same(v, this.Sink) && index !== 0) {
       if (index < 0) {
         this.SurplusVertices.push(v); this.SurplusVertexAdded.emit(v); this.SurplusEdges.push(add(this.BalancingSource,v,-index));
       } else {
@@ -343,7 +344,7 @@ export class KernighanLinAlgorithm extends AlgorithmBase {
   InternalCompute() {
     const vs=vertices(this.VisitedGraph),a=new Set(vs.slice(0,Math.floor(vs.length/2))),b=new Set(vs.slice(Math.floor(vs.length/2)));
     const weights=new Map(vs.map(v=>[v,new Map()]));
-    for(const e of this.VisitedGraph.Edges)if(e.Source!==e.Target){const w=Number(e.Tag??1);if(!Number.isFinite(w))throw new RangeError('Weight must be finite');for(const [u,v]of[[e.Source,e.Target],[e.Target,e.Source]])weights.get(u).set(v,(weights.get(u).get(v)??0)+w);}
+    for(const e of this.VisitedGraph.Edges)if(!same(e.Source,e.Target)){const w=Number(e.Tag??1);if(!Number.isFinite(w))throw new RangeError('Weight must be finite');for(const [u,v]of[[e.Source,e.Target],[e.Target,e.Source]])weights.get(u).set(v,(weights.get(u).get(v)??0)+w);}
     const cost=()=>edges(this.VisitedGraph).reduce((s,e)=>s+(a.has(e.Source)!==a.has(e.Target)?Number(e.Tag??1):0),0);
     for(let iteration=0;iteration<this._iterations;++iteration){
       this.ThrowIfCancellationRequested();const freeA=new Set(a),freeB=new Set(b),swaps=[];let total=0,best=0,bestCount=0;
@@ -415,24 +416,29 @@ export class EulerianTrailAlgorithm extends RootedAlgorithmBase {
     const vs=vertices(this.VisitedGraph);if(!vs.length)return;
     let root=this.TryGetRootVertex();if(root===undefined)root=vs[0];
     assertVertex(this.VisitedGraph,root);
-    if(this.VisitedGraph.IsDirected!==false&&vs.some(v=>out(this.VisitedGraph,v).length!==incoming(this.VisitedGraph,v).length)){
-      // Upstream returns the expandable circuit through the chosen root, omitting dead ends.
-      const used=new Set();
+    if(this.VisitedGraph.IsDirected!==false){
+      const used=new Set(),inactive=new Set(),adjacency=new Map(vs.map(v=>[v,out(this.VisitedGraph,v)])),offset=new Map(vs.map(v=>[v,0]));
+      const firstUnused=v=>{const es=adjacency.get(v);let i=offset.get(v);while(i<es.length&&used.has(es[i]))++i;offset.set(v,i);return i;};
       const findCycle=start=>{
-        // A simple cycle is sufficient: remaining cycles can be spliced afterwards.
-        // Exhausted vertices prevent exponential re-exploration of directed dead ends.
-        const path=[],seen=new Set([start]),stack=[{vertex:start,edges:out(this.VisitedGraph,start),next:0}];
-        while(stack.length){this.ThrowIfCancellationRequested();const frame=stack.at(-1);if(frame.next===frame.edges.length){stack.pop();if(stack.length)path.pop();continue;}
-          const e=frame.edges[frame.next++];if(used.has(e))continue;this.TreeEdge.emit(e);
-          if(e.Target===start)return [...path,e];
-          if(seen.has(e.Target))continue;seen.add(e.Target);path.push(e);stack.push({vertex:e.Target,edges:out(this.VisitedGraph,e.Target),next:0});
+        // Simple cycles suffice because all remaining cycles are spliced into their
+        // earliest circuit occurrence. Iterative DFS never explores a dead vertex twice.
+        const path=[],seen=new Set([start]),stack=[{vertex:start,next:firstUnused(start)}];
+        while(stack.length){this.ThrowIfCancellationRequested();const frame=stack.at(-1),es=adjacency.get(frame.vertex);if(frame.next===es.length){stack.pop();if(stack.length)path.pop();continue;}
+          const e=es[frame.next++];if(used.has(e))continue;this.TreeEdge.emit(e);
+          if(same(e.Target,start))return [...path,e];
+          if(seen.has(e.Target))continue;seen.add(e.Target);path.push(e);stack.push({vertex:e.Target,next:firstUnused(e.Target)});
         }
         return [];
       };
-      const add=(cycle,index)=>{for(const e of cycle){used.add(e);this.CircuitEdge.emit(e);}this._circuit.splice(index,0,...cycle);};
-      add(findCycle(root),0);
-      for(;;){let changed=false;for(let i=0;i<this._circuit.length;++i){const v=this._circuit[i].Source,unused=out(this.VisitedGraph,v).find(e=>!used.has(e));if(!unused)continue;this.VisitEdge.emit(unused);const cycle=findCycle(v);if(cycle.length){add(cycle,i);changed=true;break;}}if(!changed)break;}
-      return;
+      // Linked-list splicing preserves upstream's earliest-vertex circuit ordering
+      // without repeatedly copying the entire circuit as it grows.
+      let head,tail;
+      const insert=(cycle,before)=>{let first,last;for(const edge of cycle){used.add(edge);this.CircuitEdge.emit(edge);const node={edge,previous:last,next:undefined};if(last)last.next=node;else first=node;last=node;}
+        if(!first)return before;const previous=before?.previous??(before?undefined:tail);first.previous=previous;last.next=before;if(previous)previous.next=first;else head=first;if(before)before.previous=last;else tail=last;return first;
+      };
+      insert(findCycle(root),undefined);let current=head;
+      while(current){const v=current.edge.Source;if(inactive.has(v)){current=current.next;continue;}const unused=adjacency.get(v)[firstUnused(v)];if(!unused){inactive.add(v);current=current.next;continue;}this.VisitEdge.emit(unused);const cycle=findCycle(v);if(!cycle.length){inactive.add(v);current=current.next;}else current=insert(cycle,current);}
+      this._circuit=[];for(let node=head;node;node=node.next)this._circuit.push(node.edge);return;
     }
     const adjacency=new Map(vs.map(v=>[v,out(this.VisitedGraph,v)])),cursor=new Map(vs.map(v=>[v,0])),used=new Set(),stack=[{vertex:root}],reversed=[];
     while(stack.length){this.ThrowIfCancellationRequested();const frame=stack.at(-1),list=adjacency.get(frame.vertex);let i=cursor.get(frame.vertex);while(i<list.length&&used.has(list[i]))++i;cursor.set(frame.vertex,i);
@@ -447,22 +453,23 @@ export class EulerianTrailAlgorithm extends RootedAlgorithmBase {
     if(graph.IsDirected!==false){
       const odd=vertices(graph).filter(v=>Math.abs(out(graph,v).length-incoming(graph,v).length)%2);
       let failures=0;
-      while(odd.length){const u=odd[0];let v,hasAdjacent=false;for(const e of out(graph,u))if(e.Target!==u&&odd.includes(e.Target)){hasAdjacent=true;if(!out(graph,e.Target).some(r=>r.Target===u)){v=e.Target;break;}}
+      while(odd.length){const u=odd[0];let v,hasAdjacent=false;for(const e of out(graph,u))if(!same(e.Target,u)&&odd.includes(e.Target)){hasAdjacent=true;if(!out(graph,e.Target).some(r=>same(r.Target,u))){v=e.Target;break;}}
         if(v===undefined&&!hasAdjacent)v=odd[1];
         if(v===undefined){odd.push(odd.shift());if(++failures>=odd.length)throw new InvalidOperationException('No valid temporary edge can pair the odd vertices');continue;}
-        failures=0;add(u,v);odd.splice(odd.indexOf(v),1);odd.splice(odd.indexOf(u),1);
+        failures=0;add(u,v);odd.splice(odd.findIndex(x=>same(x,v)),1);odd.splice(odd.findIndex(x=>same(x,u)),1);
       }
     }
-    else {const odd=vertices(graph).filter(v=>out(graph,v).reduce((n,e)=>n+(e.Source===e.Target?2:1),0)%2);for(let i=0;i<odd.length;i+=2)add(odd[i],odd[i+1]);}
+    else {const odd=vertices(graph).filter(v=>out(graph,v).reduce((n,e)=>n+(same(e.Source,e.Target)?2:1),0)%2);for(let i=0;i<odd.length;i+=2)add(odd[i],odd[i+1]);}
     return this._temporaryEdges.slice();
   }
   RemoveTemporaryEdges(){for(const e of this._temporaryEdges)this.VisitedGraph.RemoveEdge(e);this._temporaryEdges=[];}
-  *Trails(startingVertex){
+  Trails(startingVertex){if(arguments.length)required(startingVertex);return this._trails(startingVertex);}
+  *_trails(startingVertex){
     let circuit=this._circuit.slice();const temp=new Set(this._temporaryEdges);let predecessors;
-    if(startingVertex!==undefined){assertVertex(this.VisitedGraph,startingVertex);const i=circuit.findIndex(e=>!temp.has(e)&&e.Source===startingVertex);if(i<0)throw new InvalidOperationException('Starting vertex was not found in computed circuit');circuit=[...circuit.slice(i),...circuit.slice(0,i)];
+    if(startingVertex!==undefined){assertVertex(this.VisitedGraph,startingVertex);const i=circuit.findIndex(e=>!temp.has(e)&&same(e.Source,startingVertex));if(i<0)throw new InvalidOperationException('Starting vertex was not found in computed circuit');circuit=[...circuit.slice(i),...circuit.slice(0,i)];
       predecessors=new Map();const q=[startingVertex],seen=new Set(q);for(let h=0;h<q.length;++h)for(const e of out(this.VisitedGraph,q[h]))if(!seen.has(e.Target)){seen.add(e.Target);predecessors.set(e.Target,e);q.push(e.Target);}
     }
-    let trail=[];for(const e of circuit){if(temp.has(e)){if(trail.length)yield trail;trail=[];if(predecessors){let v=e.Target;while(v!==startingVertex){const p=predecessors.get(v);if(!p)throw new InvalidOperationException('Trail is unreachable from starting vertex');trail.push(p);v=p.Source;}trail.reverse();}}else trail.push(e);}if(trail.length)yield trail;
+    let trail=[];for(const e of circuit){if(temp.has(e)){if(trail.length)yield trail;trail=[];if(predecessors){let v=e.Target;while(!same(v,startingVertex)){const p=predecessors.get(v);if(!p)throw new InvalidOperationException('Trail is unreachable from starting vertex');trail.push(p);v=p.Source;}trail.reverse();}}else trail.push(e);}if(trail.length)yield trail;
   }
 }
 
@@ -475,7 +482,7 @@ export class MinimumVertexCoverApproximationAlgorithm extends AlgorithmBase {
   constructor(graph,rng=Math.random){super(graph);this._rng=required(rng);this._cover=[];}
   get CoverSet(){return this.State===ComputationState.Finished?this._cover.slice():null;}
   Initialize(){this._cover=[];}
-  InternalCompute(){let remaining=edges(this.VisitedGraph);const selected=new Set();while(remaining.length){this.ThrowIfCancellationRequested();const e=remaining[Math.min(remaining.length-1,Math.floor(random(this._rng)*remaining.length))];let sd=0,td=0;for(const x of remaining){if(x.Source===e.Source||x.Target===e.Source)++sd;if(x.Source===e.Target||x.Target===e.Target)++td;}if(sd>1||sd===1&&td===1)selected.add(e.Source);if(td>1)selected.add(e.Target);remaining=remaining.filter(x=>x.Source!==e.Source&&x.Target!==e.Source&&x.Source!==e.Target&&x.Target!==e.Target);}this._cover=[...selected];}
+  InternalCompute(){let remaining=edges(this.VisitedGraph);const selected=new Set();while(remaining.length){this.ThrowIfCancellationRequested();const e=remaining[Math.min(remaining.length-1,Math.floor(random(this._rng)*remaining.length))];let sd=0,td=0;for(const x of remaining){if(same(x.Source,e.Source)||same(x.Target,e.Source))++sd;if(same(x.Source,e.Target)||same(x.Target,e.Target))++td;}if(sd>1||sd===1&&td===1)selected.add(e.Source);if(td>1)selected.add(e.Target);remaining=remaining.filter(x=>!same(x.Source,e.Source)&&!same(x.Target,e.Source)&&!same(x.Source,e.Target)&&!same(x.Target,e.Target));}this._cover=[...selected];}
 }
 export class MaximumCliqueAlgorithmBase extends AlgorithmBase {}
 /** Optional concrete extension: exact Bron-Kerbosch maximum-clique search. */
@@ -574,7 +581,7 @@ export class TransitionFactoryImplicitGraph {
     for(const factory of this._factories)if(factory.IsValid(vertex)){valid=true;for(const e of factory.Apply(vertex))if(this.SuccessorVertexPredicate(e.Target)){if(!this._cache.has(e.Target)){if(!this._pending.has(e.Target))this._pending.set(e.Target,new Set());this._pending.get(e.Target).add(factory);}if(this.SuccessorEdgePredicate(e))es.push(e);}}
     if(!valid)return undefined;this._cache.set(vertex,es);return es.slice();
   }
-  OutEdges(vertex){const es=this.TryGetOutEdges(vertex);if(es===undefined)throw new InvalidOperationException('Vertex is not part of implicit graph');return es;}
+  OutEdges(vertex){const es=this.TryGetOutEdges(vertex);if(es===undefined)throw new VertexNotFoundException('Vertex is not part of implicit graph');return es;}
   OutDegree(vertex){return this.OutEdges(vertex).length;}IsOutEdgesEmpty(vertex){return this.OutDegree(vertex)===0;}
   OutEdge(vertex,index){const es=this.OutEdges(vertex);if(!Number.isInteger(index)||index<0||index>=es.length)throw new RangeError('Edge index out of range');return es[index];}
 }
@@ -604,9 +611,9 @@ export class CloneableVertexGraphExplorerAlgorithm extends RootedAlgorithmBase {
       if(!this.ExploreVertexPredicate(clone))continue;
       for(const f of this._factories)if(f.IsValid(clone))for(let e of f.Apply(clone)){
         if(!this.AddVertexPredicate(e.Target)||!this.AddEdgePredicate(e)){this.EdgeSkipped.emit(e);continue;}
-        const source=e.Source===clone?current:vertices(this.VisitedGraph).find(v=>equals(v,e.Source))??e.Source;
+        const source=same(e.Source,clone)?current:vertices(this.VisitedGraph).find(v=>equals(v,e.Source))??e.Source;
         const target=vertices(this.VisitedGraph).find(v=>equals(v,e.Target))??e.Target;
-        if(source!==e.Source||target!==e.Target){const properties=Object.getOwnPropertyDescriptors(e);properties.Source={value:source,enumerable:true};properties.Target={value:target,enumerable:true};e=Object.create(Object.getPrototypeOf(e),properties);}
+        if(!same(source,e.Source)||!same(target,e.Target)){const properties=Object.getOwnPropertyDescriptors(e);properties.Source={value:source,enumerable:true};properties.Target={value:target,enumerable:true};e=Object.create(Object.getPrototypeOf(e),properties);}
         const back=this.VisitedGraph.ContainsVertex(e.Target);if(!back)discover(e.Target);
         this.VisitedGraph.AddEdge(e);(back?this.BackEdge:this.TreeEdge).emit(e);
       }
