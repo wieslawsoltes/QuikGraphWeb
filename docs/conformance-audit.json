@@ -3,7 +3,7 @@
   "upstreamCommit": "9cd6b49292e09041258708a37bed99c56177b0ef",
   "explanation": "Export presence establishes name coverage only. Mappings come from explicit source comments or exact existing Fixture.Method identities in passing Node test names, with source-file hashes checked against the recorded run. They do not prove all upstream assertions, parameters, fixture inheritance or exception semantics have been ported. No method is counted as fully ported without a behavioral review. The requires-host-runtime disposition comes from the explicitly reviewed CLR backend method list; it is not a passing test or a browser serialization equivalence claim. Member presence uses runtime static/prototype reflection and lexical constructor-field/event initialization; it does not validate overloads, parameter rules, instance defaults or algorithm results.",
   "counts": {
-    "runtimeExports": 391,
+    "runtimeExports": 412,
     "publicTypeDeclarations": 373,
     "api": {
       "runtime-export-present-unverified": 272,
@@ -20,12 +20,12 @@
       "language-adaptation-unverified": 2
     },
     "upstreamTestMethods": 1939,
-    "javascriptTestFiles": 18,
+    "javascriptTestFiles": 25,
     "testMappings": {
-      "mapped-js-test-unverified": 1917,
-      "requires-host-runtime": 22
+      "mapped-js-test-unverified": 1938,
+      "requires-host-runtime": 1
     },
-    "platformSpecificSourceMethods": 22,
+    "platformSpecificSourceMethods": 1,
     "fileLevelReferences": 0,
     "verifiedFullTestPorts": 0
   },
@@ -27869,8 +27869,8 @@
   ],
   "fileReferences": [],
   "executedMapping": {
-    "capturedPassedTests": 8379,
-    "matchedPassedNames": 1238,
+    "capturedPassedTests": 8612,
+    "matchedPassedNames": 1259,
     "staleSourceFiles": [],
     "available": true,
     "runExitCode": 0,
@@ -27894,15 +27894,23 @@
       },
       {
         "file": "test/demo.test.js",
-        "sha256": "fbf05dad402fbabb5aa1c86d41ca91057568986d6d3e87e9840b0d4ede859aee"
+        "sha256": "f14a934df0fa5d4ab8c34a8009e5509eae5038810996dcf4fa32d90a248ec058"
       },
       {
         "file": "test/extensions.test.js",
         "sha256": "a77d84a038742bfcf9c72bcd43ae963d7cf4c77e0b57d90f9b1fc8c076d32df0"
       },
       {
+        "file": "test/graphviz-runtime.test.js",
+        "sha256": "9d2ffb59f78d008594e8a0aa180e47a808aacc13815de280ac15dfa334058e8d"
+      },
+      {
         "file": "test/graphviz.test.js",
         "sha256": "39b5e777c4120bd1da767c58830b91fc4c930a4ff30f4aa243da6f04c80bacec"
+      },
+      {
+        "file": "test/layout.test.js",
+        "sha256": "3f19c44abf2865736b51210de14d744bbda37f3414c7d07427a78e8adc8e9d20"
       },
       {
         "file": "test/msagl.test.js",
@@ -27911,6 +27919,18 @@
       {
         "file": "test/npm-registry.test.js",
         "sha256": "f41688717a4098c38f5f59a41192f92bad58a89b1ab31851ff9baf356af8952c"
+      },
+      {
+        "file": "test/nrbf-graphs.test.js",
+        "sha256": "2154af99327c91e52ab4fea96d323d575a53363faad6bb13f60812be67acb511"
+      },
+      {
+        "file": "test/nrbf-limits.test.js",
+        "sha256": "ce0b396c5e20bba2cecefe81467d1f9e5e5c8789e8c7969e321416d37b5acbb7"
+      },
+      {
+        "file": "test/nrbf.test.js",
+        "sha256": "5dfab8df2c56ce343517bc6a74fb9a7b64d8391644b4288a016a79e91a76b9d4"
       },
       {
         "file": "test/observers.test.js",
@@ -27925,12 +27945,16 @@
         "sha256": "602e7e3558601b6505845df0724dc15123f2ef826a4347a721e76ea9e7fc4524"
       },
       {
+        "file": "test/schema-callback.test.js",
+        "sha256": "aa628f34d8e1f429a6cf0ea4a974fd9f771a612f618703b69bff3425dedc4977"
+      },
+      {
         "file": "test/search.test.js",
         "sha256": "4ac9c743f6cadb0fb219a89baa2b197490ccf521d29618184039386dc624c91a"
       },
       {
         "file": "test/serialization.test.js",
-        "sha256": "14c7cda2b3e08dd399edd092416c42294d4eff5adfbb6427239db278e9af8938"
+        "sha256": "9278bc49e2433379dd05587f7782878d99865bbaf38a24aedd636d975180de65"
       },
       {
         "file": "test/shortest-paths.test.js",
@@ -27946,10 +27970,14 @@
       },
       {
         "file": "test/viewer.test.js",
-        "sha256": "07f795d89d21dc288d3c6963397c5dc23f43bdec951bb096d669231f17338708"
+        "sha256": "9aa0f83e77b5866d38d3f2dd0f9ad2e6bb69e35d1cb71b98f1a409e311a7183a"
+      },
+      {
+        "file": "test/xml-validation.test.js",
+        "sha256": "75e2eba23f305ee4d00a7d0624a7495414374e813f41f396cfc13bf33c7f2af8"
       }
     ],
-    "eventStreamSha256": "25d2a4322a9da700661b20d96a616d9afeafb25c916ea89777095a8c86c0c81a"
+    "eventStreamSha256": "553e2f90ac05595ac4593ff01620529291e2c42bfd8fe296382664000bfa7627"
   },
   "tests": [
     {
@@ -28672,21 +28700,18 @@
     },
     {
       "id": "tests/QuikGraph.Graphviz.Tests/Dot/GraphvizColorTests.cs::Serialization",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Graphviz.Tests/Dot/GraphvizColorTests.cs::Serialization",
-        "fixture": "GraphvizColorTests",
-        "method": "Serialization",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test calls SerializationTestHelpers.SerializeAndDeserialize, which directly constructs BinaryFormatter and reconstructs CLR objects. A JSON or custom browser-format roundtrip would exercise a different serialization contract and is not counted as execution of this original test.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Graphviz.Tests/Dot/GraphvizColorTests.cs#L108",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Tests.CommonInternals/Helpers/SerializationTestHelpers.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "GraphvizColorTests.Serialization actual BinaryFormatter wire roundtrip",
+          "line": 14
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Graphviz.Tests/Dot/GraphvizEdgeExtremityTests.cs::AddParameters",
@@ -29638,39 +29663,33 @@
     },
     {
       "id": "tests/QuikGraph.Graphviz.Tests/Dot/GraphvizSizeTests.cs::Serialization_Size",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Graphviz.Tests/Dot/GraphvizSizeTests.cs::Serialization_Size",
-        "fixture": "GraphvizSizeTests",
-        "method": "Serialization_Size",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test calls SerializationTestHelpers.SerializeAndDeserialize, which directly constructs BinaryFormatter and reconstructs CLR objects. A JSON or custom browser-format roundtrip would exercise a different serialization contract and is not counted as execution of this original test.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Graphviz.Tests/Dot/GraphvizSizeTests.cs#L115",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Tests.CommonInternals/Helpers/SerializationTestHelpers.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "GraphvizSizeTests.Serialization_Size actual BinaryFormatter wire roundtrip",
+          "line": 14
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Graphviz.Tests/Dot/GraphvizSizeTests.cs::Serialization_SizeF",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Graphviz.Tests/Dot/GraphvizSizeTests.cs::Serialization_SizeF",
-        "fixture": "GraphvizSizeTests",
-        "method": "Serialization_SizeF",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test calls SerializationTestHelpers.SerializeAndDeserialize, which directly constructs BinaryFormatter and reconstructs CLR objects. A JSON or custom browser-format roundtrip would exercise a different serialization contract and is not counted as execution of this original test.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Graphviz.Tests/Dot/GraphvizSizeTests.cs#L125",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Tests.CommonInternals/Helpers/SerializationTestHelpers.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "GraphvizSizeTests.Serialization_SizeF actual BinaryFormatter wire roundtrip",
+          "line": 14
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Graphviz.Tests/Dot/GraphvizSizeTests.cs::ToString_Size",
@@ -31314,237 +31333,198 @@
     },
     {
       "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_AdapterGraph_Complex",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_AdapterGraph_Complex",
-        "fixture": "SystemSerializationTests",
-        "method": "BinarySerialization_AdapterGraph_Complex",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test invokes QuikGraph binary serialization through System.IO.Stream and System.Runtime.Serialization.Formatters.Binary.BinaryFormatter, including CLR type reconstruction and SerializationBinder behavior. The browser format and its validation can be tested independently; they do not execute this CLR serialization contract or establish BinaryFormatter wire compatibility.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs#L81",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/src/QuikGraph.Serialization/SerializationExtensions.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "SystemSerializationTests.BinarySerialization_AdapterGraph_Complex actual NRBF graph contract",
+          "line": 13
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_AdapterGraph_Simple",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_AdapterGraph_Simple",
-        "fixture": "SystemSerializationTests",
-        "method": "BinarySerialization_AdapterGraph_Simple",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test invokes QuikGraph binary serialization through System.IO.Stream and System.Runtime.Serialization.Formatters.Binary.BinaryFormatter, including CLR type reconstruction and SerializationBinder behavior. The browser format and its validation can be tested independently; they do not execute this CLR serialization contract or establish BinaryFormatter wire compatibility.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs#L72",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/src/QuikGraph.Serialization/SerializationExtensions.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "SystemSerializationTests.BinarySerialization_AdapterGraph_Simple actual NRBF graph contract",
+          "line": 13
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_AdjacencyGraph_Complex",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_AdjacencyGraph_Complex",
-        "fixture": "SystemSerializationTests",
-        "method": "BinarySerialization_AdjacencyGraph_Complex",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test invokes QuikGraph binary serialization through System.IO.Stream and System.Runtime.Serialization.Formatters.Binary.BinaryFormatter, including CLR type reconstruction and SerializationBinder behavior. The browser format and its validation can be tested independently; they do not execute this CLR serialization contract or establish BinaryFormatter wire compatibility.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs#L59",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/src/QuikGraph.Serialization/SerializationExtensions.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "SystemSerializationTests.BinarySerialization_AdjacencyGraph_Complex actual NRBF graph contract",
+          "line": 13
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_AdjacencyGraph_Simple",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_AdjacencyGraph_Simple",
-        "fixture": "SystemSerializationTests",
-        "method": "BinarySerialization_AdjacencyGraph_Simple",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test invokes QuikGraph binary serialization through System.IO.Stream and System.Runtime.Serialization.Formatters.Binary.BinaryFormatter, including CLR type reconstruction and SerializationBinder behavior. The browser format and its validation can be tested independently; they do not execute this CLR serialization contract or establish BinaryFormatter wire compatibility.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs#L46",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/src/QuikGraph.Serialization/SerializationExtensions.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "SystemSerializationTests.BinarySerialization_AdjacencyGraph_Simple actual NRBF graph contract",
+          "line": 13
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_BidirectionalGraph_Complex",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_BidirectionalGraph_Complex",
-        "fixture": "SystemSerializationTests",
-        "method": "BinarySerialization_BidirectionalGraph_Complex",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test invokes QuikGraph binary serialization through System.IO.Stream and System.Runtime.Serialization.Formatters.Binary.BinaryFormatter, including CLR type reconstruction and SerializationBinder behavior. The browser format and its validation can be tested independently; they do not execute this CLR serialization contract or establish BinaryFormatter wire compatibility.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs#L145",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/src/QuikGraph.Serialization/SerializationExtensions.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "SystemSerializationTests.BinarySerialization_BidirectionalGraph_Complex actual NRBF graph contract",
+          "line": 13
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_BidirectionalGraph_Simple",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_BidirectionalGraph_Simple",
-        "fixture": "SystemSerializationTests",
-        "method": "BinarySerialization_BidirectionalGraph_Simple",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test invokes QuikGraph binary serialization through System.IO.Stream and System.Runtime.Serialization.Formatters.Binary.BinaryFormatter, including CLR type reconstruction and SerializationBinder behavior. The browser format and its validation can be tested independently; they do not execute this CLR serialization contract or establish BinaryFormatter wire compatibility.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs#L122",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/src/QuikGraph.Serialization/SerializationExtensions.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "SystemSerializationTests.BinarySerialization_BidirectionalGraph_Simple actual NRBF graph contract",
+          "line": 13
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_BidirectionalMatrixGraph",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_BidirectionalMatrixGraph",
-        "fixture": "SystemSerializationTests",
-        "method": "BinarySerialization_BidirectionalMatrixGraph",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test invokes QuikGraph binary serialization through System.IO.Stream and System.Runtime.Serialization.Formatters.Binary.BinaryFormatter, including CLR type reconstruction and SerializationBinder behavior. The browser format and its validation can be tested independently; they do not execute this CLR serialization contract or establish BinaryFormatter wire compatibility.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs#L168",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/src/QuikGraph.Serialization/SerializationExtensions.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "SystemSerializationTests.BinarySerialization_BidirectionalMatrixGraph actual NRBF graph contract",
+          "line": 13
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_ClusteredGraph_Complex",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_ClusteredGraph_Complex",
-        "fixture": "SystemSerializationTests",
-        "method": "BinarySerialization_ClusteredGraph_Complex",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test invokes QuikGraph binary serialization through System.IO.Stream and System.Runtime.Serialization.Formatters.Binary.BinaryFormatter, including CLR type reconstruction and SerializationBinder behavior. The browser format and its validation can be tested independently; they do not execute this CLR serialization contract or establish BinaryFormatter wire compatibility.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs#L98",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/src/QuikGraph.Serialization/SerializationExtensions.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "SystemSerializationTests.BinarySerialization_ClusteredGraph_Complex actual NRBF graph contract",
+          "line": 13
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_ClusteredGraph_Simple",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_ClusteredGraph_Simple",
-        "fixture": "SystemSerializationTests",
-        "method": "BinarySerialization_ClusteredGraph_Simple",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test invokes QuikGraph binary serialization through System.IO.Stream and System.Runtime.Serialization.Formatters.Binary.BinaryFormatter, including CLR type reconstruction and SerializationBinder behavior. The browser format and its validation can be tested independently; they do not execute this CLR serialization contract or establish BinaryFormatter wire compatibility.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs#L90",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/src/QuikGraph.Serialization/SerializationExtensions.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "SystemSerializationTests.BinarySerialization_ClusteredGraph_Simple actual NRBF graph contract",
+          "line": 13
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_CompressedGraph_Complex",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_CompressedGraph_Complex",
-        "fixture": "SystemSerializationTests",
-        "method": "BinarySerialization_CompressedGraph_Complex",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test invokes QuikGraph binary serialization through System.IO.Stream and System.Runtime.Serialization.Formatters.Binary.BinaryFormatter, including CLR type reconstruction and SerializationBinder behavior. The browser format and its validation can be tested independently; they do not execute this CLR serialization contract or establish BinaryFormatter wire compatibility.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs#L114",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/src/QuikGraph.Serialization/SerializationExtensions.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "SystemSerializationTests.BinarySerialization_CompressedGraph_Complex actual NRBF graph contract",
+          "line": 13
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_CompressedGraph_Simple",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_CompressedGraph_Simple",
-        "fixture": "SystemSerializationTests",
-        "method": "BinarySerialization_CompressedGraph_Simple",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test invokes QuikGraph binary serialization through System.IO.Stream and System.Runtime.Serialization.Formatters.Binary.BinaryFormatter, including CLR type reconstruction and SerializationBinder behavior. The browser format and its validation can be tested independently; they do not execute this CLR serialization contract or establish BinaryFormatter wire compatibility.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs#L106",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/src/QuikGraph.Serialization/SerializationExtensions.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "SystemSerializationTests.BinarySerialization_CompressedGraph_Simple actual NRBF graph contract",
+          "line": 13
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_EdgeListGraph_Complex",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_EdgeListGraph_Complex",
-        "fixture": "SystemSerializationTests",
-        "method": "BinarySerialization_EdgeListGraph_Complex",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test invokes QuikGraph binary serialization through System.IO.Stream and System.Runtime.Serialization.Formatters.Binary.BinaryFormatter, including CLR type reconstruction and SerializationBinder behavior. The browser format and its validation can be tested independently; they do not execute this CLR serialization contract or establish BinaryFormatter wire compatibility.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs#L210",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/src/QuikGraph.Serialization/SerializationExtensions.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "SystemSerializationTests.BinarySerialization_EdgeListGraph_Complex actual NRBF graph contract",
+          "line": 13
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_EdgeListGraph_Simple",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_EdgeListGraph_Simple",
-        "fixture": "SystemSerializationTests",
-        "method": "BinarySerialization_EdgeListGraph_Simple",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test invokes QuikGraph binary serialization through System.IO.Stream and System.Runtime.Serialization.Formatters.Binary.BinaryFormatter, including CLR type reconstruction and SerializationBinder behavior. The browser format and its validation can be tested independently; they do not execute this CLR serialization contract or establish BinaryFormatter wire compatibility.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs#L202",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/src/QuikGraph.Serialization/SerializationExtensions.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "SystemSerializationTests.BinarySerialization_EdgeListGraph_Simple actual NRBF graph contract",
+          "line": 13
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_Throws",
@@ -31562,39 +31542,33 @@
     },
     {
       "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_UndirectedGraph_Complex",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_UndirectedGraph_Complex",
-        "fixture": "SystemSerializationTests",
-        "method": "BinarySerialization_UndirectedGraph_Complex",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test invokes QuikGraph binary serialization through System.IO.Stream and System.Runtime.Serialization.Formatters.Binary.BinaryFormatter, including CLR type reconstruction and SerializationBinder behavior. The browser format and its validation can be tested independently; they do not execute this CLR serialization contract or establish BinaryFormatter wire compatibility.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs#L189",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/src/QuikGraph.Serialization/SerializationExtensions.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "SystemSerializationTests.BinarySerialization_UndirectedGraph_Complex actual NRBF graph contract",
+          "line": 13
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_UndirectedGraph_Simple",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs::BinarySerialization_UndirectedGraph_Simple",
-        "fixture": "SystemSerializationTests",
-        "method": "BinarySerialization_UndirectedGraph_Simple",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test invokes QuikGraph binary serialization through System.IO.Stream and System.Runtime.Serialization.Formatters.Binary.BinaryFormatter, including CLR type reconstruction and SerializationBinder behavior. The browser format and its validation can be tested independently; they do not execute this CLR serialization contract or establish BinaryFormatter wire compatibility.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Serialization.Tests/BinarySerializationTests.cs#L176",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/src/QuikGraph.Serialization/SerializationExtensions.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "SystemSerializationTests.BinarySerialization_UndirectedGraph_Simple actual NRBF graph contract",
+          "line": 13
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Serialization.Tests/DirectedGraphMLExtensionsTests.cs::ToDirectedGraphML",
@@ -43168,21 +43142,18 @@
     },
     {
       "id": "tests/QuikGraph.Tests/Collections/EdgeEdgeDictionaryTests.cs::Serialization",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Tests/Collections/EdgeEdgeDictionaryTests.cs::Serialization",
-        "fixture": "EdgeEdgeDictionaryTests",
-        "method": "Serialization",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test calls SerializationTestHelpers.SerializeAndDeserialize, which directly constructs BinaryFormatter and reconstructs CLR objects. A JSON or custom browser-format roundtrip would exercise a different serialization contract and is not counted as execution of this original test.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Tests/Collections/EdgeEdgeDictionaryTests.cs#L24",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Tests.CommonInternals/Helpers/SerializationTestHelpers.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "EdgeEdgeDictionaryTests.Serialization actual BinaryFormatter wire roundtrip",
+          "line": 14
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Tests/Collections/EdgeListTests.cs::Clone",
@@ -44005,21 +43976,18 @@
     },
     {
       "id": "tests/QuikGraph.Tests/Collections/VertexEdgeDictionaryTests.cs::Serialization",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Tests/Collections/VertexEdgeDictionaryTests.cs::Serialization",
-        "fixture": "VertexEdgeDictionaryTests",
-        "method": "Serialization",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test calls SerializationTestHelpers.SerializeAndDeserialize, which directly constructs BinaryFormatter and reconstructs CLR objects. A JSON or custom browser-format roundtrip would exercise a different serialization contract and is not counted as execution of this original test.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Tests/Collections/VertexEdgeDictionaryTests.cs#L24",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Tests.CommonInternals/Helpers/SerializationTestHelpers.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "VertexEdgeDictionaryTests.Serialization actual BinaryFormatter wire roundtrip",
+          "line": 14
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Tests/Collections/VertexListTests.cs::Clone",
@@ -44158,21 +44126,18 @@
     },
     {
       "id": "tests/QuikGraph.Tests/Exceptions/ExceptionTests.cs::ExceptionsSerialization",
-      "status": "requires-host-runtime",
-      "mappedFiles": [],
-      "evidence": [],
-      "runtimeBoundary": {
-        "id": "tests/QuikGraph.Tests/Exceptions/ExceptionTests.cs::ExceptionsSerialization",
-        "fixture": "ExceptionTests",
-        "method": "ExceptionsSerialization",
-        "category": "dotnet-binaryformatter",
-        "disposition": "requires-host-runtime",
-        "reason": "The original test roundtrips CLR Exception instances through BinaryFormatter and compares their complete System.Exception.ToString result, including CLR exception state and stack trace. Browser Error serialization is a different runtime contract.",
-        "sourceUrl": "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Tests/Exceptions/ExceptionTests.cs#L61",
-        "implementationEvidence": [
-          "https://github.com/KeRNeLith/QuikGraph/blob/9cd6b49292e09041258708a37bed99c56177b0ef/tests/QuikGraph.Tests.CommonInternals/Helpers/SerializationTestHelpers.cs"
-        ]
-      }
+      "status": "mapped-js-test-unverified",
+      "mappedFiles": [
+        "test/nrbf-graphs.test.js"
+      ],
+      "evidence": [
+        {
+          "kind": "passed-test-name-reference",
+          "file": "test/nrbf-graphs.test.js",
+          "testName": "ExceptionTests.ExceptionsSerialization preserves CLR exception strings and inner state",
+          "line": 15
+        }
+      ]
     },
     {
       "id": "tests/QuikGraph.Tests/Extensions/AlgorithmExtensionsTests.cs::AdjacencyGraphRoots",
