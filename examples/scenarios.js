@@ -46,6 +46,10 @@ export const scenarios=[
  sample('msagl','Formats & adapters','MSAGL drawing adapter','Convert a graph into a drawing model. An external engine can supply layout.'),
  sample('storage','Structures & collections','Graph representations','Compare mutable, array-backed, reversed, and compressed graph representations.'),
  sample('collections','Structures & collections','Heaps & disjoint sets','Exercise priority queues and union-find with graph weights.'),
+ {...sample('graphviz-render','Native engines','Graphviz rendering','Render editable DOT using the real Graphviz WebAssembly engine. Choose any native engine or output format, reuse positioned DOT, and export SVG, PNG, JPEG or WebP.'),async:true},
+ {...sample('msagl-layout','Native engines','MSAGL layout & routing','Apply layered, multidimensional-scaling or force-directed layout and native edge routing to the interactive graph.'),async:true},
+ {...sample('graphml-validate','Native engines','GraphML schema validation','Validate editable GraphML against the complete embedded XSD using libxml2 WebAssembly. Inspect precise diagnostics.'),async:true},
+ {...sample('binary','Native engines','BinaryFormatter interchange','Write and read actual .NET NRBF graph files, preserving graph structure, vertex identities and edge tags.'),async:true},
 ];
 
 export const label=v=>typeof v==='object'?(v.TableName??v.Name??String(v)):String(v);
@@ -86,4 +90,35 @@ export function execute(id,g,source,target){
  }
  if(!code)code=`const algorithm = new Q.${algorithm?.constructor.name??id}(graph${['kruskal','prim','floyd','tsp'].includes(id)?', edge => edge.Tag':''});\nalgorithm.Compute(${['tsp','euler'].includes(id)?'source':''});\n// Inspect the result and subscribe to algorithm events.\nconsole.log(algorithm);`;
  return{result,highlight,colors,code,summary};
+}
+
+const runtimes=new Map();
+async function runtime(name){
+  if(!runtimes.has(name)){
+    const pending=name==='graphviz'?import('../dist/quikgraphweb-graphviz.js').then(module=>module.CreateGraphvizEngine()):name==='layout'?import('../dist/quikgraphweb-layout.js'):name==='binary'?import('../dist/binary-serialization.js'):import('../dist/quikgraphweb-xml-validation.js').then(module=>module.CreateGraphMLSchemaValidator());
+    runtimes.set(name,pending);pending.catch(()=>runtimes.delete(name));
+  }
+  return runtimes.get(name);
+}
+function checkSignal(signal){if(signal?.aborted)throw new DOMException('The operation was cancelled.','AbortError');}
+/** Optional engines initialize on demand and are reused between sample executions. */
+export async function executeAsync(id,graph,source,target,options={}){
+  checkSignal(options.signal);const load=options.loadRuntime??runtime;let result,summary,code,previewSvg,layoutResult,download,binaryBytes,importedGraph,formats,engines,exportFormat,prepareDot;
+  if(id==='graphviz-render'){
+    const engine=await load('graphviz');checkSignal(options.signal);const dot=options.text??execute('graphviz',graph,source,target).result,algorithm=options.engine??'dot';
+    previewSvg=engine.RenderSvg(dot,{engine:algorithm});result={engine:algorithm,version:engine.GraphvizVersion,svg:previewSvg};summary=`Graphviz ${algorithm} rendered ${previewSvg.length.toLocaleString()} SVG characters.`;
+    formats=engine.Formats;engines=engine.Engines;exportFormat=(format,text=dot,selectedEngine=algorithm)=>engine.RenderString(text,{format,engine:selectedEngine});prepareDot=(text=dot)=>engine.RenderString(text,{format:'dot',engine:'dot'});download=async(type='image/png')=>engine.RenderImage(dot,{renderOptions:{engine:algorithm},type,scale:2});code="import { CreateGraphvizEngine } from '@wieslawsoltes/quikgraphweb/graphviz';\nconst engine = await CreateGraphvizEngine();\nconst svg = engine.RenderSvg(dot, { engine: '"+algorithm+"' });\nconst png = await engine.RenderImage(dot, { renderOptions: { engine: '"+algorithm+"' }, type: 'image/png', scale: 2 });";
+  }else if(id==='msagl-layout'){
+    const module=await load('layout');checkSignal(options.signal);layoutResult=await module.LayoutGraphAsync(graph,{algorithm:options.algorithm??'Sugiyama',direction:options.direction??'TB',routing:options.routing??'Spline',nodeWidth:38,nodeHeight:38,signal:options.signal});checkSignal(options.signal);
+    previewSvg=layoutResult.ToSvg();result={algorithm:options.algorithm??'Sugiyama',routing:options.routing??'Spline',bounds:layoutResult.Bounds,nodes:[...layoutResult.Positions].map(([vertex,position])=>({vertex:label(vertex),...position})),edges:layoutResult.Edges.map(edge=>({source:label(edge.Edge.Source),target:label(edge.Edge.Target),path:edge.Path}))};summary=`Positioned ${layoutResult.Positions.size} vertices and routed ${layoutResult.Edges.length} edges.`;
+    code="import { MsaglLayoutEngine } from '@wieslawsoltes/quikgraphweb/layout';\nconst engine = new MsaglLayoutEngine();\nconst result = await viewer.LayoutAsync(engine, {\n  algorithm: '"+(options.algorithm??'Sugiyama')+"', direction: '"+(options.direction??'TB')+"', routing: '"+(options.routing??'Spline')+"'\n});\nconst svg = result.ToSvg();";
+  }else if(id==='graphml-validate'){
+    const validator=await load('schema');checkSignal(options.signal);result=validator.Validate(options.text??Q.SerializeToGraphML(graph),{filename:'example.graphml'});summary=result.IsValid?'The document is valid against the complete GraphML schema.':`Schema validation found ${result.Errors.length} diagnostic${result.Errors.length===1?'':'s'}.`;
+    code="import { CreateGraphMLSchemaValidator } from '@wieslawsoltes/quikgraphweb/xml-validation';\nconst validator = await CreateGraphMLSchemaValidator();\nconst result = validator.Validate(xml, { filename: 'example.graphml' });\nconsole.log(result.IsValid, result.Errors);\nvalidator.Dispose();";
+  }else if(id==='binary'){
+    const module=await load('binary');checkSignal(options.signal);binaryBytes=options.bytes??module.SerializeNrbfGraph(graph);const restored=module.DeserializeNrbfGraph(binaryBytes,{maxBytes:10*1024*1024});
+    if(options.bytes)importedGraph=restored;result={format:'NRBF / BinaryFormatter',bytes:binaryBytes.byteLength,header:[...binaryBytes.slice(0,64)].map(byte=>byte.toString(16).padStart(2,'0')).join(' '),roundTrip:{type:restored.constructor.name,vertices:restored.VertexCount,edges:restored.EdgeCount},vertices:[...restored.Vertices].map(label),edgeList:edgeSummary(restored.Edges)};summary=`${options.bytes?'Imported':'Round-tripped'} ${restored.VertexCount} vertices and ${restored.EdgeCount} edges in ${binaryBytes.byteLength.toLocaleString()} NRBF bytes.`;
+    code="import { SerializeNrbfGraph, DeserializeNrbfGraph } from '@wieslawsoltes/quikgraphweb/binary';\nconst bytes = SerializeNrbfGraph(graph);\nconst restored = DeserializeNrbfGraph(bytes, { maxBytes: 10 * 1024 * 1024 });\nconsole.log(restored.VertexCount, restored.EdgeCount);";
+  }else return execute(id,graph,source,target);
+  checkSignal(options.signal);return{result,highlight:[],colors:new Map(),code,summary,previewSvg,layoutResult,download,binaryBytes,importedGraph,formats,engines,exportFormat,prepareDot};
 }
