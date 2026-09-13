@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><AssemblyName>QuikGraph</AssemblyName></PropertyGroup>
+  <ItemGroup><Compile Include="$(UpstreamRoot)/src/QuikGraph/**/*.cs" Exclude="$(UpstreamRoot)/src/QuikGraph/obj/**/*.cs;$(UpstreamRoot)/src/QuikGraph/bin/**/*.cs" /></ItemGroup>
+</Project>

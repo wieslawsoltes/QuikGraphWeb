@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><AssemblyName>QuikGraph.Graphviz</AssemblyName></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(UpstreamRoot)/src/QuikGraph.Graphviz/**/*.cs" Exclude="$(UpstreamRoot)/src/QuikGraph.Graphviz/obj/**/*.cs;$(UpstreamRoot)/src/QuikGraph.Graphviz/bin/**/*.cs" />
+    <ProjectReference Include="QuikGraph.csproj" />
+  </ItemGroup>
+</Project>

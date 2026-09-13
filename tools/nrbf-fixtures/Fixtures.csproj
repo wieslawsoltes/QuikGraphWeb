@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <DefineConstants>SUPPORTS_SERIALIZATION</DefineConstants>
+    <UpstreamRoot Condition="'$(UpstreamRoot)' == ''">$(MSBuildThisFileDirectory)../../../upstream</UpstreamRoot>
+    <NoWarn>$(NoWarn);SYSLIB0011;SYSLIB0050;CS8765;CS8767;CS8618;CS8604</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <AssemblyMetadata Include="BuildSdkVersion" Value="$(NETCoreSdkVersion)" />
+    <Compile Include="Program.cs" />
+    <Compile Include="$(UpstreamRoot)/tests/QuikGraph.Serialization.Tests/TestClasses/SerializationTestVertexClasses.cs" />
+    <Compile Include="$(UpstreamRoot)/tests/QuikGraph.Serialization.Tests/TestClasses/SerializationTestEdgeClasses.cs" />
+    <Compile Include="$(UpstreamRoot)/src/QuikGraph.CommonInternals/Externs/JetBrains.Annotations.cs" />
+    <ProjectReference Include="reference/QuikGraph.csproj" />
+    <ProjectReference Include="reference/QuikGraph.Graphviz.csproj" />
+  </ItemGroup>
+</Project>

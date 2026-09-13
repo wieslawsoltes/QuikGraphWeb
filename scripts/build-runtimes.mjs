@@ -36,7 +36,7 @@ export async function buildRuntimes() {
   }
   for (const [module, browserName] of entries) {
     if (!sourceFiles.has(module + '.js')) continue;
-    const shared = { entryPoints: ['src/' + module + '.js'], bundle: true, mainFields: ['module', 'main'], target: 'es2022', sourcemap: true, minify: false, pure: ['console.time', 'console.timeEnd'] };
+    const shared = { entryPoints: ['src/' + module + '.js'], bundle: true, mainFields: ['module', 'main'], target: 'es2022', sourcemap: true, minify: false, minifySyntax: true, pure: ['console.time', 'console.timeEnd'] };
     await build({ ...shared, outfile: 'dist/' + module + '.js', platform: 'neutral', format: 'esm', plugins: [externalCore, xmlVendor] });
     await build({ ...shared, outfile: 'dist/cjs/' + module + '.js', platform: 'node', format: 'cjs', plugins: [externalCore, xmlVendor] });
     await build({ ...shared, outfile: 'dist/' + browserName + '.js', platform: 'browser', format: 'esm', minify: true, plugins: [xmlVendor] });

@@ -1,0 +1,3183 @@
+{
+  "upstreamCommit": "9cd6b49292e09041258708a37bed99c56177b0ef",
+  "runtime": "8.0.31",
+  "sdk": "8.0.425",
+  "coreAssembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+  "graphvizAssembly": "QuikGraph.Graphviz, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+  "fixtures": [
+    {
+      "name": "edge-list-graph-int",
+      "file": "edge-list-graph-int.nrbf",
+      "bytes": 4349,
+      "sha256": "75d163dfb1480f4a98cf22a2c0ef060f00626a7f747598996460b88d27ba8bce",
+      "clrType": "QuikGraph.EdgeListGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": {
+        "vertices": [
+          0,
+          1,
+          2
+        ],
+        "edges": [
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 1,
+            "target": 2
+          },
+          {
+            "source": 2,
+            "target": 2
+          }
+        ],
+        "directed": true,
+        "parallel": true
+      }
+    },
+    {
+      "name": "adjacency-int",
+      "file": "adjacency-int.nrbf",
+      "bytes": 6249,
+      "sha256": "68fabf537f1fbb5aaf274964a37cf4b1555c5060a930ef9bc521a5c7bf221913",
+      "clrType": "QuikGraph.AdjacencyGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": {
+        "vertices": [
+          0,
+          1,
+          2,
+          9
+        ],
+        "edges": [
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 1,
+            "target": 2
+          },
+          {
+            "source": 2,
+            "target": 2
+          }
+        ],
+        "directed": true,
+        "parallel": true
+      }
+    },
+    {
+      "name": "array-adjacency-int",
+      "file": "array-adjacency-int.nrbf",
+      "bytes": 3645,
+      "sha256": "6506551bbd5f206d620c9d20baf26cb38ffdef912d6faf558a0618eddce0163a",
+      "clrType": "QuikGraph.ArrayAdjacencyGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": {
+        "vertices": [
+          0,
+          1,
+          2,
+          9
+        ],
+        "edges": [
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 1,
+            "target": 2
+          },
+          {
+            "source": 2,
+            "target": 2
+          }
+        ],
+        "directed": true,
+        "parallel": true
+      }
+    },
+    {
+      "name": "bidirectional-int",
+      "file": "bidirectional-int.nrbf",
+      "bytes": 7714,
+      "sha256": "f965e8d9e1c0a8c38797cafcc112961e08840f1cd50bd2abbf27d0d63c7fc154",
+      "clrType": "QuikGraph.BidirectionalGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": {
+        "vertices": [
+          0,
+          1,
+          2,
+          9
+        ],
+        "edges": [
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 1,
+            "target": 2
+          },
+          {
+            "source": 2,
+            "target": 2
+          }
+        ],
+        "directed": true,
+        "parallel": true
+      }
+    },
+    {
+      "name": "array-bidirectional-int",
+      "file": "array-bidirectional-int.nrbf",
+      "bytes": 5974,
+      "sha256": "713cb5d0a47e4f00931fc5869409fbba347697033cdcc5e1e3f2ca430035e3da",
+      "clrType": "QuikGraph.ArrayBidirectionalGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": {
+        "vertices": [
+          0,
+          1,
+          2,
+          9
+        ],
+        "edges": [
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 1,
+            "target": 2
+          },
+          {
+            "source": 2,
+            "target": 2
+          }
+        ],
+        "directed": true,
+        "parallel": true
+      }
+    },
+    {
+      "name": "bidirectional-adapter-int",
+      "file": "bidirectional-adapter-int.nrbf",
+      "bytes": 10880,
+      "sha256": "73cfec117e5727198d69a34a2022b4e8ea2ad649e5726a94e7c36099723997aa",
+      "clrType": "QuikGraph.BidirectionalAdapterGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": {
+        "vertices": [
+          0,
+          1,
+          2,
+          9
+        ],
+        "edges": [
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 1,
+            "target": 2
+          },
+          {
+            "source": 2,
+            "target": 2
+          }
+        ],
+        "directed": true,
+        "parallel": true
+      }
+    },
+    {
+      "name": "reversed-bidirectional-int",
+      "file": "reversed-bidirectional-int.nrbf",
+      "bytes": 8424,
+      "sha256": "bef700959c9d8ff173636ead398cb4852a20777f080c218771a504896b383b9d",
+      "clrType": "QuikGraph.ReversedBidirectionalGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": {
+        "vertices": [
+          0,
+          1,
+          2,
+          9
+        ],
+        "edges": [
+          {
+            "source": 1,
+            "target": 0
+          },
+          {
+            "source": 1,
+            "target": 0
+          },
+          {
+            "source": 2,
+            "target": 1
+          },
+          {
+            "source": 2,
+            "target": 2
+          }
+        ],
+        "directed": true,
+        "parallel": true
+      }
+    },
+    {
+      "name": "undirected-bidirectional-int",
+      "file": "undirected-bidirectional-int.nrbf",
+      "bytes": 8409,
+      "sha256": "605e9d4b420fc5118ac5945f1c3d46586ee153157030cd0603d203e24f9b64e4",
+      "clrType": "QuikGraph.UndirectedBidirectionalGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": {
+        "vertices": [
+          0,
+          1,
+          2,
+          9
+        ],
+        "edges": [
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 1,
+            "target": 2
+          },
+          {
+            "source": 2,
+            "target": 2
+          }
+        ],
+        "directed": false,
+        "parallel": true
+      }
+    },
+    {
+      "name": "undirected-int",
+      "file": "undirected-int.nrbf",
+      "bytes": 6071,
+      "sha256": "caedf7cfb0693ff107cafa72094ae9691709a89f6ff13d7611214ee9dc4856be",
+      "clrType": "QuikGraph.UndirectedGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": {
+        "vertices": [
+          0,
+          1,
+          2,
+          9
+        ],
+        "edges": [
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 1,
+            "target": 2
+          },
+          {
+            "source": 2,
+            "target": 2
+          }
+        ],
+        "directed": false,
+        "parallel": true
+      }
+    },
+    {
+      "name": "array-undirected-int",
+      "file": "array-undirected-int.nrbf",
+      "bytes": 4421,
+      "sha256": "75f76661da210436c4a264c56438ab696ba76366a84e6c7f1fc81372d37fda12",
+      "clrType": "QuikGraph.ArrayUndirectedGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": {
+        "vertices": [
+          0,
+          1,
+          2,
+          9
+        ],
+        "edges": [
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 1,
+            "target": 2
+          },
+          {
+            "source": 2,
+            "target": 2
+          }
+        ],
+        "directed": false,
+        "parallel": true
+      }
+    },
+    {
+      "name": "matrix-int",
+      "file": "matrix-int.nrbf",
+      "bytes": 1634,
+      "sha256": "45681f656869b38dfad0174b00c8d0d91a99e285a28411344c89cfb2d823e014",
+      "clrType": "QuikGraph.BidirectionalMatrixGraph\u00601[[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": {
+        "vertices": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "edges": [
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 1,
+            "target": 2
+          },
+          {
+            "source": 2,
+            "target": 2
+          }
+        ],
+        "directed": true,
+        "parallel": false
+      }
+    },
+    {
+      "name": "compressed-int",
+      "file": "compressed-int.nrbf",
+      "bytes": 2891,
+      "sha256": "ed547be4607fd663d294e90a296cd0831486d1d72101df030163560abc8e3fe9",
+      "clrType": "QuikGraph.CompressedSparseRowGraph\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": {
+        "vertices": [
+          0,
+          1,
+          2,
+          9
+        ],
+        "edges": [
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 1,
+            "target": 2
+          },
+          {
+            "source": 2,
+            "target": 2
+          }
+        ],
+        "directed": true,
+        "parallel": false
+      }
+    },
+    {
+      "name": "clustered-int",
+      "file": "clustered-int.nrbf",
+      "bytes": 9696,
+      "sha256": "032a79d3f5d1ce86a54954502ee88ac30e0140801f63353f5e7ca83f3170434b",
+      "clrType": "QuikGraph.ClusteredAdjacencyGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": {
+        "vertices": [
+          9,
+          0,
+          1,
+          2
+        ],
+        "edges": [
+          {
+            "source": 0,
+            "target": 1
+          },
+          {
+            "source": 1,
+            "target": 2
+          }
+        ],
+        "directed": true,
+        "parallel": true,
+        "clusters": [
+          {
+            "vertices": [
+              0,
+              1,
+              2
+            ],
+            "edges": [
+              {
+                "source": 0,
+                "target": 1
+              },
+              {
+                "source": 1,
+                "target": 2
+              }
+            ],
+            "directed": true,
+            "parallel": true,
+            "clusters": [
+              {
+                "vertices": [
+                  1,
+                  2
+                ],
+                "edges": [
+                  {
+                    "source": 1,
+                    "target": 2
+                  }
+                ],
+                "directed": true,
+                "parallel": true,
+                "clusters": []
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "adjacency-empty",
+      "file": "adjacency-empty.nrbf",
+      "bytes": 2540,
+      "sha256": "23e6bcf372f1d99e037c0e98906b7b5c6898d2c690c68df9f7a6f9404081aa23",
+      "clrType": "QuikGraph.AdjacencyGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": {
+        "vertices": [],
+        "edges": [],
+        "directed": true,
+        "parallel": false
+      }
+    },
+    {
+      "name": "adjacency-string-tagged",
+      "file": "adjacency-string-tagged.nrbf",
+      "bytes": 7630,
+      "sha256": "f9ac4fb3ad17f690b2c4d058a1d3beda079d0fabde8e1166f62d0e0ea9868733",
+      "clrType": "QuikGraph.AdjacencyGraph\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": {
+        "vertices": [
+          "isolated",
+          "\u03B1",
+          "\u03B2",
+          "emoji\uD83D\uDE00"
+        ],
+        "edges": [
+          {
+            "source": "\u03B1",
+            "target": "\u03B2",
+            "tag": 2.5
+          },
+          {
+            "source": "\u03B2",
+            "target": "emoji\uD83D\uDE00",
+            "tag": -0.25
+          }
+        ],
+        "directed": true,
+        "parallel": false
+      }
+    },
+    {
+      "name": "edge-int",
+      "file": "edge-int.nrbf",
+      "bytes": 283,
+      "sha256": "b4a2c518da39a04bf97012aaba20daa2939ceb6726588eeb324832a6d6993720",
+      "clrType": "QuikGraph.Edge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": {
+        "source": 10,
+        "target": 20
+      }
+    },
+    {
+      "name": "edge-string",
+      "file": "edge-string.nrbf",
+      "bytes": 297,
+      "sha256": "ca677838acb206d9630a01f84fcaff8fb56f2318647e9e54a36225a88a125f5e",
+      "clrType": "QuikGraph.Edge\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": {
+        "source": "\u03B1",
+        "target": "emoji\uD83D\uDE00"
+      }
+    },
+    {
+      "name": "equatable-edge-int",
+      "file": "equatable-edge-int.nrbf",
+      "bytes": 306,
+      "sha256": "846505200247e166010de440447919ab88e4f0ef3bab54ac134bb0bf22778c35",
+      "clrType": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": {
+        "source": 10,
+        "target": 20
+      }
+    },
+    {
+      "name": "undirected-edge-int",
+      "file": "undirected-edge-int.nrbf",
+      "bytes": 293,
+      "sha256": "3ef8118b6111d7a13e46a81f989b3697ba7e7d07a657b54c1b9b7595dab9c7eb",
+      "clrType": "QuikGraph.UndirectedEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": {
+        "source": 10,
+        "target": 20
+      }
+    },
+    {
+      "name": "equatable-undirected-edge-int",
+      "file": "equatable-undirected-edge-int.nrbf",
+      "bytes": 337,
+      "sha256": "eb8a3e12ef28d9933164e98aa3bb2aa31df2ef5730d06b6dcfebebc75a294933",
+      "clrType": "QuikGraph.EquatableUndirectedEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": {
+        "source": 10,
+        "target": 20
+      }
+    },
+    {
+      "name": "tagged-edge-int",
+      "file": "tagged-edge-int.nrbf",
+      "bytes": 448,
+      "sha256": "91cf7e76b8efca18e1aa24d63de1330ed41897ce922675712ca016970248b523",
+      "clrType": "QuikGraph.TaggedEdge\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": {
+        "source": 10,
+        "target": 20,
+        "tag": "weight"
+      }
+    },
+    {
+      "name": "tagged-undirected-edge-int",
+      "file": "tagged-undirected-edge-int.nrbf",
+      "bytes": 478,
+      "sha256": "1dc7fb75f474e62d68c00dd19998eb1d9b5e06c5b70b143a5963a622b38babb2",
+      "clrType": "QuikGraph.TaggedUndirectedEdge\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": {
+        "source": 10,
+        "target": 20,
+        "tag": "weight"
+      }
+    },
+    {
+      "name": "equatable-tagged-edge-int",
+      "file": "equatable-tagged-edge-int.nrbf",
+      "bytes": 457,
+      "sha256": "dfd2c2ec31f1c9a32a7e332dbd1b43c5742669584edd844ed89577308c38ace4",
+      "clrType": "QuikGraph.EquatableTaggedEdge\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": {
+        "source": 10,
+        "target": 20,
+        "tag": "weight"
+      }
+    },
+    {
+      "name": "term-edge-int",
+      "file": "term-edge-int.nrbf",
+      "bytes": 363,
+      "sha256": "0e7d04037a8284a36917078760ee89b686b38f3e0d3432525c2ffb1fde1a3bdc",
+      "clrType": "QuikGraph.TermEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": {
+        "source": 10,
+        "target": 20,
+        "sourceTerminal": 3,
+        "targetTerminal": 4
+      }
+    },
+    {
+      "name": "equatable-term-edge-int",
+      "file": "equatable-term-edge-int.nrbf",
+      "bytes": 416,
+      "sha256": "3cd2d49204a0c4f0b285bc23edfab29960458fbc0345c5a8e0629e7f96477c7c",
+      "clrType": "QuikGraph.EquatableTermEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": {
+        "source": 10,
+        "target": 20,
+        "sourceTerminal": 3,
+        "targetTerminal": 4
+      }
+    },
+    {
+      "name": "s-edge-int",
+      "file": "s-edge-int.nrbf",
+      "bytes": 284,
+      "sha256": "31cd910deabc04f29c429b18298cdcdb05c1fc27cf0e8b6701bd13e174078933",
+      "clrType": "QuikGraph.SEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": {
+        "source": 10,
+        "target": 20
+      }
+    },
+    {
+      "name": "s-equatable-edge-int",
+      "file": "s-equatable-edge-int.nrbf",
+      "bytes": 293,
+      "sha256": "6643ac06a1facb47a7aa1f9f752c5f37a4257458b5e6b0a729e22382558266b9",
+      "clrType": "QuikGraph.SEquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": {
+        "source": 10,
+        "target": 20
+      }
+    },
+    {
+      "name": "s-undirected-edge-int",
+      "file": "s-undirected-edge-int.nrbf",
+      "bytes": 294,
+      "sha256": "2130135e484a9bb83dfcf8c9ac95294ba98af8f14589a6a965c89b3ae236853c",
+      "clrType": "QuikGraph.SUndirectedEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": {
+        "source": 10,
+        "target": 20
+      }
+    },
+    {
+      "name": "s-tagged-edge-int",
+      "file": "s-tagged-edge-int.nrbf",
+      "bytes": 435,
+      "sha256": "6c5b142d1937be6d0bfcad35df2ad20659586522d5fc569e2ce21feac0548f72",
+      "clrType": "QuikGraph.STaggedEdge\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": {
+        "source": 10,
+        "target": 20,
+        "tag": "weight"
+      }
+    },
+    {
+      "name": "s-equatable-tagged-edge-int",
+      "file": "s-equatable-tagged-edge-int.nrbf",
+      "bytes": 444,
+      "sha256": "600b992f80a24b2ae01d1e21481fd79a8100436532185850ded61119ba26aa0c",
+      "clrType": "QuikGraph.SEquatableTaggedEdge\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": {
+        "source": 10,
+        "target": 20,
+        "tag": "weight"
+      }
+    },
+    {
+      "name": "s-tagged-undirected-edge-int",
+      "file": "s-tagged-undirected-edge-int.nrbf",
+      "bytes": 445,
+      "sha256": "0f217913490282c9ad527cdf1f0a2101c5a4f793bb5aed195cabe08a410210a7",
+      "clrType": "QuikGraph.STaggedUndirectedEdge\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": {
+        "source": 10,
+        "target": 20,
+        "tag": "weight"
+      }
+    },
+    {
+      "name": "s-reversed-edge-int",
+      "file": "s-reversed-edge-int.nrbf",
+      "bytes": 797,
+      "sha256": "adbc3dea13b7f24b2ed4e7a8c8c7865cf3fb5091ced0c95350412ec160502083",
+      "clrType": "QuikGraph.SReversedEdge\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": {
+        "source": 20,
+        "target": 10
+      }
+    },
+    {
+      "name": "graphviz-color",
+      "file": "graphviz-color.nrbf",
+      "bytes": 179,
+      "sha256": "59b88bf2dbeb39c78209aec12c91c44ec8f003ff49a328b85bfcdcfdb642da80",
+      "clrType": "QuikGraph.Graphviz.Dot.GraphvizColor",
+      "expected": {
+        "a": 128,
+        "r": 10,
+        "g": 20,
+        "b": 30
+      }
+    },
+    {
+      "name": "graphviz-size",
+      "file": "graphviz-size.nrbf",
+      "bytes": 174,
+      "sha256": "f949b853ef8a2ff3c5036ef21e2cb715536cac8d0b54804ea083cf5e6b3bc19e",
+      "clrType": "QuikGraph.Graphviz.Dot.GraphvizSize",
+      "expected": {
+        "width": 12,
+        "height": 34
+      }
+    },
+    {
+      "name": "graphviz-size-f",
+      "file": "graphviz-size-f.nrbf",
+      "bytes": 175,
+      "sha256": "17a1a46aa989f52baa6f4985bc68d9e6650e5ec8705dc5ac8f7f1b1198cb3ff0",
+      "clrType": "QuikGraph.Graphviz.Dot.GraphvizSizeF",
+      "expected": {
+        "width": 1.25,
+        "height": 2.5
+      }
+    },
+    {
+      "name": "vertex-list",
+      "file": "vertex-list.nrbf",
+      "bytes": 370,
+      "sha256": "1757f20847a3f60f399132871d7a6ff5d3764778a4b3853584e1468fb6e23daf",
+      "clrType": "QuikGraph.Collections.VertexList\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": [
+        5,
+        8,
+        13
+      ]
+    },
+    {
+      "name": "edge-list",
+      "file": "edge-list.nrbf",
+      "bytes": 1163,
+      "sha256": "250154f33832ec88db459b3391ce1453442418744037a7acd483eeb36f5e6961",
+      "clrType": "QuikGraph.Collections.EdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": [
+        {
+          "source": 0,
+          "target": 1
+        },
+        {
+          "source": 1,
+          "target": 2
+        }
+      ]
+    },
+    {
+      "name": "queue",
+      "file": "queue.nrbf",
+      "bytes": 367,
+      "sha256": "b08dbfa48a9697f2edd9c219ccb226391b9f340f4cac4d7afe8270ec47c55d69",
+      "clrType": "QuikGraph.Collections.Queue\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": [
+        5,
+        8
+      ]
+    },
+    {
+      "name": "vertex-edge-dictionary",
+      "file": "vertex-edge-dictionary.nrbf",
+      "bytes": 4054,
+      "sha256": "f22708f377700531892232302713c017dbfe4b84afec38fdcdbeb4c3d6a7a107",
+      "clrType": "QuikGraph.Collections.VertexEdgeDictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": [
+        {
+          "key": 1,
+          "value": [
+            {
+              "source": 1,
+              "target": 2
+            }
+          ]
+        },
+        {
+          "key": 2,
+          "value": []
+        }
+      ]
+    },
+    {
+      "name": "edge-edge-dictionary",
+      "file": "edge-edge-dictionary.nrbf",
+      "bytes": 2873,
+      "sha256": "89107d46646d1c31c1d8fb296a3b31eaa21c65ba6e2e150a0d24a5fb9da25aac",
+      "clrType": "QuikGraph.Collections.EdgeEdgeDictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": [
+        {
+          "key": {
+            "source": 0,
+            "target": 1
+          },
+          "value": {
+            "source": 1,
+            "target": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "negative-cycle-exception",
+      "file": "negative-cycle-exception.nrbf",
+      "bytes": 779,
+      "sha256": "d858ab98e4dc6569732a8ed7a1ec83366e7dab0d68bf893b10f710bb488aa619",
+      "clrType": "QuikGraph.NegativeCycleGraphException",
+      "expected": {
+        "type": "NegativeCycleGraphException",
+        "message": "negative cycle",
+        "inner": {
+          "type": "InvalidOperationException",
+          "message": "inner",
+          "inner": null
+        }
+      }
+    },
+    {
+      "name": "non-acyclic-exception",
+      "file": "non-acyclic-exception.nrbf",
+      "bytes": 426,
+      "sha256": "f123bde59a33ff5b3c6e5af93461512f7cfa7ecd677431ae9a5d29f10a3ae247",
+      "clrType": "QuikGraph.NonAcyclicGraphException",
+      "expected": {
+        "type": "NonAcyclicGraphException",
+        "message": "cycle",
+        "inner": null
+      }
+    },
+    {
+      "name": "non-strongly-connected-exception",
+      "file": "non-strongly-connected-exception.nrbf",
+      "bytes": 453,
+      "sha256": "65f96b420c3fd6bd1333d9026a1c7ab16e029e46b710acd00876e780caa54806",
+      "clrType": "QuikGraph.NonStronglyConnectedGraphException",
+      "expected": {
+        "type": "NonStronglyConnectedGraphException",
+        "message": "disconnected",
+        "inner": null
+      }
+    },
+    {
+      "name": "parallel-edge-exception",
+      "file": "parallel-edge-exception.nrbf",
+      "bytes": 443,
+      "sha256": "a09a0bc1149bd739fb32a361d8d3341ed4af9d121deb97ea8b01f0a79a1bd9fe",
+      "clrType": "QuikGraph.ParallelEdgeNotAllowedException",
+      "expected": {
+        "type": "ParallelEdgeNotAllowedException",
+        "message": "parallel",
+        "inner": null
+      }
+    },
+    {
+      "name": "vertex-not-found-exception",
+      "file": "vertex-not-found-exception.nrbf",
+      "bytes": 426,
+      "sha256": "33e8c1936c48d736034750b9c586c5b08c7788e324a2ef28ab21dec62a58fe89",
+      "clrType": "QuikGraph.VertexNotFoundException",
+      "expected": {
+        "type": "VertexNotFoundException",
+        "message": "missing",
+        "inner": null
+      }
+    },
+    {
+      "name": "no-path-exception",
+      "file": "no-path-exception.nrbf",
+      "bytes": 420,
+      "sha256": "d3a730b7f03bb53134382968f86f196348597782a2761ee0047cb94bb3647683",
+      "clrType": "QuikGraph.NoPathFoundException",
+      "expected": {
+        "type": "NoPathFoundException",
+        "message": "no path",
+        "inner": null
+      }
+    },
+    {
+      "name": "primitive-array",
+      "file": "primitive-array.nrbf",
+      "bytes": 197,
+      "sha256": "2ca97dc7fa6453b280aa8fd6ad8475382436943c349eef2685f8eb2eb9fc3542",
+      "clrType": "System.Object[]",
+      "expected": [
+        true,
+        255,
+        -4,
+        -32000,
+        65000,
+        42,
+        4294967295,
+        "-9223372036854775808",
+        "18446744073709551615",
+        1.25,
+        -2.5,
+        {
+          "decimalValue": "123.456"
+        },
+        "\u03A9",
+        "unicode\uD83D\uDE00",
+        {
+          "dateTimeTicks": "637162995060000000",
+          "kind": "Utc"
+        },
+        {
+          "timeSpanTicks": "-1234567"
+        },
+        null,
+        [
+          1,
+          2,
+          3
+        ],
+        [
+          null,
+          null,
+          "last"
+        ]
+      ]
+    },
+    {
+      "name": "identity-cycles",
+      "file": "identity-cycles.nrbf",
+      "bytes": 6273,
+      "sha256": "923fe56537e33554111009a3b8acd277ec7ddd63169529a6f79e6852c3be029c",
+      "clrType": "System.Object[]",
+      "expected": {
+        "self": true,
+        "shared": true,
+        "graph": {
+          "vertices": [
+            0,
+            1,
+            2,
+            9
+          ],
+          "edges": [
+            {
+              "source": 0,
+              "target": 1
+            },
+            {
+              "source": 0,
+              "target": 1
+            },
+            {
+              "source": 1,
+              "target": 2
+            },
+            {
+              "source": 2,
+              "target": 2
+            }
+          ],
+          "directed": true,
+          "parallel": true
+        }
+      }
+    },
+    {
+      "name": "adjacency-custom",
+      "file": "adjacency-custom.nrbf",
+      "bytes": 6630,
+      "sha256": "28d064a5d2a966a70a3ebd05978fb60e5bb5299f28fd72216f0c775d372dda54",
+      "clrType": "QuikGraph.AdjacencyGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "expected": {
+        "vertices": [
+          {
+            "id": "alpha",
+            "text": "name \u03B1",
+            "number": 7,
+            "integer64": "9007199254740993",
+            "boolean": true,
+            "single": 2.25,
+            "number64": 1.5,
+            "array": [
+              1,
+              2
+            ],
+            "list": [
+              3,
+              4
+            ]
+          },
+          {
+            "id": "beta",
+            "text": "name \u03B2",
+            "number": -3,
+            "integer64": "-9007199254740993",
+            "boolean": false,
+            "single": -4.25,
+            "number64": -2.5,
+            "array": null,
+            "list": null
+          },
+          {
+            "id": "isolated",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0,
+            "array": null,
+            "list": null
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          },
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          },
+          {
+            "source": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "loop",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0
+          }
+        ],
+        "directed": true,
+        "parallel": true
+      }
+    },
+    {
+      "name": "array-adjacency-custom",
+      "file": "array-adjacency-custom.nrbf",
+      "bytes": 4244,
+      "sha256": "86fa732c2a8abee3a8f290fe8008d1834a670a6f1c0f939538d416279e9b4957",
+      "clrType": "QuikGraph.ArrayAdjacencyGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "expected": {
+        "vertices": [
+          {
+            "id": "alpha",
+            "text": "name \u03B1",
+            "number": 7,
+            "integer64": "9007199254740993",
+            "boolean": true,
+            "single": 2.25,
+            "number64": 1.5,
+            "array": [
+              1,
+              2
+            ],
+            "list": [
+              3,
+              4
+            ]
+          },
+          {
+            "id": "beta",
+            "text": "name \u03B2",
+            "number": -3,
+            "integer64": "-9007199254740993",
+            "boolean": false,
+            "single": -4.25,
+            "number64": -2.5,
+            "array": null,
+            "list": null
+          },
+          {
+            "id": "isolated",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0,
+            "array": null,
+            "list": null
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          },
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          },
+          {
+            "source": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "loop",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0
+          }
+        ],
+        "directed": true,
+        "parallel": true
+      }
+    },
+    {
+      "name": "bidirectional-custom",
+      "file": "bidirectional-custom.nrbf",
+      "bytes": 7736,
+      "sha256": "6ddebefbe03d7e8b1d0586e0245885c56ab70051708e568bbe704f755d2c3434",
+      "clrType": "QuikGraph.BidirectionalGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "expected": {
+        "vertices": [
+          {
+            "id": "alpha",
+            "text": "name \u03B1",
+            "number": 7,
+            "integer64": "9007199254740993",
+            "boolean": true,
+            "single": 2.25,
+            "number64": 1.5,
+            "array": [
+              1,
+              2
+            ],
+            "list": [
+              3,
+              4
+            ]
+          },
+          {
+            "id": "beta",
+            "text": "name \u03B2",
+            "number": -3,
+            "integer64": "-9007199254740993",
+            "boolean": false,
+            "single": -4.25,
+            "number64": -2.5,
+            "array": null,
+            "list": null
+          },
+          {
+            "id": "isolated",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0,
+            "array": null,
+            "list": null
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          },
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          },
+          {
+            "source": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "loop",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0
+          }
+        ],
+        "directed": true,
+        "parallel": true
+      }
+    },
+    {
+      "name": "array-bidirectional-custom",
+      "file": "array-bidirectional-custom.nrbf",
+      "bytes": 6276,
+      "sha256": "55b0412d0acc859d1cbb5f4c368812f73361b70e603707c4d57bfb41986c6dac",
+      "clrType": "QuikGraph.ArrayBidirectionalGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "expected": {
+        "vertices": [
+          {
+            "id": "alpha",
+            "text": "name \u03B1",
+            "number": 7,
+            "integer64": "9007199254740993",
+            "boolean": true,
+            "single": 2.25,
+            "number64": 1.5,
+            "array": [
+              1,
+              2
+            ],
+            "list": [
+              3,
+              4
+            ]
+          },
+          {
+            "id": "beta",
+            "text": "name \u03B2",
+            "number": -3,
+            "integer64": "-9007199254740993",
+            "boolean": false,
+            "single": -4.25,
+            "number64": -2.5,
+            "array": null,
+            "list": null
+          },
+          {
+            "id": "isolated",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0,
+            "array": null,
+            "list": null
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          },
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          },
+          {
+            "source": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "loop",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0
+          }
+        ],
+        "directed": true,
+        "parallel": true
+      }
+    },
+    {
+      "name": "bidirectional-adapter-custom",
+      "file": "bidirectional-adapter-custom.nrbf",
+      "bytes": 10588,
+      "sha256": "b824424625ff51e620159d3c63f6dcad926594540563bf98ed642b3a123c5f9b",
+      "clrType": "QuikGraph.BidirectionalAdapterGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "expected": {
+        "vertices": [
+          {
+            "id": "alpha",
+            "text": "name \u03B1",
+            "number": 7,
+            "integer64": "9007199254740993",
+            "boolean": true,
+            "single": 2.25,
+            "number64": 1.5,
+            "array": [
+              1,
+              2
+            ],
+            "list": [
+              3,
+              4
+            ]
+          },
+          {
+            "id": "beta",
+            "text": "name \u03B2",
+            "number": -3,
+            "integer64": "-9007199254740993",
+            "boolean": false,
+            "single": -4.25,
+            "number64": -2.5,
+            "array": null,
+            "list": null
+          },
+          {
+            "id": "isolated",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0,
+            "array": null,
+            "list": null
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          },
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          },
+          {
+            "source": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "loop",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0
+          }
+        ],
+        "directed": true,
+        "parallel": true
+      }
+    },
+    {
+      "name": "reversed-bidirectional-custom",
+      "file": "reversed-bidirectional-custom.nrbf",
+      "bytes": 8328,
+      "sha256": "b9f91269dcf123f4c84d260f87b4198e41d599d4d499a3b4211b12a6c95cfe00",
+      "clrType": "QuikGraph.ReversedBidirectionalGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "expected": {
+        "vertices": [
+          {
+            "id": "alpha",
+            "text": "name \u03B1",
+            "number": 7,
+            "integer64": "9007199254740993",
+            "boolean": true,
+            "single": 2.25,
+            "number64": 1.5,
+            "array": [
+              1,
+              2
+            ],
+            "list": [
+              3,
+              4
+            ]
+          },
+          {
+            "id": "beta",
+            "text": "name \u03B2",
+            "number": -3,
+            "integer64": "-9007199254740993",
+            "boolean": false,
+            "single": -4.25,
+            "number64": -2.5,
+            "array": null,
+            "list": null
+          },
+          {
+            "id": "isolated",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0,
+            "array": null,
+            "list": null
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "target": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            }
+          },
+          {
+            "source": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "target": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            }
+          },
+          {
+            "source": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            }
+          }
+        ],
+        "directed": true,
+        "parallel": true
+      }
+    },
+    {
+      "name": "undirected-custom",
+      "file": "undirected-custom.nrbf",
+      "bytes": 6200,
+      "sha256": "ac72603920f5ee7a9908a204f69042b21bd844f34533e28ac42675cd93cee7a1",
+      "clrType": "QuikGraph.UndirectedGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "expected": {
+        "vertices": [
+          {
+            "id": "alpha",
+            "text": "name \u03B1",
+            "number": 7,
+            "integer64": "9007199254740993",
+            "boolean": true,
+            "single": 2.25,
+            "number64": 1.5,
+            "array": [
+              1,
+              2
+            ],
+            "list": [
+              3,
+              4
+            ]
+          },
+          {
+            "id": "beta",
+            "text": "name \u03B2",
+            "number": -3,
+            "integer64": "-9007199254740993",
+            "boolean": false,
+            "single": -4.25,
+            "number64": -2.5,
+            "array": null,
+            "list": null
+          },
+          {
+            "id": "isolated",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0,
+            "array": null,
+            "list": null
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          },
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          },
+          {
+            "source": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "loop",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0
+          }
+        ],
+        "directed": false,
+        "parallel": true
+      }
+    },
+    {
+      "name": "array-undirected-custom",
+      "file": "array-undirected-custom.nrbf",
+      "bytes": 4700,
+      "sha256": "dcc78bfe4f3e13aa89b8068eb37c6500c72345b5afd1d6d439314880b0cdeed7",
+      "clrType": "QuikGraph.ArrayUndirectedGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "expected": {
+        "vertices": [
+          {
+            "id": "alpha",
+            "text": "name \u03B1",
+            "number": 7,
+            "integer64": "9007199254740993",
+            "boolean": true,
+            "single": 2.25,
+            "number64": 1.5,
+            "array": [
+              1,
+              2
+            ],
+            "list": [
+              3,
+              4
+            ]
+          },
+          {
+            "id": "beta",
+            "text": "name \u03B2",
+            "number": -3,
+            "integer64": "-9007199254740993",
+            "boolean": false,
+            "single": -4.25,
+            "number64": -2.5,
+            "array": null,
+            "list": null
+          },
+          {
+            "id": "isolated",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0,
+            "array": null,
+            "list": null
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          },
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          },
+          {
+            "source": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "loop",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0
+          }
+        ],
+        "directed": false,
+        "parallel": true
+      }
+    },
+    {
+      "name": "undirected-bidirectional-custom",
+      "file": "undirected-bidirectional-custom.nrbf",
+      "bytes": 8313,
+      "sha256": "45a09e57bd80cd2567e13d5fd6c58b30f2c89c0f8238cb7ae579e394ce6b40c6",
+      "clrType": "QuikGraph.UndirectedBidirectionalGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "expected": {
+        "vertices": [
+          {
+            "id": "alpha",
+            "text": "name \u03B1",
+            "number": 7,
+            "integer64": "9007199254740993",
+            "boolean": true,
+            "single": 2.25,
+            "number64": 1.5,
+            "array": [
+              1,
+              2
+            ],
+            "list": [
+              3,
+              4
+            ]
+          },
+          {
+            "id": "beta",
+            "text": "name \u03B2",
+            "number": -3,
+            "integer64": "-9007199254740993",
+            "boolean": false,
+            "single": -4.25,
+            "number64": -2.5,
+            "array": null,
+            "list": null
+          },
+          {
+            "id": "isolated",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0,
+            "array": null,
+            "list": null
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          },
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          },
+          {
+            "source": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "loop",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0
+          }
+        ],
+        "directed": false,
+        "parallel": true
+      }
+    },
+    {
+      "name": "clustered-custom",
+      "file": "clustered-custom.nrbf",
+      "bytes": 8690,
+      "sha256": "035b24463814b9927e952f83d7f04790425a5966e8296de605a2adc03840cec7",
+      "clrType": "QuikGraph.ClusteredAdjacencyGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "expected": {
+        "vertices": [
+          {
+            "id": "isolated",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0,
+            "array": null,
+            "list": null
+          },
+          {
+            "id": "alpha",
+            "text": "name \u03B1",
+            "number": 7,
+            "integer64": "9007199254740993",
+            "boolean": true,
+            "single": 2.25,
+            "number64": 1.5,
+            "array": [
+              1,
+              2
+            ],
+            "list": [
+              3,
+              4
+            ]
+          },
+          {
+            "id": "beta",
+            "text": "name \u03B2",
+            "number": -3,
+            "integer64": "-9007199254740993",
+            "boolean": false,
+            "single": -4.25,
+            "number64": -2.5,
+            "array": null,
+            "list": null
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          }
+        ],
+        "directed": true,
+        "parallel": true,
+        "clusters": [
+          {
+            "vertices": [
+              {
+                "id": "alpha",
+                "text": "name \u03B1",
+                "number": 7,
+                "integer64": "9007199254740993",
+                "boolean": true,
+                "single": 2.25,
+                "number64": 1.5,
+                "array": [
+                  1,
+                  2
+                ],
+                "list": [
+                  3,
+                  4
+                ]
+              },
+              {
+                "id": "beta",
+                "text": "name \u03B2",
+                "number": -3,
+                "integer64": "-9007199254740993",
+                "boolean": false,
+                "single": -4.25,
+                "number64": -2.5,
+                "array": null,
+                "list": null
+              }
+            ],
+            "edges": [
+              {
+                "source": {
+                  "id": "alpha",
+                  "text": "name \u03B1",
+                  "number": 7,
+                  "integer64": "9007199254740993",
+                  "boolean": true,
+                  "single": 2.25,
+                  "number64": 1.5,
+                  "array": [
+                    1,
+                    2
+                  ],
+                  "list": [
+                    3,
+                    4
+                  ]
+                },
+                "target": {
+                  "id": "beta",
+                  "text": "name \u03B2",
+                  "number": -3,
+                  "integer64": "-9007199254740993",
+                  "boolean": false,
+                  "single": -4.25,
+                  "number64": -2.5,
+                  "array": null,
+                  "list": null
+                },
+                "id": "edge-\u03B1\u03B2",
+                "text": "payload",
+                "number": 12,
+                "integer64": "21",
+                "boolean": true,
+                "single": 0.5,
+                "number64": 3.125
+              }
+            ],
+            "directed": true,
+            "parallel": true,
+            "clusters": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "compressed-custom",
+      "file": "compressed-custom.nrbf",
+      "bytes": 4436,
+      "sha256": "0580830522a3b1120fb269e08e355c0d698a997ee87e038a06145eb0449f243b",
+      "clrType": "QuikGraph.CompressedSparseRowGraph\u00601[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "expected": {
+        "vertices": [
+          {
+            "id": "alpha",
+            "text": "name \u03B1",
+            "number": 7,
+            "integer64": "9007199254740993",
+            "boolean": true,
+            "single": 2.25,
+            "number64": 1.5,
+            "array": [
+              1,
+              2
+            ],
+            "list": [
+              3,
+              4
+            ]
+          },
+          {
+            "id": "beta",
+            "text": "name \u03B2",
+            "number": -3,
+            "integer64": "-9007199254740993",
+            "boolean": false,
+            "single": -4.25,
+            "number64": -2.5,
+            "array": null,
+            "list": null
+          },
+          {
+            "id": "isolated",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0,
+            "array": null,
+            "list": null
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            }
+          },
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            }
+          },
+          {
+            "source": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            }
+          }
+        ],
+        "directed": true,
+        "parallel": false
+      }
+    },
+    {
+      "name": "edge-list-graph-custom",
+      "file": "edge-list-graph-custom.nrbf",
+      "bytes": 4474,
+      "sha256": "9f78b3f3b58b41848c5198dab69d9c18a2fdb926818d2a4273d656b3287af61b",
+      "clrType": "QuikGraph.EdgeListGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "expected": {
+        "vertices": [
+          {
+            "id": "alpha",
+            "text": "name \u03B1",
+            "number": 7,
+            "integer64": "9007199254740993",
+            "boolean": true,
+            "single": 2.25,
+            "number64": 1.5,
+            "array": [
+              1,
+              2
+            ],
+            "list": [
+              3,
+              4
+            ]
+          },
+          {
+            "id": "beta",
+            "text": "name \u03B2",
+            "number": -3,
+            "integer64": "-9007199254740993",
+            "boolean": false,
+            "single": -4.25,
+            "number64": -2.5,
+            "array": null,
+            "list": null
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "id": "alpha",
+              "text": "name \u03B1",
+              "number": 7,
+              "integer64": "9007199254740993",
+              "boolean": true,
+              "single": 2.25,
+              "number64": 1.5,
+              "array": [
+                1,
+                2
+              ],
+              "list": [
+                3,
+                4
+              ]
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "edge-\u03B1\u03B2",
+            "text": "payload",
+            "number": 12,
+            "integer64": "21",
+            "boolean": true,
+            "single": 0.5,
+            "number64": 3.125
+          },
+          {
+            "source": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "target": {
+              "id": "beta",
+              "text": "name \u03B2",
+              "number": -3,
+              "integer64": "-9007199254740993",
+              "boolean": false,
+              "single": -4.25,
+              "number64": -2.5,
+              "array": null,
+              "list": null
+            },
+            "id": "loop",
+            "text": null,
+            "number": 0,
+            "integer64": "0",
+            "boolean": false,
+            "single": 0,
+            "number64": 0
+          }
+        ],
+        "directed": true,
+        "parallel": true
+      }
+    },
+    {
+      "name": "multidimensional-array",
+      "file": "multidimensional-array.nrbf",
+      "bytes": 62,
+      "sha256": "563dd91e354ec9e80c420029907d11be2553b58bf9ea57df37eb6c6f6decd38d",
+      "clrType": "System.Int32[,]",
+      "expected": {
+        "lengths": [
+          2,
+          3
+        ],
+        "lowerBounds": [
+          0,
+          0
+        ],
+        "values": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      }
+    },
+    {
+      "name": "offset-array",
+      "file": "offset-array.nrbf",
+      "bytes": 70,
+      "sha256": "ee769a0c25dd174b28a24f158a45dcd68fe77ca9496ae36bdacd8c20328cf317",
+      "clrType": "System.String[,]",
+      "expected": {
+        "lengths": [
+          2,
+          3
+        ],
+        "lowerBounds": [
+          -2,
+          5
+        ],
+        "values": [
+          "first",
+          null,
+          null,
+          null,
+          null,
+          "last"
+        ]
+      }
+    },
+    {
+      "name": "array-boolean",
+      "file": "array-boolean.nrbf",
+      "bytes": 31,
+      "sha256": "75744e7d06458e6333aa2a306d1c18d56152b823940768052b61453c9d4cf546",
+      "clrType": "System.Boolean[]",
+      "expected": [
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "name": "array-byte",
+      "file": "array-byte.nrbf",
+      "bytes": 31,
+      "sha256": "95f54b66da697b773e4fa7ef40a76cfa7bee2d835ba58fe3c083e83935612f62",
+      "clrType": "System.Byte[]",
+      "expected": [
+        0,
+        1,
+        255
+      ]
+    },
+    {
+      "name": "array-sbyte",
+      "file": "array-sbyte.nrbf",
+      "bytes": 31,
+      "sha256": "183435e3cae9f46e3d5a65847f781643ee2a79f2453d917345b83c594f11c84d",
+      "clrType": "System.SByte[]",
+      "expected": [
+        -128,
+        0,
+        127
+      ]
+    },
+    {
+      "name": "array-char",
+      "file": "array-char.nrbf",
+      "bytes": 35,
+      "sha256": "699751e79d66861e2bdc57f4d33d310eb4f1f3f7609cc2c7d2486ba9fb975b42",
+      "clrType": "System.Char[]",
+      "expected": [
+        "\u0000",
+        "a",
+        "\u03A9",
+        "\u4E2D"
+      ]
+    },
+    {
+      "name": "array-int16",
+      "file": "array-int16.nrbf",
+      "bytes": 34,
+      "sha256": "d8a918f1b48d4a86e81815434b08bdc10e69c38a8fc8246c75ca551ca8455e9b",
+      "clrType": "System.Int16[]",
+      "expected": [
+        -32768,
+        0,
+        32767
+      ]
+    },
+    {
+      "name": "array-uint16",
+      "file": "array-uint16.nrbf",
+      "bytes": 34,
+      "sha256": "c0b013ff026a6a496716684bd29e8d6ea4df39408c04e45f3e2522aca0b987d5",
+      "clrType": "System.UInt16[]",
+      "expected": [
+        0,
+        1,
+        65535
+      ]
+    },
+    {
+      "name": "array-int32",
+      "file": "array-int32.nrbf",
+      "bytes": 40,
+      "sha256": "1e1c36d848659c3aa343b88d72c2acf4579369da69939f85168e77a969ef78f3",
+      "clrType": "System.Int32[]",
+      "expected": [
+        -2147483648,
+        0,
+        2147483647
+      ]
+    },
+    {
+      "name": "array-uint32",
+      "file": "array-uint32.nrbf",
+      "bytes": 40,
+      "sha256": "e1ff8aeabbef5262d9fe59e95c6195fb092f95b35f9bd8d02d09f9b27b8a5e00",
+      "clrType": "System.UInt32[]",
+      "expected": [
+        0,
+        1,
+        4294967295
+      ]
+    },
+    {
+      "name": "array-int64",
+      "file": "array-int64.nrbf",
+      "bytes": 52,
+      "sha256": "3d6fd013be0de9e39d82de0460dcfe4250df51850a9eeaca4570dc14cccb8bb0",
+      "clrType": "System.Int64[]",
+      "expected": [
+        "-9223372036854775808",
+        "0",
+        "9223372036854775807"
+      ]
+    },
+    {
+      "name": "array-uint64",
+      "file": "array-uint64.nrbf",
+      "bytes": 52,
+      "sha256": "d6b4f9bb1a2373e085b3218981c18103f80626585802cd0e81700eaf98823643",
+      "clrType": "System.UInt64[]",
+      "expected": [
+        "0",
+        "1",
+        "18446744073709551615"
+      ]
+    },
+    {
+      "name": "array-single",
+      "file": "array-single.nrbf",
+      "bytes": 52,
+      "sha256": "dcb6641c4fa33ab2ab8b7307a42dd418d3f435903089cf17fb8c85487978f0b1",
+      "clrType": "System.Single[]",
+      "expected": [
+        "-Infinity",
+        -0,
+        1E-45,
+        3.4028235E+38,
+        "Infinity",
+        "NaN"
+      ]
+    },
+    {
+      "name": "array-double",
+      "file": "array-double.nrbf",
+      "bytes": 76,
+      "sha256": "e9954985ccfa610e61c9f326d2aac9ab63d3c35853027f513e5b5a42160492a7",
+      "clrType": "System.Double[]",
+      "expected": [
+        "-Infinity",
+        -0,
+        5E-324,
+        1.7976931348623157E+308,
+        "Infinity",
+        "NaN"
+      ]
+    },
+    {
+      "name": "array-decimal",
+      "file": "array-decimal.nrbf",
+      "bytes": 122,
+      "sha256": "a48ea14f1d881afa463f6998062ab69fbcab51d098376581653efdc8cff3937a",
+      "clrType": "System.Decimal[]",
+      "expected": [
+        {
+          "decimalValue": "-79228162514264337593543950335"
+        },
+        {
+          "decimalValue": "0"
+        },
+        {
+          "decimalValue": "1.0000000000000000000000000001"
+        },
+        {
+          "decimalValue": "79228162514264337593543950335"
+        }
+      ]
+    },
+    {
+      "name": "array-datetime",
+      "file": "array-datetime.nrbf",
+      "bytes": 60,
+      "sha256": "f794064d8f652849daab3b5c76d82132879d0335c0741451c75367c5f24d8bcf",
+      "clrType": "System.DateTime[]",
+      "expected": [
+        {
+          "dateTimeTicks": "0",
+          "kind": "Unspecified"
+        },
+        {
+          "dateTimeTicks": "637134336000000000",
+          "kind": "Utc"
+        },
+        {
+          "dateTimeTicks": "637134336000000000",
+          "kind": "Local"
+        },
+        {
+          "dateTimeTicks": "3155378975999999999",
+          "kind": "Unspecified"
+        }
+      ]
+    },
+    {
+      "name": "array-timespan",
+      "file": "array-timespan.nrbf",
+      "bytes": 52,
+      "sha256": "0872645c206f34f01507e300763db377acfcf4a1afc09a1d26e534e4a6ab4bbc",
+      "clrType": "System.TimeSpan[]",
+      "expected": [
+        {
+          "timeSpanTicks": "-9223372036854775808"
+        },
+        {
+          "timeSpanTicks": "0"
+        },
+        {
+          "timeSpanTicks": "9223372036854775807"
+        }
+      ]
+    },
+    {
+      "name": "decimal-root",
+      "file": "decimal-root.nrbf",
+      "bytes": 82,
+      "sha256": "bdcf5aab75c4bc5b4ee1763b4b9464637c40e124ce1815602c11c9cbe33ee398",
+      "clrType": "System.Decimal",
+      "expected": {
+        "decimalValue": "123.456"
+      }
+    },
+    {
+      "name": "datetime-root",
+      "file": "datetime-root.nrbf",
+      "bytes": 78,
+      "sha256": "798b3e3c67b15cf0993a135e1058cc80d30b9aeca4475a4cff550a8fdcff7058",
+      "clrType": "System.DateTime",
+      "expected": {
+        "dateTimeTicks": "637162995060000000",
+        "kind": "Utc"
+      }
+    },
+    {
+      "name": "timespan-root",
+      "file": "timespan-root.nrbf",
+      "bytes": 60,
+      "sha256": "03f8aa74412a70f2cf92b97fc90eb466a15c19a0beb963ab6091c6e49f66d74b",
+      "clrType": "System.TimeSpan",
+      "expected": {
+        "timeSpanTicks": "-1234567"
+      }
+    },
+    {
+      "name": "adjacency-double-tagged",
+      "file": "adjacency-double-tagged.nrbf",
+      "bytes": 7575,
+      "sha256": "b9cec24ba89008517863e764691e6605616df8053d810feef0b140def7bac469",
+      "clrType": "QuikGraph.AdjacencyGraph\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": {
+        "vertices": [
+          1,
+          2.5,
+          4
+        ],
+        "edges": [
+          {
+            "source": 1,
+            "target": 2.5,
+            "tag": 1
+          },
+          {
+            "source": 2.5,
+            "target": 4,
+            "tag": 1.25
+          }
+        ],
+        "directed": true,
+        "parallel": true
+      }
+    },
+    {
+      "name": "vertex-list-empty",
+      "file": "vertex-list-empty.nrbf",
+      "bytes": 354,
+      "sha256": "dcf07fcc7b092d30673294f6e7b2c6335bdf3ecb2852ba46caeb11f3404f3368",
+      "clrType": "QuikGraph.Collections.VertexList\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": []
+    },
+    {
+      "name": "edge-list-empty",
+      "file": "edge-list-empty.nrbf",
+      "bytes": 892,
+      "sha256": "f16522530b812456b50d082c1e7a771d49b0d983591198057be764ecd160ed4e",
+      "clrType": "QuikGraph.Collections.EdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.Edge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": []
+    },
+    {
+      "name": "edge-list-equatable-empty",
+      "file": "edge-list-equatable-empty.nrbf",
+      "bytes": 928,
+      "sha256": "1654db62f0f759f24839975a2f662ad742c1659203c4a7f191a40bd50881b46e",
+      "clrType": "QuikGraph.Collections.EdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+      "expected": []
+    },
+    {
+      "name": "queue-empty",
+      "file": "queue-empty.nrbf",
+      "bytes": 351,
+      "sha256": "d49cb60309a37ac8ba22c73943aec1c7d7ed7640755af717edd52969c771217a",
+      "clrType": "QuikGraph.Collections.Queue\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "expected": []
+    }
+  ],
+  "unsupportedByReferenceRuntime": {
+    "forest-disjoint-set": "SerializationException: Type \u0027QuikGraph.Collections.ForestDisjointSet\u00601\u002BElement[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]\u0027 in Assembly \u0027QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb\u0027 is not marked as serializable."
+  }
+}
