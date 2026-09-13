@@ -8,3 +8,6 @@ quikgraphweb-*.tar.gz
 benchmark.json
 SHA256SUMS.txt
 .DS_Store
+tools/**/bin/
+tools/**/obj/
+.reference/

@@ -1,0 +1,2758 @@
+{
+  "QuikGraph.AdjacencyGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CEdgeCapacity\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CAllowParallelEdges\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "_vertexEdges",
+        "type": "QuikGraph.Collections.IVertexEdgeDictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "QuikGraph.Collections.VertexEdgeDictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      },
+      {
+        "name": "\u003CEdgeCount\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "VertexAdded",
+        "type": "QuikGraph.VertexAction\u00601[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": null
+      },
+      {
+        "name": "VertexRemoved",
+        "type": "QuikGraph.VertexAction\u00601[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": null
+      },
+      {
+        "name": "EdgeAdded",
+        "type": "QuikGraph.EdgeAction\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": null
+      },
+      {
+        "name": "EdgeRemoved",
+        "type": "QuikGraph.EdgeAction\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": null
+      }
+    ]
+  },
+  "QuikGraph.AdjacencyGraph\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CEdgeCapacity\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CAllowParallelEdges\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "_vertexEdges",
+        "type": "QuikGraph.Collections.IVertexEdgeDictionary\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "QuikGraph.Collections.VertexEdgeDictionary\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      },
+      {
+        "name": "\u003CEdgeCount\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "VertexAdded",
+        "type": "QuikGraph.VertexAction\u00601[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": null
+      },
+      {
+        "name": "VertexRemoved",
+        "type": "QuikGraph.VertexAction\u00601[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": null
+      },
+      {
+        "name": "EdgeAdded",
+        "type": "QuikGraph.EdgeAction\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": null
+      },
+      {
+        "name": "EdgeRemoved",
+        "type": "QuikGraph.EdgeAction\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": null
+      }
+    ]
+  },
+  "QuikGraph.AdjacencyGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CEdgeCapacity\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CAllowParallelEdges\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "_vertexEdges",
+        "type": "QuikGraph.Collections.IVertexEdgeDictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "QuikGraph.Collections.VertexEdgeDictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      },
+      {
+        "name": "\u003CEdgeCount\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "VertexAdded",
+        "type": "QuikGraph.VertexAction\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": null
+      },
+      {
+        "name": "VertexRemoved",
+        "type": "QuikGraph.VertexAction\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": null
+      },
+      {
+        "name": "EdgeAdded",
+        "type": "QuikGraph.EdgeAction\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": null
+      },
+      {
+        "name": "EdgeRemoved",
+        "type": "QuikGraph.EdgeAction\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": null
+      }
+    ]
+  },
+  "QuikGraph.AdjacencyGraph\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CEdgeCapacity\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CAllowParallelEdges\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "_vertexEdges",
+        "type": "QuikGraph.Collections.IVertexEdgeDictionary\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "QuikGraph.Collections.VertexEdgeDictionary\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      },
+      {
+        "name": "\u003CEdgeCount\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "VertexAdded",
+        "type": "QuikGraph.VertexAction\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": null
+      },
+      {
+        "name": "VertexRemoved",
+        "type": "QuikGraph.VertexAction\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": null
+      },
+      {
+        "name": "EdgeAdded",
+        "type": "QuikGraph.EdgeAction\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": null
+      },
+      {
+        "name": "EdgeRemoved",
+        "type": "QuikGraph.EdgeAction\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": null
+      }
+    ]
+  },
+  "QuikGraph.ArrayAdjacencyGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CAllowParallelEdges\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "_vertexOutEdges",
+        "type": "System.Collections.Generic.Dictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge[], Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "System.Collections.Generic.Dictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge[], Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      },
+      {
+        "name": "\u003CEdgeCount\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.ArrayAdjacencyGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CAllowParallelEdges\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "_vertexOutEdges",
+        "type": "System.Collections.Generic.Dictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "System.Collections.Generic.Dictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      },
+      {
+        "name": "\u003CEdgeCount\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.ArrayBidirectionalGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CAllowParallelEdges\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "_vertexEdges",
+        "type": "System.Collections.Generic.IDictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "System.Collections.Generic.Dictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      },
+      {
+        "name": "\u003CEdgeCount\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.ArrayBidirectionalGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CAllowParallelEdges\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "_vertexEdges",
+        "type": "System.Collections.Generic.IDictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "System.Collections.Generic.Dictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      },
+      {
+        "name": "\u003CEdgeCount\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003COutEdges\u003Ek__BackingField",
+        "type": "QuikGraph.Serialization.Tests.EquatableTestEdge[]",
+        "runtimeType": "QuikGraph.Serialization.Tests.EquatableTestEdge[]"
+      },
+      {
+        "name": "\u003CInEdges\u003Ek__BackingField",
+        "type": "QuikGraph.Serialization.Tests.EquatableTestEdge[]",
+        "runtimeType": "QuikGraph.Serialization.Tests.EquatableTestEdge[]"
+      }
+    ]
+  },
+  "QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003COutEdges\u003Ek__BackingField",
+        "type": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]",
+        "runtimeType": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]"
+      },
+      {
+        "name": "\u003CInEdges\u003Ek__BackingField",
+        "type": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]",
+        "runtimeType": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]"
+      }
+    ]
+  },
+  "QuikGraph.ArrayUndirectedGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "AllowParallelEdges",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "VertexEdges",
+        "type": "System.Collections.Generic.Dictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge[], Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "System.Collections.Generic.Dictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge[], Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      },
+      {
+        "name": "Edges",
+        "type": "System.Collections.Generic.List\u00601[[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "System.Collections.Generic.List\u00601[[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      }
+    ]
+  },
+  "QuikGraph.ArrayUndirectedGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "AllowParallelEdges",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "VertexEdges",
+        "type": "System.Collections.Generic.Dictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "System.Collections.Generic.Dictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      },
+      {
+        "name": "Edges",
+        "type": "System.Collections.Generic.List\u00601[[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "System.Collections.Generic.List\u00601[[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      }
+    ]
+  },
+  "QuikGraph.BidirectionalAdapterGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "_baseGraph",
+        "type": "QuikGraph.IVertexAndEdgeListGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "QuikGraph.AdjacencyGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      },
+      {
+        "name": "_inEdges",
+        "type": "System.Collections.Generic.Dictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Collections.EdgeList\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "System.Collections.Generic.Dictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Collections.EdgeList\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      }
+    ]
+  },
+  "QuikGraph.BidirectionalAdapterGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "_baseGraph",
+        "type": "QuikGraph.IVertexAndEdgeListGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "QuikGraph.AdjacencyGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      },
+      {
+        "name": "_inEdges",
+        "type": "System.Collections.Generic.Dictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.Collections.EdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "System.Collections.Generic.Dictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.Collections.EdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      }
+    ]
+  },
+  "QuikGraph.BidirectionalGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CEdgeCapacity\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CAllowParallelEdges\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "\u003CEdgeCount\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "_vertexOutEdges",
+        "type": "QuikGraph.Collections.IVertexEdgeDictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "QuikGraph.Collections.VertexEdgeDictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      },
+      {
+        "name": "_vertexInEdges",
+        "type": "QuikGraph.Collections.IVertexEdgeDictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "QuikGraph.Collections.VertexEdgeDictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      },
+      {
+        "name": "VertexAdded",
+        "type": "QuikGraph.VertexAction\u00601[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": null
+      },
+      {
+        "name": "VertexRemoved",
+        "type": "QuikGraph.VertexAction\u00601[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": null
+      },
+      {
+        "name": "EdgeAdded",
+        "type": "QuikGraph.EdgeAction\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": null
+      },
+      {
+        "name": "EdgeRemoved",
+        "type": "QuikGraph.EdgeAction\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": null
+      }
+    ]
+  },
+  "QuikGraph.BidirectionalGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CEdgeCapacity\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CAllowParallelEdges\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "\u003CEdgeCount\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "_vertexOutEdges",
+        "type": "QuikGraph.Collections.IVertexEdgeDictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "QuikGraph.Collections.VertexEdgeDictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      },
+      {
+        "name": "_vertexInEdges",
+        "type": "QuikGraph.Collections.IVertexEdgeDictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "QuikGraph.Collections.VertexEdgeDictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      },
+      {
+        "name": "VertexAdded",
+        "type": "QuikGraph.VertexAction\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": null
+      },
+      {
+        "name": "VertexRemoved",
+        "type": "QuikGraph.VertexAction\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": null
+      },
+      {
+        "name": "EdgeAdded",
+        "type": "QuikGraph.EdgeAction\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": null
+      },
+      {
+        "name": "EdgeRemoved",
+        "type": "QuikGraph.EdgeAction\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": null
+      }
+    ]
+  },
+  "QuikGraph.BidirectionalMatrixGraph\u00601[[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CVertexCount\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CEdgeCount\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "_edges",
+        "type": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][,]",
+        "runtimeType": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][,]"
+      },
+      {
+        "name": "EdgeAdded",
+        "type": "QuikGraph.EdgeAction\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": null
+      },
+      {
+        "name": "EdgeRemoved",
+        "type": "QuikGraph.EdgeAction\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": null
+      }
+    ]
+  },
+  "QuikGraph.ClusteredAdjacencyGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CParent\u003Ek__BackingField",
+        "type": "QuikGraph.ClusteredAdjacencyGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": null
+      },
+      {
+        "name": "\u003CWrapped\u003Ek__BackingField",
+        "type": "QuikGraph.AdjacencyGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "QuikGraph.AdjacencyGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      },
+      {
+        "name": "\u003CCollapsed\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "_clusters",
+        "type": "System.Collections.Generic.List\u00601[[QuikGraph.IClusteredGraph, QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "System.Collections.Generic.List\u00601[[QuikGraph.IClusteredGraph, QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      }
+    ]
+  },
+  "QuikGraph.ClusteredAdjacencyGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CParent\u003Ek__BackingField",
+        "type": "QuikGraph.ClusteredAdjacencyGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": null
+      },
+      {
+        "name": "\u003CWrapped\u003Ek__BackingField",
+        "type": "QuikGraph.AdjacencyGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "QuikGraph.AdjacencyGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      },
+      {
+        "name": "\u003CCollapsed\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "_clusters",
+        "type": "System.Collections.Generic.List\u00601[[QuikGraph.IClusteredGraph, QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "System.Collections.Generic.List\u00601[[QuikGraph.IClusteredGraph, QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      }
+    ]
+  },
+  "QuikGraph.Collections.EdgeEdgeDictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "Version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Comparer",
+        "type": "System.Collections.Generic.IEqualityComparer\u00601[[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "System.Collections.Generic.GenericEqualityComparer\u00601[[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      },
+      {
+        "name": "HashSize",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "KeyValuePairs",
+        "type": "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]][]",
+        "runtimeType": "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]][]"
+      }
+    ]
+  },
+  "QuikGraph.Collections.EdgeEdgeDictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "Version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Comparer",
+        "type": "System.Collections.Generic.IEqualityComparer\u00601[[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "System.Collections.Generic.GenericEqualityComparer\u00601[[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      },
+      {
+        "name": "HashSize",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "KeyValuePairs",
+        "type": "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]",
+        "runtimeType": "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]"
+      }
+    ]
+  },
+  "QuikGraph.Collections.EdgeList\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "_items",
+        "type": "QuikGraph.Serialization.Tests.EquatableTestEdge[]",
+        "runtimeType": "QuikGraph.Serialization.Tests.EquatableTestEdge[]"
+      },
+      {
+        "name": "_size",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "_version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "List\u00601\u002B_items",
+        "type": "QuikGraph.Serialization.Tests.EquatableTestEdge[]",
+        "runtimeType": "QuikGraph.Serialization.Tests.EquatableTestEdge[]"
+      },
+      {
+        "name": "List\u00601\u002B_size",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "List\u00601\u002B_version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.Collections.EdgeList\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "_items",
+        "type": "QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]",
+        "runtimeType": "QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]"
+      },
+      {
+        "name": "_size",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "_version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "List\u00601\u002B_items",
+        "type": "QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]",
+        "runtimeType": "QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]"
+      },
+      {
+        "name": "List\u00601\u002B_size",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "List\u00601\u002B_version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.Collections.EdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.Edge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "_items",
+        "type": "QuikGraph.Edge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]",
+        "runtimeType": "QuikGraph.Edge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]"
+      },
+      {
+        "name": "_size",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "_version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "List\u00601\u002B_items",
+        "type": "QuikGraph.Edge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]",
+        "runtimeType": "QuikGraph.Edge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]"
+      },
+      {
+        "name": "List\u00601\u002B_size",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "List\u00601\u002B_version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.Collections.EdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "_items",
+        "type": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]",
+        "runtimeType": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]"
+      },
+      {
+        "name": "_size",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "_version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "List\u00601\u002B_items",
+        "type": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]",
+        "runtimeType": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]"
+      },
+      {
+        "name": "List\u00601\u002B_size",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "List\u00601\u002B_version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.Collections.EdgeList\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "_items",
+        "type": "QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]",
+        "runtimeType": "QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]"
+      },
+      {
+        "name": "_size",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "_version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "List\u00601\u002B_items",
+        "type": "QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]",
+        "runtimeType": "QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]"
+      },
+      {
+        "name": "List\u00601\u002B_size",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "List\u00601\u002B_version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.Collections.Queue\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "Queue\u00601\u002B_array",
+        "type": "System.Int32[]",
+        "runtimeType": "System.Int32[]"
+      },
+      {
+        "name": "Queue\u00601\u002B_head",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Queue\u00601\u002B_tail",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Queue\u00601\u002B_size",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Queue\u00601\u002B_version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.Collections.VertexEdgeDictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "Version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Comparer",
+        "type": "System.Collections.Generic.IEqualityComparer\u00601[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "System.Collections.Generic.GenericEqualityComparer\u00601[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      },
+      {
+        "name": "HashSize",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "KeyValuePairs",
+        "type": "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Collections.IEdgeList\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]",
+        "runtimeType": "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Collections.IEdgeList\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]"
+      }
+    ]
+  },
+  "QuikGraph.Collections.VertexEdgeDictionary\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "Version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Comparer",
+        "type": "System.Collections.Generic.IEqualityComparer\u00601[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": "System.Collections.Generic.GenericEqualityComparer\u00601[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+      },
+      {
+        "name": "HashSize",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "KeyValuePairs",
+        "type": "System.Collections.Generic.KeyValuePair\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.Collections.IEdgeList\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]",
+        "runtimeType": "System.Collections.Generic.KeyValuePair\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.Collections.IEdgeList\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]"
+      }
+    ]
+  },
+  "QuikGraph.Collections.VertexEdgeDictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "Version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Comparer",
+        "type": "System.Collections.Generic.IEqualityComparer\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": "System.Collections.Generic.GenericEqualityComparer\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+      },
+      {
+        "name": "HashSize",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "KeyValuePairs",
+        "type": "System.Collections.Generic.KeyValuePair\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.Collections.IEdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]",
+        "runtimeType": "System.Collections.Generic.KeyValuePair\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.Collections.IEdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]"
+      }
+    ]
+  },
+  "QuikGraph.Collections.VertexEdgeDictionary\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "Version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Comparer",
+        "type": "System.Collections.Generic.IEqualityComparer\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": "System.Collections.Generic.GenericEqualityComparer\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+      },
+      {
+        "name": "HashSize",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "KeyValuePairs",
+        "type": "System.Collections.Generic.KeyValuePair\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.Collections.IEdgeList\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]",
+        "runtimeType": "System.Collections.Generic.KeyValuePair\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.Collections.IEdgeList\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]"
+      }
+    ]
+  },
+  "QuikGraph.Collections.VertexList\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "_items",
+        "type": "System.Int32[]",
+        "runtimeType": "System.Int32[]"
+      },
+      {
+        "name": "_size",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "_version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "List\u00601\u002B_items",
+        "type": "System.Int32[]",
+        "runtimeType": "System.Int32[]"
+      },
+      {
+        "name": "List\u00601\u002B_size",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "List\u00601\u002B_version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.CompressedSparseRowGraph\u00601[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "_outEdges",
+        "type": "QuikGraph.Serialization.Tests.EquatableTestVertex[]",
+        "runtimeType": "QuikGraph.Serialization.Tests.EquatableTestVertex[]"
+      },
+      {
+        "name": "_outEdgeStartRanges",
+        "type": "System.Collections.Generic.Dictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "System.Collections.Generic.Dictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      }
+    ]
+  },
+  "QuikGraph.CompressedSparseRowGraph\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "_outEdges",
+        "type": "System.Int32[]",
+        "runtimeType": "System.Int32[]"
+      },
+      {
+        "name": "_outEdgeStartRanges",
+        "type": "System.Collections.Generic.Dictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "System.Collections.Generic.Dictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      }
+    ]
+  },
+  "QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "Start",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "End",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "Start",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "End",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.Edge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CSource\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CTarget\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.Edge\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CSource\u003Ek__BackingField",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "\u003CTarget\u003Ek__BackingField",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      }
+    ]
+  },
+  "QuikGraph.EdgeListGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CIsDirected\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "\u003CAllowParallelEdges\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "_edges",
+        "type": "QuikGraph.Collections.EdgeEdgeDictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "QuikGraph.Collections.EdgeEdgeDictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      },
+      {
+        "name": "EdgeAdded",
+        "type": "QuikGraph.EdgeAction\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": null
+      },
+      {
+        "name": "EdgeRemoved",
+        "type": "QuikGraph.EdgeAction\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": null
+      }
+    ]
+  },
+  "QuikGraph.EdgeListGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CIsDirected\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "\u003CAllowParallelEdges\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "_edges",
+        "type": "QuikGraph.Collections.EdgeEdgeDictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "QuikGraph.Collections.EdgeEdgeDictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      },
+      {
+        "name": "EdgeAdded",
+        "type": "QuikGraph.EdgeAction\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": null
+      },
+      {
+        "name": "EdgeRemoved",
+        "type": "QuikGraph.EdgeAction\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": null
+      }
+    ]
+  },
+  "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "Edge\u00601\u002B\u003CSource\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Edge\u00601\u002B\u003CTarget\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.EquatableTaggedEdge\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "TagChanged",
+        "type": "System.EventHandler",
+        "runtimeType": null
+      },
+      {
+        "name": "_tag",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "Edge\u00601\u002B\u003CSource\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Edge\u00601\u002B\u003CTarget\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.EquatableTermEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "TermEdge\u00601\u002B\u003CSource\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "TermEdge\u00601\u002B\u003CTarget\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "TermEdge\u00601\u002B\u003CSourceTerminal\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "TermEdge\u00601\u002B\u003CTargetTerminal\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.EquatableUndirectedEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "UndirectedEdge\u00601\u002B\u003CSource\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "UndirectedEdge\u00601\u002B\u003CTarget\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.Graphviz.Dot.GraphvizColor": {
+    "assembly": "QuikGraph.Graphviz, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "a",
+        "type": "System.Byte",
+        "runtimeType": "System.Byte"
+      },
+      {
+        "name": "r",
+        "type": "System.Byte",
+        "runtimeType": "System.Byte"
+      },
+      {
+        "name": "g",
+        "type": "System.Byte",
+        "runtimeType": "System.Byte"
+      },
+      {
+        "name": "b",
+        "type": "System.Byte",
+        "runtimeType": "System.Byte"
+      }
+    ]
+  },
+  "QuikGraph.Graphviz.Dot.GraphvizSize": {
+    "assembly": "QuikGraph.Graphviz, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "w",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "h",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.Graphviz.Dot.GraphvizSizeF": {
+    "assembly": "QuikGraph.Graphviz, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "w",
+        "type": "System.Single",
+        "runtimeType": "System.Single"
+      },
+      {
+        "name": "h",
+        "type": "System.Single",
+        "runtimeType": "System.Single"
+      }
+    ]
+  },
+  "QuikGraph.NegativeCycleGraphException": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "ClassName",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "Message",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "Data",
+        "type": "System.Collections.IDictionary",
+        "runtimeType": null
+      },
+      {
+        "name": "InnerException",
+        "type": "System.Exception",
+        "runtimeType": "System.InvalidOperationException"
+      },
+      {
+        "name": "HelpURL",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "StackTraceString",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "RemoteStackTraceString",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "RemoteStackIndex",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "ExceptionMethod",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "HResult",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Source",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "WatsonBuckets",
+        "type": "System.Byte[]",
+        "runtimeType": null
+      }
+    ]
+  },
+  "QuikGraph.NonAcyclicGraphException": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "ClassName",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "Message",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "Data",
+        "type": "System.Collections.IDictionary",
+        "runtimeType": null
+      },
+      {
+        "name": "InnerException",
+        "type": "System.Exception",
+        "runtimeType": null
+      },
+      {
+        "name": "HelpURL",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "StackTraceString",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "RemoteStackTraceString",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "RemoteStackIndex",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "ExceptionMethod",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "HResult",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Source",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "WatsonBuckets",
+        "type": "System.Byte[]",
+        "runtimeType": null
+      }
+    ]
+  },
+  "QuikGraph.NonStronglyConnectedGraphException": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "ClassName",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "Message",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "Data",
+        "type": "System.Collections.IDictionary",
+        "runtimeType": null
+      },
+      {
+        "name": "InnerException",
+        "type": "System.Exception",
+        "runtimeType": null
+      },
+      {
+        "name": "HelpURL",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "StackTraceString",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "RemoteStackTraceString",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "RemoteStackIndex",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "ExceptionMethod",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "HResult",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Source",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "WatsonBuckets",
+        "type": "System.Byte[]",
+        "runtimeType": null
+      }
+    ]
+  },
+  "QuikGraph.NoPathFoundException": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "ClassName",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "Message",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "Data",
+        "type": "System.Collections.IDictionary",
+        "runtimeType": null
+      },
+      {
+        "name": "InnerException",
+        "type": "System.Exception",
+        "runtimeType": null
+      },
+      {
+        "name": "HelpURL",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "StackTraceString",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "RemoteStackTraceString",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "RemoteStackIndex",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "ExceptionMethod",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "HResult",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Source",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "WatsonBuckets",
+        "type": "System.Byte[]",
+        "runtimeType": null
+      }
+    ]
+  },
+  "QuikGraph.ParallelEdgeNotAllowedException": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "ClassName",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "Message",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "Data",
+        "type": "System.Collections.IDictionary",
+        "runtimeType": null
+      },
+      {
+        "name": "InnerException",
+        "type": "System.Exception",
+        "runtimeType": null
+      },
+      {
+        "name": "HelpURL",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "StackTraceString",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "RemoteStackTraceString",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "RemoteStackIndex",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "ExceptionMethod",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "HResult",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Source",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "WatsonBuckets",
+        "type": "System.Byte[]",
+        "runtimeType": null
+      }
+    ]
+  },
+  "QuikGraph.ReversedBidirectionalGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003COriginalGraph\u003Ek__BackingField",
+        "type": "QuikGraph.IBidirectionalGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "QuikGraph.BidirectionalGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      }
+    ]
+  },
+  "QuikGraph.ReversedBidirectionalGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003COriginalGraph\u003Ek__BackingField",
+        "type": "QuikGraph.IBidirectionalGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "QuikGraph.BidirectionalGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      }
+    ]
+  },
+  "QuikGraph.SEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CSource\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CTarget\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.SEquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CSource\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CTarget\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.SEquatableTaggedEdge\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CSource\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CTarget\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "TagChanged",
+        "type": "System.EventHandler",
+        "runtimeType": null
+      },
+      {
+        "name": "_tag",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      }
+    ]
+  },
+  "QuikGraph.Serialization.Tests.EquatableTestEdge": {
+    "assembly": "Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CID\u003Ek__BackingField",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "\u003CString\u003Ek__BackingField",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "\u003CInt\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CLong\u003Ek__BackingField",
+        "type": "System.Int64",
+        "runtimeType": "System.Int64"
+      },
+      {
+        "name": "\u003CDouble\u003Ek__BackingField",
+        "type": "System.Double",
+        "runtimeType": "System.Double"
+      },
+      {
+        "name": "\u003CBool\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "\u003CFloat\u003Ek__BackingField",
+        "type": "System.Single",
+        "runtimeType": "System.Single"
+      },
+      {
+        "name": "Edge\u00601\u002B\u003CSource\u003Ek__BackingField",
+        "type": "QuikGraph.Serialization.Tests.EquatableTestVertex",
+        "runtimeType": "QuikGraph.Serialization.Tests.EquatableTestVertex"
+      },
+      {
+        "name": "Edge\u00601\u002B\u003CTarget\u003Ek__BackingField",
+        "type": "QuikGraph.Serialization.Tests.EquatableTestVertex",
+        "runtimeType": "QuikGraph.Serialization.Tests.EquatableTestVertex"
+      }
+    ]
+  },
+  "QuikGraph.Serialization.Tests.EquatableTestVertex": {
+    "assembly": "Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "TestVertex\u002B\u003CID\u003Ek__BackingField",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "TestVertex\u002B\u003CStringDefault\u003Ek__BackingField",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "TestVertex\u002B\u003CString\u003Ek__BackingField",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "TestVertex\u002B\u003CInt\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "TestVertex\u002B\u003CLong\u003Ek__BackingField",
+        "type": "System.Int64",
+        "runtimeType": "System.Int64"
+      },
+      {
+        "name": "TestVertex\u002B\u003CBool\u003Ek__BackingField",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "TestVertex\u002B\u003CFloat\u003Ek__BackingField",
+        "type": "System.Single",
+        "runtimeType": "System.Single"
+      },
+      {
+        "name": "TestVertex\u002B\u003CDouble\u003Ek__BackingField",
+        "type": "System.Double",
+        "runtimeType": "System.Double"
+      },
+      {
+        "name": "TestVertex\u002B\u003CIntArray\u003Ek__BackingField",
+        "type": "System.Int32[]",
+        "runtimeType": "System.Int32[]"
+      },
+      {
+        "name": "TestVertex\u002B\u003CIntIList\u003Ek__BackingField",
+        "type": "System.Collections.Generic.IList\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": "System.Collections.Generic.List\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+      }
+    ]
+  },
+  "QuikGraph.SReversedEdge\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003COriginalEdge\u003Ek__BackingField",
+        "type": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+      }
+    ]
+  },
+  "QuikGraph.STaggedEdge\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CSource\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CTarget\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "TagChanged",
+        "type": "System.EventHandler",
+        "runtimeType": null
+      },
+      {
+        "name": "_tag",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      }
+    ]
+  },
+  "QuikGraph.STaggedUndirectedEdge\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CSource\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CTarget\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "TagChanged",
+        "type": "System.EventHandler",
+        "runtimeType": null
+      },
+      {
+        "name": "_tag",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      }
+    ]
+  },
+  "QuikGraph.SUndirectedEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CSource\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CTarget\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "TagChanged",
+        "type": "System.EventHandler",
+        "runtimeType": null
+      },
+      {
+        "name": "_tag",
+        "type": "System.Double",
+        "runtimeType": "System.Double"
+      },
+      {
+        "name": "Edge\u00601\u002B\u003CSource\u003Ek__BackingField",
+        "type": "System.Double",
+        "runtimeType": "System.Double"
+      },
+      {
+        "name": "Edge\u00601\u002B\u003CTarget\u003Ek__BackingField",
+        "type": "System.Double",
+        "runtimeType": "System.Double"
+      }
+    ]
+  },
+  "QuikGraph.TaggedEdge\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "TagChanged",
+        "type": "System.EventHandler",
+        "runtimeType": null
+      },
+      {
+        "name": "_tag",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "Edge\u00601\u002B\u003CSource\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Edge\u00601\u002B\u003CTarget\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "TagChanged",
+        "type": "System.EventHandler",
+        "runtimeType": null
+      },
+      {
+        "name": "_tag",
+        "type": "System.Double",
+        "runtimeType": "System.Double"
+      },
+      {
+        "name": "Edge\u00601\u002B\u003CSource\u003Ek__BackingField",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "Edge\u00601\u002B\u003CTarget\u003Ek__BackingField",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      }
+    ]
+  },
+  "QuikGraph.TaggedUndirectedEdge\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "TagChanged",
+        "type": "System.EventHandler",
+        "runtimeType": null
+      },
+      {
+        "name": "_tag",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "UndirectedEdge\u00601\u002B\u003CSource\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "UndirectedEdge\u00601\u002B\u003CTarget\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.TermEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CSource\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CTarget\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CSourceTerminal\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CTargetTerminal\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.UndirectedBidirectionalGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "OriginalGraph",
+        "type": "QuikGraph.BidirectionalGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "QuikGraph.BidirectionalGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      }
+    ]
+  },
+  "QuikGraph.UndirectedBidirectionalGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "OriginalGraph",
+        "type": "QuikGraph.BidirectionalGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "QuikGraph.BidirectionalGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      }
+    ]
+  },
+  "QuikGraph.UndirectedEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "\u003CSource\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "\u003CTarget\u003Ek__BackingField",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "QuikGraph.UndirectedGraph\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "AllowParallelEdges",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "EdgeCapacity",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "AdjacentEdges",
+        "type": "QuikGraph.Collections.VertexEdgeDictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "QuikGraph.Collections.VertexEdgeDictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      },
+      {
+        "name": "Edges",
+        "type": "System.Collections.Generic.List\u00601[[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "System.Collections.Generic.List\u00601[[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      }
+    ]
+  },
+  "QuikGraph.UndirectedGraph\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "AllowParallelEdges",
+        "type": "System.Boolean",
+        "runtimeType": "System.Boolean"
+      },
+      {
+        "name": "EdgeCapacity",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "AdjacentEdges",
+        "type": "QuikGraph.Collections.VertexEdgeDictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "QuikGraph.Collections.VertexEdgeDictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      },
+      {
+        "name": "Edges",
+        "type": "System.Collections.Generic.List\u00601[[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "System.Collections.Generic.List\u00601[[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      }
+    ]
+  },
+  "QuikGraph.VertexNotFoundException": {
+    "assembly": "QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "ClassName",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "Message",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "Data",
+        "type": "System.Collections.IDictionary",
+        "runtimeType": null
+      },
+      {
+        "name": "InnerException",
+        "type": "System.Exception",
+        "runtimeType": null
+      },
+      {
+        "name": "HelpURL",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "StackTraceString",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "RemoteStackTraceString",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "RemoteStackIndex",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "ExceptionMethod",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "HResult",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Source",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "WatsonBuckets",
+        "type": "System.Byte[]",
+        "runtimeType": null
+      }
+    ]
+  },
+  "System.Collections.Generic.Dictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "Version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Comparer",
+        "type": "System.Collections.Generic.IEqualityComparer\u00601[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "System.Collections.Generic.GenericEqualityComparer\u00601[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      },
+      {
+        "name": "HashSize",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "KeyValuePairs",
+        "type": "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]",
+        "runtimeType": "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]"
+      }
+    ]
+  },
+  "System.Collections.Generic.Dictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Collections.EdgeList\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "Version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Comparer",
+        "type": "System.Collections.Generic.IEqualityComparer\u00601[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "System.Collections.Generic.GenericEqualityComparer\u00601[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      },
+      {
+        "name": "HashSize",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "KeyValuePairs",
+        "type": "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Collections.EdgeList\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]",
+        "runtimeType": "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Collections.EdgeList\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]"
+      }
+    ]
+  },
+  "System.Collections.Generic.Dictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "Version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Comparer",
+        "type": "System.Collections.Generic.IEqualityComparer\u00601[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "System.Collections.Generic.GenericEqualityComparer\u00601[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      },
+      {
+        "name": "HashSize",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "KeyValuePairs",
+        "type": "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]",
+        "runtimeType": "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]"
+      }
+    ]
+  },
+  "System.Collections.Generic.Dictionary\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge[], Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "Version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Comparer",
+        "type": "System.Collections.Generic.IEqualityComparer\u00601[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "System.Collections.Generic.GenericEqualityComparer\u00601[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      },
+      {
+        "name": "HashSize",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "KeyValuePairs",
+        "type": "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge[], Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]][]",
+        "runtimeType": "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge[], Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]][]"
+      }
+    ]
+  },
+  "System.Collections.Generic.Dictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "Version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Comparer",
+        "type": "System.Collections.Generic.IEqualityComparer\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": "System.Collections.Generic.GenericEqualityComparer\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+      },
+      {
+        "name": "HashSize",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "KeyValuePairs",
+        "type": "System.Collections.Generic.KeyValuePair\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]",
+        "runtimeType": "System.Collections.Generic.KeyValuePair\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]"
+      }
+    ]
+  },
+  "System.Collections.Generic.Dictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.Collections.EdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "Version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Comparer",
+        "type": "System.Collections.Generic.IEqualityComparer\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": "System.Collections.Generic.GenericEqualityComparer\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+      },
+      {
+        "name": "HashSize",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "KeyValuePairs",
+        "type": "System.Collections.Generic.KeyValuePair\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.Collections.EdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]",
+        "runtimeType": "System.Collections.Generic.KeyValuePair\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.Collections.EdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]"
+      }
+    ]
+  },
+  "System.Collections.Generic.Dictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "Version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Comparer",
+        "type": "System.Collections.Generic.IEqualityComparer\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": "System.Collections.Generic.GenericEqualityComparer\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+      },
+      {
+        "name": "HashSize",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "KeyValuePairs",
+        "type": "System.Collections.Generic.KeyValuePair\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]",
+        "runtimeType": "System.Collections.Generic.KeyValuePair\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]"
+      }
+    ]
+  },
+  "System.Collections.Generic.Dictionary\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "Version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Comparer",
+        "type": "System.Collections.Generic.IEqualityComparer\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": "System.Collections.Generic.GenericEqualityComparer\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+      },
+      {
+        "name": "HashSize",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "KeyValuePairs",
+        "type": "System.Collections.Generic.KeyValuePair\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]",
+        "runtimeType": "System.Collections.Generic.KeyValuePair\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]][]"
+      }
+    ]
+  },
+  "System.Collections.Generic.GenericEqualityComparer\u00601[[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": []
+  },
+  "System.Collections.Generic.GenericEqualityComparer\u00601[[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": []
+  },
+  "System.Collections.Generic.GenericEqualityComparer\u00601[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": []
+  },
+  "System.Collections.Generic.GenericEqualityComparer\u00601[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": []
+  },
+  "System.Collections.Generic.GenericEqualityComparer\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": []
+  },
+  "System.Collections.Generic.GenericEqualityComparer\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": []
+  },
+  "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "key",
+        "type": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+      },
+      {
+        "name": "value",
+        "type": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+      }
+    ]
+  },
+  "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "key",
+        "type": "QuikGraph.Serialization.Tests.EquatableTestEdge",
+        "runtimeType": "QuikGraph.Serialization.Tests.EquatableTestEdge"
+      },
+      {
+        "name": "value",
+        "type": "QuikGraph.Serialization.Tests.EquatableTestEdge",
+        "runtimeType": "QuikGraph.Serialization.Tests.EquatableTestEdge"
+      }
+    ]
+  },
+  "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "key",
+        "type": "QuikGraph.Serialization.Tests.EquatableTestVertex",
+        "runtimeType": "QuikGraph.Serialization.Tests.EquatableTestVertex"
+      },
+      {
+        "name": "value",
+        "type": "QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      }
+    ]
+  },
+  "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Collections.EdgeList\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "key",
+        "type": "QuikGraph.Serialization.Tests.EquatableTestVertex",
+        "runtimeType": "QuikGraph.Serialization.Tests.EquatableTestVertex"
+      },
+      {
+        "name": "value",
+        "type": "QuikGraph.Collections.EdgeList\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "QuikGraph.Collections.EdgeList\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      }
+    ]
+  },
+  "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Collections.IEdgeList\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "key",
+        "type": "QuikGraph.Serialization.Tests.EquatableTestVertex",
+        "runtimeType": "QuikGraph.Serialization.Tests.EquatableTestVertex"
+      },
+      {
+        "name": "value",
+        "type": "QuikGraph.Collections.IEdgeList\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "QuikGraph.Collections.EdgeList\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      }
+    ]
+  },
+  "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "key",
+        "type": "QuikGraph.Serialization.Tests.EquatableTestVertex",
+        "runtimeType": "QuikGraph.Serialization.Tests.EquatableTestVertex"
+      },
+      {
+        "name": "value",
+        "type": "QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "runtimeType": "QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+      }
+    ]
+  },
+  "System.Collections.Generic.KeyValuePair\u00602[[QuikGraph.Serialization.Tests.EquatableTestVertex, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[QuikGraph.Serialization.Tests.EquatableTestEdge[], Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "key",
+        "type": "QuikGraph.Serialization.Tests.EquatableTestVertex",
+        "runtimeType": "QuikGraph.Serialization.Tests.EquatableTestVertex"
+      },
+      {
+        "name": "value",
+        "type": "QuikGraph.Serialization.Tests.EquatableTestEdge[]",
+        "runtimeType": "QuikGraph.Serialization.Tests.EquatableTestEdge[]"
+      }
+    ]
+  },
+  "System.Collections.Generic.KeyValuePair\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.Collections.IEdgeList\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "key",
+        "type": "System.Double",
+        "runtimeType": "System.Double"
+      },
+      {
+        "name": "value",
+        "type": "QuikGraph.Collections.IEdgeList\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "QuikGraph.Collections.EdgeList\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      }
+    ]
+  },
+  "System.Collections.Generic.KeyValuePair\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "key",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "value",
+        "type": "QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "QuikGraph.ArrayBidirectionalGraph\u00602\u002BInOutEdges[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      }
+    ]
+  },
+  "System.Collections.Generic.KeyValuePair\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.Collections.EdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "key",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "value",
+        "type": "QuikGraph.Collections.EdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "QuikGraph.Collections.EdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      }
+    ]
+  },
+  "System.Collections.Generic.KeyValuePair\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.Collections.IEdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "key",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "value",
+        "type": "QuikGraph.Collections.IEdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "QuikGraph.Collections.EdgeList\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      }
+    ]
+  },
+  "System.Collections.Generic.KeyValuePair\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "key",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "value",
+        "type": "QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "runtimeType": "QuikGraph.CompressedSparseRowGraph\u00601\u002BRange[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+      }
+    ]
+  },
+  "System.Collections.Generic.KeyValuePair\u00602[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "key",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "value",
+        "type": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]",
+        "runtimeType": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]"
+      }
+    ]
+  },
+  "System.Collections.Generic.KeyValuePair\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.Collections.IEdgeList\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "key",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "value",
+        "type": "QuikGraph.Collections.IEdgeList\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]",
+        "runtimeType": "QuikGraph.Collections.EdgeList\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[QuikGraph.TaggedEdge\u00602[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Double, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]"
+      }
+    ]
+  },
+  "System.Collections.Generic.List\u00601[[QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "_items",
+        "type": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]",
+        "runtimeType": "QuikGraph.EquatableEdge\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]][]"
+      },
+      {
+        "name": "_size",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "_version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "System.Collections.Generic.List\u00601[[QuikGraph.IClusteredGraph, QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "_items",
+        "type": "QuikGraph.IClusteredGraph[]",
+        "runtimeType": "QuikGraph.IClusteredGraph[]"
+      },
+      {
+        "name": "_size",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "_version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "System.Collections.Generic.List\u00601[[QuikGraph.Serialization.Tests.EquatableTestEdge, Fixtures, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "_items",
+        "type": "QuikGraph.Serialization.Tests.EquatableTestEdge[]",
+        "runtimeType": "QuikGraph.Serialization.Tests.EquatableTestEdge[]"
+      },
+      {
+        "name": "_size",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "_version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "System.Collections.Generic.List\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": false,
+    "members": [
+      {
+        "name": "_items",
+        "type": "System.Int32[]",
+        "runtimeType": "System.Int32[]"
+      },
+      {
+        "name": "_size",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "_version",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      }
+    ]
+  },
+  "System.InvalidOperationException": {
+    "assembly": "System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+    "customSerialization": true,
+    "members": [
+      {
+        "name": "ClassName",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "Message",
+        "type": "System.String",
+        "runtimeType": "System.String"
+      },
+      {
+        "name": "Data",
+        "type": "System.Collections.IDictionary",
+        "runtimeType": null
+      },
+      {
+        "name": "InnerException",
+        "type": "System.Exception",
+        "runtimeType": null
+      },
+      {
+        "name": "HelpURL",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "StackTraceString",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "RemoteStackTraceString",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "RemoteStackIndex",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "ExceptionMethod",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "HResult",
+        "type": "System.Int32",
+        "runtimeType": "System.Int32"
+      },
+      {
+        "name": "Source",
+        "type": "System.String",
+        "runtimeType": null
+      },
+      {
+        "name": "WatsonBuckets",
+        "type": "System.Byte[]",
+        "runtimeType": null
+      }
+    ]
+  }
+}

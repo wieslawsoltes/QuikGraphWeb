@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <BaseIntermediateOutputPath>obj/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <UpstreamRoot Condition="'$(UpstreamRoot)' == ''">$(MSBuildThisFileDirectory)../../../../upstream</UpstreamRoot>
+    <DefineConstants>NETSTANDARD2_0;SUPPORTS_SERIALIZATION;SUPPORTS_CLONEABLE;SUPPORTS_CONVERTER;SUPPORTS_TYPE_FULL_FEATURES;SUPPORTS_ENUMERABLE_COVARIANT;SUPPORTS_SORTEDSET;SUPPORTS_AGGRESSIVE_INLINING;DEPLOY_BUILD</DefineConstants>
+    <AssemblyVersion>2.5.0.0</AssemblyVersion>
+    <Version>2.5.0</Version>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(UpstreamRoot)/QuikGraph.snk</AssemblyOriginatorKeyFile>
+    <NoWarn>$(NoWarn);SYSLIB0003;SYSLIB0051;CS0672;CS3021</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(UpstreamRoot)/src/QuikGraph.CommonInternals/**/*.cs" />
+  </ItemGroup>
+</Project>

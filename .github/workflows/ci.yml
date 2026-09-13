@@ -42,8 +42,52 @@ jobs:
             benchmark.json
           if-no-files-found: ignore
 
+  binary-interop:
+    name: Native .NET binary interoperability
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_NOLOGO: 1
+    steps:
+      - uses: actions/checkout@v7
+      - name: Check out pinned original QuikGraph sources
+        uses: actions/checkout@v7
+        with:
+          repository: KeRNeLith/QuikGraph
+          ref: 9cd6b49292e09041258708a37bed99c56177b0ef
+          path: .reference/QuikGraph
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: tools/nrbf-fixtures/global.json
+      - name: Build unchanged signed CLR reference libraries
+        working-directory: tools/nrbf-fixtures
+        run: dotnet build Fixtures.csproj -c Release -p:UpstreamRoot="$GITHUB_WORKSPACE/.reference/QuikGraph"
+      - name: Re-encode original CLR fixtures through JavaScript
+        run: node tools/nrbf-fixtures/roundtrip.mjs test-results/nrbf-roundtrip
+      - name: Materialize CLR fixtures as JavaScript graph objects
+        run: node tools/nrbf-fixtures/hydrate.mjs test-results/nrbf-hydrated
+      - name: Serialize independently constructed JavaScript objects
+        run: node tools/nrbf-fixtures/fresh.mjs test-results/nrbf-fresh
+      - name: Verify all JavaScript outputs in the original CLR types
+        shell: bash
+        run: |
+          dotnet tools/nrbf-fixtures/bin/Release/net8.0/Fixtures.dll verify test-results/nrbf-roundtrip 2>&1 | tee test-results/nrbf-roundtrip.txt
+          dotnet tools/nrbf-fixtures/bin/Release/net8.0/Fixtures.dll verify test-results/nrbf-hydrated 2>&1 | tee test-results/nrbf-hydrated.txt
+          dotnet tools/nrbf-fixtures/bin/Release/net8.0/Fixtures.dll verify test-results/nrbf-fresh 2>&1 | tee test-results/nrbf-fresh.txt
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: binary-interoperability
+          path: test-results/nrbf-*
+          if-no-files-found: ignore
+
   package:
-    needs: verify
+    needs: [verify, binary-interop]
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:

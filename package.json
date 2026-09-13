@@ -41,7 +41,17 @@
       "import": "./dist/xml-validation.js",
       "require": "./dist/cjs/xml-validation.js"
     },
-    "./xml-validation/browser": "./dist/quikgraphweb-xml-validation.js"
+    "./xml-validation/browser": "./dist/quikgraphweb-xml-validation.js",
+    "./nrbf": {
+      "types": "./dist/nrbf.d.ts",
+      "import": "./dist/nrbf.js",
+      "require": "./dist/cjs/nrbf.js"
+    },
+    "./binary-serialization": {
+      "types": "./dist/binary-serialization.d.ts",
+      "import": "./dist/binary-serialization.js",
+      "require": "./dist/cjs/binary-serialization.js"
+    }
   },
   "files": [
     "dist",
