@@ -167,3 +167,9 @@ await writeFile('docs/conformance-summary.json', JSON.stringify({
   counts: report.counts,
 }, null, 2) + '\n');
 console.log(JSON.stringify({ upstreamCommit: report.upstreamCommit, ...report.counts }, null, 2));
+// Source identities are a release gate; they still do not imply assertion parity.
+assert.equal(executedMapping.runExitCode, 0, 'Run the passing JavaScript suite before the conformance audit.');
+assert.equal(executedMapping.staleSourceFiles.length, 0, 'Rerun tests after changing mapped source files.');
+assert.equal(tests.filter(test => test.status === 'unported').length, 0, 'Every source test needs executable mapping or an explicit platform disposition.');
+assert.equal(declarations.filter(type => /missing$/.test(type.status)).length, 0, 'Public source API declarations must remain accounted for.');
+assert.equal(memberResults.filter(member => member.status === 'runtime-member-name-missing').length, 0, 'Public source member names must remain accounted for.');

@@ -10,7 +10,7 @@ Graph data structures, algorithms, and a reusable HTML viewer for JavaScript. Qu
 
 **[Open the graph laboratory](https://wieslawsoltes.github.io/QuikGraphWeb/)** · [API and usage](docs/usage.md) · [Compatibility](docs/compatibility.md) · [Verification](docs/verification.md) · [Source/test inventories](docs/api-inventory.json) · [Releases](https://github.com/wieslawsoltes/QuikGraphWeb/releases)
 
-The library has no runtime dependencies. The package includes native ES modules, CommonJS, standalone browser bundles, TypeScript declarations, source, documentation, and 38 executable examples. See the compatibility document and generated audit for the exact distinction between available APIs, source-linked tests, and full .NET conformance.
+The package is self-contained: native ES modules, CommonJS, standalone browser bundles, TypeScript declarations, source, documentation, and 42 executable examples. Optional entry points include bundled Graphviz WebAssembly rendering, Microsoft MSAGL.js layout, and native GraphML XSD validation; the core import does not load those engines. MS-NRBF binary serialization is included in the core API. No additional runtime npm packages or native executables are required. See the compatibility document and generated audit for the exact distinction between available APIs, source-linked tests, and full .NET conformance.
 
 ## Install
 
@@ -52,9 +52,20 @@ CommonJS consumers can use `require('@wieslawsoltes/quikgraphweb')`. Node 22 and
 | Structure | Connected/weak/strong/incremental components, topological sorting, condensation, transitive closure/reduction, offline least common ancestors |
 | Optimization | Prim/Kruskal spanning forests, Edmonds–Karp flow, graph augmentation/balancing, bipartite matching, Hungarian assignment, exact TSP, Kernighan–Lin partitioning |
 | Analysis | PageRank, coloring, vertex-cover approximation, Euler/Hamilton predicates and trails, random walks, cycle-popping trees, state-space exploration, additional Bron–Kerbosch clique search |
-| Formats | Graphviz DOT and formatters, GraphML with typed metadata, generic XML, Directed Graph Markup Language models |
-| Integrations | DataSet-shaped JavaScript relational objects, Petri-net simulation, MSAGL drawing-model adapters |
-| Browser component | Canvas graph viewer, custom labels/colors, highlights, pan/zoom, vertex dragging, selection/edit events, SVG export |
+| Formats | Graphviz DOT and formatters, GraphML with typed metadata and native XSD validation, generic XML, Directed Graph Markup Language models, MS-NRBF binary serialization |
+| Integrations | DataSet-shaped JavaScript relational objects, Petri-net simulation, bundled Graphviz rendering and Microsoft MSAGL.js layout/routing |
+| Browser component | Canvas graph viewer, native layout curves and clusters, custom labels/colors, highlights, pan/zoom, dragging, searchable keyboard-accessible vertex/edge inspector, selection/edit events, SVG export |
+
+## Optional rendering and validation engines
+
+| npm entry point | Ready-to-use functionality |
+| --- | --- |
+| `@wieslawsoltes/quikgraphweb/graphviz-runtime` | [Graphviz WebAssembly](docs/graphviz-runtime.md): DOT/native graph input, SVG/JSON/text formats, browser PNG/JPEG/WebP export |
+| `@wieslawsoltes/quikgraphweb/layout` | [Microsoft MSAGL.js](docs/layout.md): layered, MDS and force layout; six routing modes; clusters, labels and exact curves |
+| `@wieslawsoltes/quikgraphweb/xml-validation` | [Native GraphML XSD](docs/xml-validation.md): compiled schemas, diagnostic locations and validation before graph conversion |
+| `@wieslawsoltes/quikgraphweb/binary-serialization` | [MS-NRBF interchange](docs/nrbf.md): original QuikGraph graph records, explicit custom type schemas and CLR interoperability |
+
+The laboratory exposes editable DOT/GraphML, rendering and layout controls, NRBF file import/export, and the original graph-algorithm examples. The [usage guide](docs/usage.md) shows short integration examples for every optional module.
 
 ## Use the web component
 
@@ -66,7 +77,7 @@ The viewer is an optional rendering surface. The graph and algorithm modules als
   import {
     defineQuikGraphViewer, BidirectionalGraph, TaggedEdge,
     DijkstraShortestPathAlgorithm
-  } from 'https://cdn.jsdelivr.net/npm/@wieslawsoltes/quikgraphweb@0.1.0/dist/index.js';
+  } from 'https://cdn.jsdelivr.net/npm/@wieslawsoltes/quikgraphweb@0.2.0/dist/index.js';
 
   defineQuikGraphViewer();
   const graph = new BidirectionalGraph();
@@ -122,4 +133,4 @@ For an explicit retry, use the **Publish npm registry** workflow with the existi
 
 ## License and attribution
 
-Microsoft Public License (MS-PL), preserving QuikGraph's upstream license. See [LICENSE](LICENSE) and [NOTICE](NOTICE). QuikGraph originated as QuickGraph by Jonathan “Peli” de Halleux, continued as YC.QuickGraph, and is maintained by KeRNeLith and contributors. QuikGraphWeb is an independent JavaScript adaptation.
+Microsoft Public License (MS-PL), preserving QuikGraph's upstream license. See [LICENSE](LICENSE) and [NOTICE](NOTICE). Bundled engines retain their own licenses in [third-party notices](THIRD_PARTY_NOTICES.md) and `dist/licenses/`. QuikGraph originated as QuickGraph by Jonathan “Peli” de Halleux, continued as YC.QuickGraph, and is maintained by KeRNeLith and contributors. QuikGraphWeb is an independent JavaScript adaptation.
