@@ -35,7 +35,13 @@
       "import": "./dist/layout.js",
       "require": "./dist/cjs/layout.js"
     },
-    "./layout/browser": "./dist/quikgraphweb-layout.js"
+    "./layout/browser": "./dist/quikgraphweb-layout.js",
+    "./xml-validation": {
+      "types": "./dist/xml-validation.d.ts",
+      "import": "./dist/xml-validation.js",
+      "require": "./dist/cjs/xml-validation.js"
+    },
+    "./xml-validation/browser": "./dist/quikgraphweb-xml-validation.js"
   },
   "files": [
     "dist",
