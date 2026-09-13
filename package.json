@@ -29,7 +29,13 @@
       "import": "./dist/graphviz-runtime.js",
       "require": "./dist/cjs/graphviz-runtime.js"
     },
-    "./graphviz-runtime/browser": "./dist/quikgraphweb-graphviz.js"
+    "./graphviz-runtime/browser": "./dist/quikgraphweb-graphviz.js",
+    "./layout": {
+      "types": "./dist/layout.d.ts",
+      "import": "./dist/layout.js",
+      "require": "./dist/cjs/layout.js"
+    },
+    "./layout/browser": "./dist/quikgraphweb-layout.js"
   },
   "files": [
     "dist",
