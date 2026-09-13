@@ -5,7 +5,10 @@
   "type": "module",
   "license": "MS-PL",
   "author": "QuikGraphWeb contributors",
-  "repository": { "type": "git", "url": "git+https://github.com/wieslawsoltes/QuikGraphWeb.git" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wieslawsoltes/QuikGraphWeb.git"
+  },
   "homepage": "https://wieslawsoltes.github.io/QuikGraphWeb/",
   "bugs": "https://github.com/wieslawsoltes/QuikGraphWeb/issues",
   "main": "./dist/cjs/index.js",
@@ -14,14 +17,51 @@
   "unpkg": "./dist/quikgraphweb.min.js",
   "jsdelivr": "./dist/quikgraphweb.min.js",
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "require": "./dist/cjs/index.js" },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/cjs/index.js"
+    },
     "./browser": "./dist/quikgraphweb.browser.js",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./graphviz-runtime": {
+      "types": "./dist/graphviz-runtime.d.ts",
+      "import": "./dist/graphviz-runtime.js",
+      "require": "./dist/cjs/graphviz-runtime.js"
+    },
+    "./graphviz-runtime/browser": "./dist/quikgraphweb-graphviz.js"
   },
-  "files": ["dist", "src", "docs", "examples", "LICENSE", "NOTICE", "README.md", "CHANGELOG.md"],
-  "sideEffects": ["./src/web-component.js", "./dist/web-component.js", "./dist/cjs/web-component.js", "./dist/quikgraphweb.browser.js", "./dist/quikgraphweb.min.js"],
-  "engines": { "node": ">=22" },
-  "keywords": ["quikgraph", "graph", "graph-algorithms", "shortest-path", "graphviz", "petri-net", "web-components", "dotnet"],
+  "files": [
+    "dist",
+    "src",
+    "docs",
+    "examples",
+    "LICENSE",
+    "NOTICE",
+    "README.md",
+    "CHANGELOG.md",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "sideEffects": [
+    "./src/web-component.js",
+    "./dist/web-component.js",
+    "./dist/cjs/web-component.js",
+    "./dist/quikgraphweb.browser.js",
+    "./dist/quikgraphweb.min.js"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "keywords": [
+    "quikgraph",
+    "graph",
+    "graph-algorithms",
+    "shortest-path",
+    "graphviz",
+    "petri-net",
+    "web-components",
+    "dotnet"
+  ],
   "scripts": {
     "build": "node scripts/build.mjs",
     "test": "node scripts/test.mjs",
@@ -34,6 +74,16 @@
     "check": "npm run build && npm test && npm run audit && npm run test:package && npm run build:demo",
     "prepack": "npm run build"
   },
-  "devDependencies": { "esbuild": "0.28.2", "playwright": "1.63.0", "typescript": "7.0.2" },
-  "publishConfig": { "access": "public", "provenance": true }
+  "devDependencies": {
+    "@msagl/core": "1.1.24",
+    "@viz-js/viz": "3.30.0",
+    "esbuild": "0.28.2",
+    "libxml2-wasm": "0.7.2",
+    "playwright": "1.63.0",
+    "typescript": "7.0.2"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
 }
