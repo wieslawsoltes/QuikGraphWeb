@@ -1,0 +1,6 @@
+{
+  "name": "QuikGraphWeb",
+  "license": "MS-PL",
+  "external": ["./vendor/*"],
+  "copy": [["dist/vendor", "vendor"], ["dist/licenses", "licenses/native"]]
+}

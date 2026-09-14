@@ -1,0 +1,1 @@
+<Project><PropertyGroup><Version>0.3.0</Version><BlazorFrameworkVersion Condition="'$(TargetFramework)' == 'net8.0'">8.0.28</BlazorFrameworkVersion><BlazorFrameworkVersion Condition="'$(TargetFramework)' == 'net10.0'">10.0.10</BlazorFrameworkVersion></PropertyGroup></Project>

@@ -1,0 +1,42 @@
+@page "/"
+@namespace QuikGraphWebBlazorSample
+@using QuikGraphWeb.Blazor
+@using Microsoft.AspNetCore.Components
+@using Microsoft.JSInterop
+<main>
+    <h1>QuikGraphWeb + Blazor</h1>
+    <p>Native weighted graph algorithms, interactive graph inspection, MSAGL geometry and Graphviz WASM export.</p>
+    <button id="action" @onclick="Exercise" disabled="@(!_ready)">Compute path, lay out and verify Graphviz</button>
+    <button id="toggle" @onclick="Toggle">@(_show ? "Unmount" : "Mount")</button>
+    @if (_show) { <GraphViewer @ref="_viewer" Vertices="_vertices" Edges="_edges" Ready="Initialize" Changed="OnChanged" /> }
+    <output id="status">@_status</output><output id="result">@_result</output><p>@_details</p>
+    <InteropProbe />
+</main>
+@code {
+    private readonly GraphVertex[] _vertices = [new("A", "Start"), new("B", "Transform"), new("C", "Validate"), new("D", "Finish")];
+    private readonly GraphEdge[] _edges = [new("ab", "A", "B", 2), new("ac", "A", "C", 7), new("bc", "B", "C", 1), new("cd", "C", "D", 3), new("bd", "B", "D", 9)];
+    private GraphViewer _viewer = default!;
+    private bool _show = true, _ready;
+    private string _status = "Loading", _result = "", _details = "";
+    private int _notifications;
+    private void Initialize(IJSObjectReference _) { _ready = true; _status = "Ready"; }
+    private void OnChanged(BrowserEvent args) => _notifications++;
+    private async Task Exercise()
+    {
+        var path = await _viewer.ShortestPathAsync("A", "D");
+        if (!path.Found || path.Distance != 6 || !path.Edges.SequenceEqual(new[] { "ab", "bc", "cd" })) throw new InvalidOperationException("Native Dijkstra path was incorrect.");
+        await _viewer.HighlightAsync(path.Edges);
+        var layout = await _viewer.ApplyMsaglLayoutAsync();
+        if (!layout.TryGetProperty("Nodes", out var nodes) || nodes.GetArrayLength() != 4) throw new InvalidOperationException("Native MSAGL geometry was incomplete.");
+        var svg = await _viewer.ExportSvgAsync();
+        if (!svg.Contains("<svg") || !svg.Contains("Start")) throw new InvalidOperationException("Viewer SVG export failed.");
+        await using var model = await _viewer.InvokeAsync<IJSObjectReference>("GetModel");
+        var rendered = await _viewer.Module!.CallJsonAsync<string>(model, "RenderGraphviz");
+        if (!rendered.Contains("<svg") || !rendered.Contains("<path")) throw new InvalidOperationException("Real Graphviz WASM export failed.");
+        var components = await _viewer.Module.CallJsonAsync<GraphComponents>(model, "Components");
+        if (components.Count != 1) throw new InvalidOperationException("Native connected components failed.");
+        await _viewer.SelectVertexAsync("D");
+        _details = $"Shortest path: {string.Join(" → ", path.Vertices)}; cost {path.Distance}; Graphviz SVG: {rendered.Length:N0} characters."; _result = "Passed";
+    }
+    private void Toggle() { _show = !_show; _ready = false; _status = _show ? "Loading" : "Unmounted"; _result = ""; }
+}

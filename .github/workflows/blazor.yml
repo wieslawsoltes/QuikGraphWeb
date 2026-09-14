@@ -1,0 +1,24 @@
+name: Blazor
+on:
+  pull_request:
+  push:
+    branches: [main]
+    paths: ['blazor/**', 'src/**', 'dist/**', 'package*.json', '.gitmodules', '.github/workflows/blazor.yml']
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish the checked-in Blazor version from main
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  blazor:
+    permissions:
+      contents: write
+    uses: wieslawsoltes/Dockyard/.github/workflows/blazor.yml@4da3066e32f61c05b42563f952281fa78e1bb96a
+    with:
+      project: blazor/src/QuikGraphWeb.Blazor.csproj
+      package_name: QuikGraphWeb
+      publish: ${{ github.event_name == 'workflow_dispatch' && inputs.publish }}
+    secrets: inherit

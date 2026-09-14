@@ -1,0 +1,12 @@
+**/bin/
+**/obj/
+src/WebInterop.g.cs
+src/*.csproj
+src/wwwroot/
+sample/Program.cs
+sample/Sample.csproj
+sample/_Imports.razor
+sample/wwwroot/index.html
+server/
+tests/
+artifacts/

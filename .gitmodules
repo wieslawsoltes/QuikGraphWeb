@@ -1,0 +1,3 @@
+[submodule "blazor/runtime-source"]
+	path = blazor/runtime-source
+	url = https://github.com/wieslawsoltes/Dockyard.git
