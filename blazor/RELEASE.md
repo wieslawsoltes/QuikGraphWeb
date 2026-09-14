@@ -1,9 +1,11 @@
-# QuikGraphWeb.Blazor 0.3.0
+# QuikGraphWeb.Blazor 0.3.1
 
-- .NET 8/.NET 10 native graph package, typed graph editing/snapshots, viewer and provider.
-- Locally bundled Graphviz WASM, MSAGL geometry/layout and XML validation with preserved notices/core identity.
-- Streamed graph/path/component/geometry/SVG results, literal graph DTO arguments and native returned-function references.
-- Real WebAssembly/Server package-consumer samples verifying graph algorithms, MSAGL geometry, Graphviz rendering, streams, Razor callbacks and remounting.
-- Complete root/Blazor guides and validation-gated NuGet/public-payload/release support.
+Updates the pinned shared runtime to tested Dockyard revision `1c895b7184451071e1c7131063249d2d9eb145b9`, retaining a self-contained package.
 
-Native compatibility limits remain applicable; generic interop complements typed helpers rather than an exhaustive generated C# QuikGraph port. Synchronous engine callbacks execute in the browser.
+- Preserve cyclic/deep native argument graphs and shared callback identity without mutating inputs.
+- Preserve callable property/method/disposal access; add `CallFunctionJsonAsync<T>` for complete streamed callable results.
+- Await concurrent native/module/subscription cleanup and asynchronous unsubscribe, continuing cleanup after individual failures.
+- Honor initialization-wait cancellation independently for each caller and prevent late native construction after disposal.
+- Run expanded JavaScript and managed lifetime/identity regressions in the package-consumer matrix.
+
+Typed graph models, interactive viewer, native algorithms, Graphviz WASM, MSAGL geometry and XML validation remain available with their existing identity and compatibility contracts. The .NET 8/.NET 10 WebAssembly/Server samples verify native shortest paths, MSAGL layout and actual Graphviz output before publishing. The release verifies downloaded public NuGet payloads and includes symbols and runnable samples.

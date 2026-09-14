@@ -19,7 +19,7 @@ The [complete JavaScript guide](README.web.md) preserves API examples, native en
 ## Blazor
 
 ```sh
-dotnet add package QuikGraphWeb.Blazor --version 0.3.0
+dotnet add package QuikGraphWeb.Blazor --version 0.3.1
 ```
 
 The .NET 8/.NET 10 package supports interactive WebAssembly and Server with locally bundled graph APIs, Graphviz WASM, MSAGL and XML validation. It includes typed `GraphModel`, `GraphViewer`, `GraphProvider`, graph editing/snapshots, shortest paths, components, layout and SVG export. Consumers need neither npm nor a CDN.
