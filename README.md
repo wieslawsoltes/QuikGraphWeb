@@ -4,7 +4,7 @@ Graph structures, algorithms and interactive viewing for JavaScript, TypeScript 
 
 [![npm](https://img.shields.io/npm/v/%40wieslawsoltes%2Fquikgraphweb)](https://www.npmjs.com/package/@wieslawsoltes/quikgraphweb)
 [![npm downloads](https://img.shields.io/npm/dm/%40wieslawsoltes%2Fquikgraphweb)](https://www.npmjs.com/package/@wieslawsoltes/quikgraphweb)
-[![NuGet](https://img.shields.io/nuget/v/QuikGraphWeb.Blazor)](https://www.nuget.org/packages/QuikGraphWeb.Blazor)
+[![QuikGraphWeb.Blazor on NuGet](https://img.shields.io/nuget/v/QuikGraphWeb.Blazor?label=QuikGraphWeb.Blazor&logo=nuget)](https://www.nuget.org/packages/QuikGraphWeb.Blazor)
 [![NuGet downloads](https://img.shields.io/nuget/dt/QuikGraphWeb.Blazor)](https://www.nuget.org/packages/QuikGraphWeb.Blazor)
 [![Blazor CI](https://github.com/wieslawsoltes/QuikGraphWeb/actions/workflows/blazor.yml/badge.svg)](https://github.com/wieslawsoltes/QuikGraphWeb/actions/workflows/blazor.yml)
 
