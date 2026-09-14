@@ -1,11 +1,7 @@
-# QuikGraphWeb.Blazor 0.3.1
+# QuikGraphWeb.Blazor 0.3.2
 
-Updates the pinned shared runtime to tested Dockyard revision `1c895b7184451071e1c7131063249d2d9eb145b9`, retaining a self-contained package.
+Adopts validated shared runtime c833be49d472583b6f56225862e0aa7d201c1da7 from merged Dockyard PR #5. Fixes concurrent visual teardown, late template imports/creation, queued callbacks after removal and retained cleanup failures. Adds lifecycle state, awaitable factory disposal and coalesced updates, plus bounded publication verification retries.
 
-- Preserve cyclic/deep native argument graphs and shared callback identity without mutating inputs.
-- Preserve callable property/method/disposal access; add `CallFunctionJsonAsync<T>` for complete streamed callable results.
-- Await concurrent native/module/subscription cleanup and asynchronous unsubscribe, continuing cleanup after individual failures.
-- Honor initialization-wait cancellation independently for each caller and prevent late native construction after disposal.
-- Run expanded JavaScript and managed lifetime/identity regressions in the package-consumer matrix.
+Preserves graph models/viewer, native algorithms, Graphviz WASM, MSAGL geometry, XML validation, streamed outputs and native callback contracts. New shared/managed lifetime tests and real template movement/update/recreation run with the .NET 8/.NET 10 package-restored WebAssembly/Server samples.
 
-Typed graph models, interactive viewer, native algorithms, Graphviz WASM, MSAGL geometry and XML validation remain available with their existing identity and compatibility contracts. The .NET 8/.NET 10 WebAssembly/Server samples verify native shortest paths, MSAGL layout and actual Graphviz output before publishing. The release verifies downloaded public NuGet payloads and includes symbols and runnable samples.
+Package upload and public availability are distinct: NuGet payload verification must succeed before this GitHub release is created. Earlier 0.3.1 availability failures are not waived or corrected by a version bump, and original immutable package bytes must not be replaced. The read-only NuGet availability workflow diagnoses original main-release artifacts without uploading or creating releases. See PUBLISHING.md.
