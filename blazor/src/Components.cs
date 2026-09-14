@@ -20,18 +20,18 @@ public sealed class GraphModel : IAsyncDisposable
     public IJSObjectReference Handle { get; }
     private int _disposed;
     private GraphModel(BrowserModule module, IJSObjectReference handle) { Module = module; Handle = handle; }
-    public static async ValueTask<GraphModel> CreateAsync(BrowserModule module, GraphSnapshot snapshot) => new(module, await module.CreateAsync("BlazorGraph", [snapshot]));
+    public static async ValueTask<GraphModel> CreateAsync(BrowserModule module, GraphSnapshot snapshot) => new(module, await module.CreateAsync("BlazorGraph", [BrowserValue.Literal(snapshot)]));
     public ValueTask<IJSObjectReference> GetNativeGraphAsync() => Module.GetAsync<IJSObjectReference>(Handle, "Graph");
-    public ValueTask<GraphSnapshot> GetSnapshotAsync() => Module.CallAsync<GraphSnapshot>(Handle, "GetSnapshot");
-    public ValueTask LoadAsync(GraphSnapshot snapshot) => Module.CallVoidAsync(Handle, "Load", [snapshot]);
-    public ValueTask AddVertexAsync(GraphVertex vertex) => Module.CallVoidAsync(Handle, "AddVertex", [vertex]);
-    public ValueTask AddEdgeAsync(GraphEdge edge) => Module.CallVoidAsync(Handle, "AddEdge", [edge]);
+    public ValueTask<GraphSnapshot> GetSnapshotAsync() => Module.CallJsonAsync<GraphSnapshot>(Handle, "GetSnapshot");
+    public ValueTask LoadAsync(GraphSnapshot snapshot) => Module.CallVoidAsync(Handle, "Load", [BrowserValue.Literal(snapshot)]);
+    public ValueTask AddVertexAsync(GraphVertex vertex) => Module.CallVoidAsync(Handle, "AddVertex", [BrowserValue.Literal(vertex)]);
+    public ValueTask AddEdgeAsync(GraphEdge edge) => Module.CallVoidAsync(Handle, "AddEdge", [BrowserValue.Literal(edge)]);
     public ValueTask<bool> RemoveVertexAsync(string id) => Module.CallAsync<bool>(Handle, "RemoveVertex", [id]);
     public ValueTask<bool> RemoveEdgeAsync(string id) => Module.CallAsync<bool>(Handle, "RemoveEdge", [id]);
-    public ValueTask<GraphPath> ShortestPathAsync(string source, string target, string algorithm = "dijkstra") => Module.CallAsync<GraphPath>(Handle, "ShortestPath", [source, target, algorithm]);
-    public ValueTask<GraphComponents> ComponentsAsync(bool strong = false) => Module.CallAsync<GraphComponents>(Handle, "Components", [strong]);
-    public ValueTask<string> RenderGraphvizAsync(object? options = null) => Module.CallAsync<string>(Handle, "RenderGraphviz", [options ?? new { }]);
-    public ValueTask<BrowserSubscription> ObserveChangesAsync(Func<JsonElement, Task> next) => Module.SubscribeAsync(Handle, "dom:changed", next);
+    public ValueTask<GraphPath> ShortestPathAsync(string source, string target, string algorithm = "dijkstra") => Module.CallJsonAsync<GraphPath>(Handle, "ShortestPath", [source, target, algorithm]);
+    public ValueTask<GraphComponents> ComponentsAsync(bool strong = false) => Module.CallJsonAsync<GraphComponents>(Handle, "Components", [strong]);
+    public ValueTask<string> RenderGraphvizAsync(object? options = null) => Module.CallJsonAsync<string>(Handle, "RenderGraphviz", [options ?? new { }]);
+    public ValueTask<BrowserSubscription> ObserveChangesAsync(Func<JsonElement, Task> next) => Module.SubscribeJsonAsync<JsonElement>(Handle, "dom:changed", next);
     public async ValueTask DisposeAsync()
     {
         if (Interlocked.Exchange(ref _disposed, 1) != 0) return;
@@ -52,15 +52,15 @@ public sealed class GraphViewer : BrowserComponent
     protected override IReadOnlyList<string> DefaultEvents => ["dom:graph-select-vertex", "dom:graph-select-edge", "dom:graph-layout-change", "dom:graph-create-vertex", "dom:graph-delete-vertex", "dom:graph-delete-edge"];
     protected override Dictionary<string, object?> BuildOptions()
     {
-        var values = base.BuildOptions(); values["vertices"] = Vertices; values["edges"] = Edges; values["directed"] = Directed;
+        var values = base.BuildOptions(); values["vertices"] = BrowserValue.Literal(Vertices); values["edges"] = BrowserValue.Literal(Edges); values["directed"] = Directed;
         values["model"] = Model?.Handle; values["graph"] = Graph; values["layoutMode"] = LayoutMode; return values;
     }
     public ValueTask FitAsync() => InvokeVoidAsync("Fit");
     public ValueTask ZoomAsync(double factor) => InvokeVoidAsync("Zoom", factor);
     public ValueTask SelectVertexAsync(string id) => InvokeVoidAsync("SelectVertex", id);
-    public ValueTask<string> ExportSvgAsync() => InvokeAsync<string>("ToSvg");
-    public ValueTask<GraphPath> ShortestPathAsync(string source, string target, string algorithm = "dijkstra") => InvokeAsync<GraphPath>("ShortestPath", source, target, algorithm);
+    public ValueTask<string> ExportSvgAsync() => InvokeJsonAsync<string>("ToSvg");
+    public ValueTask<GraphPath> ShortestPathAsync(string source, string target, string algorithm = "dijkstra") => InvokeJsonAsync<GraphPath>("ShortestPath", source, target, algorithm);
     public ValueTask HighlightAsync(IEnumerable<string> edgeIds) => InvokeVoidAsync("Highlight", edgeIds);
-    public ValueTask<JsonElement> ApplyMsaglLayoutAsync(object? options = null) => InvokeAsync<JsonElement>("ApplyMsaglLayout", options ?? new { algorithm = "Sugiyama" });
+    public ValueTask<JsonElement> ApplyMsaglLayoutAsync(object? options = null) => InvokeJsonAsync<JsonElement>("ApplyMsaglLayout", options ?? new { algorithm = "Sugiyama" });
     public ValueTask CancelLayoutAsync() => InvokeVoidAsync("CancelLayout");
 }
