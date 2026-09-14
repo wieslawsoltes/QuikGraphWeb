@@ -1,6 +1,6 @@
 # QuikGraphWeb.Blazor
 
-Install `QuikGraphWeb.Blazor` 0.3.0 for .NET 8/.NET 10. The package locally includes native graph APIs, Graphviz WASM, MSAGL layouts and XML validation, preserving shared core identity and dependency notices.
+Install `QuikGraphWeb.Blazor` 0.3.1 for .NET 8/.NET 10. The package locally includes native graph APIs, Graphviz WASM, MSAGL layouts and XML validation, preserving shared core identity and dependency notices.
 
 ## Viewer and models
 

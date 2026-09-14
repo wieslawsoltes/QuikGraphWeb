@@ -16,7 +16,7 @@ jobs:
   blazor:
     permissions:
       contents: write
-    uses: wieslawsoltes/Dockyard/.github/workflows/blazor.yml@4da3066e32f61c05b42563f952281fa78e1bb96a
+    uses: wieslawsoltes/Dockyard/.github/workflows/blazor.yml@1c895b7184451071e1c7131063249d2d9eb145b9
     with:
       project: blazor/src/QuikGraphWeb.Blazor.csproj
       package_name: QuikGraphWeb
