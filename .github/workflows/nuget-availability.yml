@@ -1,0 +1,60 @@
+name: NuGet availability
+on:
+  workflow_dispatch:
+    inputs:
+      release_run:
+        description: Original main-branch Blazor release run containing blazor-net10.0
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    env:
+      RELEASE_RUN: ${{ inputs.release_run }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - name: Validate the original main-branch release run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [[ "$RELEASE_RUN" =~ ^[0-9]+$ ]]
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$RELEASE_RUN" > /tmp/release-run.json
+          jq -e '.head_branch == "main" and .event == "push" and .path == ".github/workflows/blazor.yml"' /tmp/release-run.json
+      - uses: actions/download-artifact@v4
+        with:
+          name: blazor-net10.0
+          run-id: ${{ env.RELEASE_RUN }}
+          github-token: ${{ github.token }}
+          path: artifacts
+      - name: Report public endpoint availability without credentials
+        run: |
+          python3 - <<'PY'
+          import importlib.util, pathlib, urllib.request, urllib.error, urllib.parse
+          source = pathlib.Path('blazor/runtime-source/blazor/nuget-registry.py')
+          spec = importlib.util.spec_from_file_location('registry', source)
+          registry = importlib.util.module_from_spec(spec); spec.loader.exec_module(registry)
+          packages = list(pathlib.Path('artifacts/nuget').glob('*.nupkg'))
+          assert len(packages) == 1
+          identity, version, payload = registry.package_info(packages[0].read_bytes())
+          key = identity.lower()
+          urls = [f'https://api.nuget.org/v3-flatcontainer/{key}/index.json',
+                  f'https://www.nuget.org/packages/{identity}/{version}',
+                  f'https://www.nuget.org/api/v2/package/{identity}/{version}']
+          print(f'Inspecting {identity} {version}: {len(payload)} validated payload members', flush=True)
+          for url in urls:
+              try:
+                  with urllib.request.urlopen(url, timeout=30) as response:
+                      print(f'{url}: HTTP {response.status}; host={urllib.parse.urlparse(response.url).hostname}', flush=True)
+                      if url.endswith('/index.json'): print(response.read(10000).decode(), flush=True)
+              except (urllib.error.URLError, TimeoutError) as error:
+                  print(f'{url}: {type(error).__name__}: {error}', flush=True)
+          PY
+      - name: Compare public bytes with the original tested package
+        run: python3 blazor/runtime-source/blazor/nuget-registry.py verify artifacts/nuget --timeout-seconds 720
